@@ -1,6 +1,6 @@
+<%@ page import="ua.denitdao.servlet.shop.final_servlet_shop.util.Paths" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="com.example.final_project_demo.util.Paths" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>
@@ -18,8 +18,6 @@
 <a href="${pageContext.request.contextPath}<%= Paths.SOME %>">Not working page</a><br>
 <a href="${pageContext.request.contextPath}<%= Paths.LOGOUT %>">- Logout (user)</a><br><br>
 <a href="${pageContext.request.contextPath}<%= Paths.VIEW_HOME %>">Home page (guest)</a><br>
-<a href="${pageContext.request.contextPath}<%= Paths.VIEW_ABOUT %>">About (user)</a><br>
-<a href="${pageContext.request.contextPath}<%= Paths.VIEW_TASKS %>">Tasks (admin)</a><br>
 
 <p>${sessionScope.role}</p>
 <c:forEach var="user" items="${requestScope.users}">
