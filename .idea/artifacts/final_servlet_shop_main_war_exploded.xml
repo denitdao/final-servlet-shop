@@ -1,0 +1,27 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="final-servlet-shop.main:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/final_servlet_shop_main_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="final-servlet-shop.main" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Gradle: org.glassfish.web:jakarta.servlet.jsp.jstl:2.0.0" />
+          <element id="library" level="project" name="Gradle: mysql:mysql-connector-java:8.0.24" />
+          <element id="library" level="project" name="Gradle: org.apache.commons:commons-dbcp2:2.8.0" />
+          <element id="library" level="project" name="Gradle: org.apache.logging.log4j:log4j-core:2.14.1" />
+          <element id="library" level="project" name="Gradle: jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:2.0.0" />
+          <element id="library" level="project" name="Gradle: com.google.protobuf:protobuf-java:3.11.4" />
+          <element id="library" level="project" name="Gradle: org.apache.commons:commons-pool2:2.8.1" />
+          <element id="library" level="project" name="Gradle: commons-logging:commons-logging:1.2" />
+          <element id="library" level="project" name="Gradle: org.apache.logging.log4j:log4j-api:2.14.1" />
+          <element id="library" level="project" name="Gradle: jakarta.el:jakarta.el-api:4.0.0" />
+          <element id="library" level="project" name="Gradle: jakarta.xml.bind:jakarta.xml.bind-api:3.0.0" />
+          <element id="library" level="project" name="Gradle: com.sun.activation:jakarta.activation:2.0.0" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="final-servlet-shop.main/web/Web Gradle : final-servlet-shop-1.0-SNAPSHOT.war" />
+    </root>
+  </artifact>
+</component>

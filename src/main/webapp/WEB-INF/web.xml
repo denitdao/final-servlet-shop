@@ -7,7 +7,7 @@
     <!-- The main servlet than gets commands as the parameter -->
     <servlet>
         <servlet-name>Controller</servlet-name>
-        <servlet-class>ua.denitdao.servlet.shop.final_servlet_shop.controller.Servlet</servlet-class>
+        <servlet-class>ua.denitdao.servlet.shop.controller.Servlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>
@@ -17,7 +17,7 @@
     <!-- Filter that defines accessible commands for the roles -->
     <filter>
         <filter-name>AccessFilter</filter-name>
-        <filter-class>ua.denitdao.servlet.shop.final_servlet_shop.controller.filter.AccessFilter</filter-class>
+        <filter-class>ua.denitdao.servlet.shop.controller.filter.AccessFilter</filter-class>
         <init-param>
             <param-name>admin</param-name>
             <param-value>logout viewAbout viewTasks</param-value>
@@ -43,7 +43,7 @@
     <!--  Filter that defines encoding for the files  -->
     <filter>
         <filter-name>EncodingFilter</filter-name>
-        <filter-class>ua.denitdao.servlet.shop.final_servlet_shop.controller.filter.EncodingFilter</filter-class>
+        <filter-class>ua.denitdao.servlet.shop.controller.filter.EncodingFilter</filter-class>
         <init-param>
             <param-name>encoding</param-name>
             <param-value>UTF-8</param-value>
@@ -57,7 +57,7 @@
     <!--  Filter that defines the locale (language) for the pages  -->
     <filter>
         <filter-name>LocaleFilter</filter-name>
-        <filter-class>ua.denitdao.servlet.shop.final_servlet_shop.controller.filter.LocaleFilter</filter-class>
+        <filter-class>ua.denitdao.servlet.shop.controller.filter.LocaleFilter</filter-class>
         <init-param>
             <param-name>default</param-name>
             <param-value>en</param-value>
@@ -74,8 +74,8 @@
 
     <!--  Listeners for basic operations during session and context destruction  -->
     <listener>
-        <listener-class>ua.denitdao.servlet.shop.final_servlet_shop.controller.listener.SessionListener</listener-class>
-        <listener-class>ua.denitdao.servlet.shop.final_servlet_shop.controller.listener.ContextListener</listener-class>
+        <listener-class>ua.denitdao.servlet.shop.controller.listener.SessionListener</listener-class>
+        <listener-class>ua.denitdao.servlet.shop.controller.listener.ContextListener</listener-class>
     </listener>
 
     <!--  Handling error cases with custom error pages  -->
