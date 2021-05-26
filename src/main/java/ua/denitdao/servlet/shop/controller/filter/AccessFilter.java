@@ -48,7 +48,7 @@ public class AccessFilter implements Filter {
 
     private boolean accessAllowed(ServletRequest request) {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String commandName = httpRequest.getRequestURI().replaceAll(".*?/c/", "");
+        String commandName = httpRequest.getRequestURI().replaceAll(".*?/shop/", "");
         HttpSession session = httpRequest.getSession();
         String role = (String) session.getAttribute("role");
 

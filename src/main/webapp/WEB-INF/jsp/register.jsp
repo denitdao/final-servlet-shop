@@ -9,16 +9,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><fmt:message key="login_jsp.title"/></title>
+    <title>Register</title>
 </head>
 <body>
-<h1>Login here</h1>
+<h1>Register here</h1>
 <br>
 <form action="<%= Paths.POST_LOGIN %>" method="post">
-    <fmt:message key="login_jsp.label.login"/>: <input type="text" name="login" value="${sessionScope.getOrDefault("wrong_login", "")}"><br>
-    <fmt:message key="login_jsp.label.password"/>: <input type="text" name="password"><br>
+    Name: <input type="text" name="name"><br>
+    Login: <input type="text" name="login"
+                  value="${sessionScope.getOrDefault("wrong_login", "")}"><br>
+    Password: <input type="text" name="password"><br>
     <input type="submit" value='<fmt:message key="login_jsp.button.login"/>'>
 </form>
+<a href="${pageContext.request.contextPath}<%= Paths.LOGIN_JSP %>">Logout</a><br>
 <c:if test="${not empty sessionScope.login_status}">
     <h3>Error message: ${sessionScope.login_status}</h3>
 </c:if>

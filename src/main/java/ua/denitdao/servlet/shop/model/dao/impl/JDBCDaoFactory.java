@@ -16,7 +16,7 @@ public class JDBCDaoFactory extends DaoFactory {
 
     private static final Logger logger = LogManager.getLogger(JDBCDaoFactory.class);
     private final DataSource dataSource = DBCPDataSource.getDataSource();
-
+    // todo add get connection public and make createUserDao methods with db
     @Override
     public UserDao createUserDao() {
         return new JDBCUserDao(getConnection());

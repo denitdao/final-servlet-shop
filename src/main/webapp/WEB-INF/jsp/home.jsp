@@ -12,14 +12,15 @@
     <title>Home</title>
 </head>
 <body>
-<h2>Contents:</h2>
-<h3>Hello any: ${sessionScope.getOrDefault("user", "(not logged in)")}</h3>
-<a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>">- Login (guest)</a><br>
-<a href="${pageContext.request.contextPath}<%= Paths.SOME %>">Not working page</a><br>
-<a href="${pageContext.request.contextPath}<%= Paths.LOGOUT %>">- Logout (user)</a><br><br>
-<a href="${pageContext.request.contextPath}<%= Paths.VIEW_HOME %>">Home page (guest)</a><br>
+<h3>Hello: ${sessionScope.getOrDefault("user", "(not logged in)")}</h3>
+<c:if test="${empty sessionScope.user}">
+    <a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>">Login</a><br>
+</c:if>
+<c:if test="${not empty sessionScope.user}">
+    <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
+</c:if>
+<a href="${pageContext.request.contextPath}<%= Paths.VIEW_HOME %>">Home page</a><br>
 
-<p>${sessionScope.role}</p>
 <c:forEach var="user" items="${requestScope.users}">
     <p>User: --- ${user}</p>
 </c:forEach>

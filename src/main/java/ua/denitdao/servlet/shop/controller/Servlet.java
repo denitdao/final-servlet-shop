@@ -29,7 +29,10 @@ public class Servlet extends HttpServlet {
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         logger.debug("~~~ in controller with path: '{}'", req.getRequestURI());
 
-        String commandName = req.getRequestURI().replaceAll(".*?/c/", "");
+//        if (req.getRequestURI().equals("/"))
+//            resp.sendRedirect(Paths.HOME_JSP);
+
+        String commandName = req.getRequestURI().replaceAll(".*?/shop/", "");
         Command command = CommandContainer.getCommand(commandName);
 
         String path = Paths.ERROR_JSP; // if command execution fails, it will remain the same

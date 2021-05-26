@@ -20,9 +20,9 @@ public class CommandContainer {
 
     static {
         commands = new HashMap<>();
-        commands.put(Commands.LOGIN, new LoginCommand());
+        commands.put(Commands.POST_LOGIN, new LoginCommand());
         commands.put(Commands.VIEW_LOGIN, new ViewLoginCommand());
-        commands.put(Commands.LOGOUT, new LogoutCommand());
+        commands.put(Commands.POST_LOGOUT, new LogoutCommand());
         commands.put(Commands.VIEW_HOME, new ViewHomeCommand());
         commands.put(Commands.DEFAULT, new DefaultCommand());
         // ...
