@@ -4,8 +4,7 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.HashSet;
+import ua.denitdao.servlet.shop.util.ContextUtil;
 
 public class ContextListener implements ServletContextListener {
 
@@ -14,9 +13,7 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         logger.debug("context initialization");
-        HashSet<Integer> activeUsers = new HashSet<>();
-        sce.getServletContext()
-                .setAttribute("activeUsers", activeUsers);
+        ContextUtil.createActiveUserStorage(sce);
     }
 
     @Override

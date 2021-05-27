@@ -21,16 +21,20 @@ public class UserMapper implements EntityMapper<User> {
     @Override
     public User extractFromResultSet(ResultSet rs) throws SQLException {
         return User.builder()
-                .id(rs.getInt("id"))
-                .name(rs.getString("name"))
+                .id(rs.getLong("id"))
+                .firstName(rs.getString("first_name"))
+                .secondName(rs.getString("second_name"))
                 .login(rs.getString("login"))
                 .password(rs.getString("password"))
                 .role(rs.getString("role"))
+                .blocked(rs.getBoolean("blocked"))
+                .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
+                .updatedAt(rs.getTimestamp("updated_at").toLocalDateTime())
                 .build();
     }
 
     @Override
-    public User makeUnique(Map<Integer, User> cache, User entity) {
+    public User makeUnique(Map<Long, User> cache, User entity) {
         cache.putIfAbsent(entity.getId(), entity);
         return cache.get(entity.getId());
     }

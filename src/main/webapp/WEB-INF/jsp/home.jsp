@@ -19,7 +19,7 @@
 <c:if test="${not empty sessionScope.user}">
     <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
 </c:if>
-<a href="${pageContext.request.contextPath}<%= Paths.VIEW_HOME %>">Home page</a><br>
+<a href="${pageContext.request.contextPath}<%= Paths.VIEW_CATEGORY %>?id=1">Category</a><br>
 
 <c:forEach var="user" items="${requestScope.users}">
     <p>User: --- ${user}</p>

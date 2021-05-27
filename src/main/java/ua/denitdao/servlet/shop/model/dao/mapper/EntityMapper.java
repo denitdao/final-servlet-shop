@@ -8,5 +8,5 @@ public interface EntityMapper<T> {
 
     T extractFromResultSet(ResultSet resultSet) throws SQLException;
 
-    T makeUnique(Map<Integer, T> cache, T entity);
+    T makeUnique(Map<Long, T> cache, T entity);
 }

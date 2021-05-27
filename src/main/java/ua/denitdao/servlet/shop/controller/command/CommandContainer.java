@@ -22,8 +22,12 @@ public class CommandContainer {
         commands = new HashMap<>();
         commands.put(Commands.POST_LOGIN, new LoginCommand());
         commands.put(Commands.VIEW_LOGIN, new ViewLoginCommand());
+        commands.put(Commands.POST_REGISTER, new RegisterCommand());
+        commands.put(Commands.VIEW_REGISTER, new ViewRegisterCommand());
         commands.put(Commands.POST_LOGOUT, new LogoutCommand());
         commands.put(Commands.VIEW_HOME, new ViewHomeCommand());
+        commands.put(Commands.VIEW_CATEGORY, new ViewCategoryCommand());
+        commands.put(Commands.VIEW_PRODUCT, new ViewProductCommand());
         commands.put(Commands.DEFAULT, new DefaultCommand());
         // ...
     }

@@ -13,24 +13,30 @@ import ua.denitdao.servlet.shop.util.ContextUtil;
 import ua.denitdao.servlet.shop.util.PasswordManager;
 import ua.denitdao.servlet.shop.util.Paths;
 
-public class LoginCommand implements Command {
+public class RegisterCommand implements Command {
 
-    private static final Logger logger = LogManager.getLogger(LoginCommand.class);
+    private static final Logger logger = LogManager.getLogger(RegisterCommand.class);
     private final UserService userService;
 
-    public LoginCommand() {
+    public RegisterCommand() {
         final ServiceFactory serviceFactory = ServiceFactory.getInstance();
         userService = serviceFactory.getUserService();
     }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws MyException {
+        String firstName = req.getParameter("firstName");
+        String secondName = req.getParameter("secondName");
         String login = req.getParameter("login");
         String password = req.getParameter("password");
 
         HttpSession session = req.getSession();
-
-        User user = userService.getUserByLogin(login);
+        User user = User.builder()
+                .firstName(firstName)
+                .secondName(secondName)
+                .login(login)
+                .password(password).build();
+//        User user = userService.create(login);
         if (user != null && PasswordManager.verifyPassword(password, user.getPassword())) {
             // todo: add validation if user is registered in the context
             ContextUtil.addUserToContext(req, user.getId());
@@ -44,6 +50,4 @@ public class LoginCommand implements Command {
             return "redirect:" + Paths.VIEW_LOGIN;
         }
     }
-
-
 }
