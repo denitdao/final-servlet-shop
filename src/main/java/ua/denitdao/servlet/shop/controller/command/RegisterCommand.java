@@ -5,12 +5,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.denitdao.servlet.shop.model.entity.Roles;
 import ua.denitdao.servlet.shop.model.entity.User;
 import ua.denitdao.servlet.shop.model.exception.MyException;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.model.service.UserService;
 import ua.denitdao.servlet.shop.util.ContextUtil;
-import ua.denitdao.servlet.shop.util.PasswordManager;
 import ua.denitdao.servlet.shop.util.Paths;
 
 public class RegisterCommand implements Command {
@@ -36,18 +36,21 @@ public class RegisterCommand implements Command {
                 .secondName(secondName)
                 .login(login)
                 .password(password).build();
-//        User user = userService.create(login);
-        if (user != null && PasswordManager.verifyPassword(password, user.getPassword())) {
-            // todo: add validation if user is registered in the context
+
+        if (userService.createUser(user)) {
             ContextUtil.addUserToContext(req, user.getId());
+
             session.setAttribute("user", user);
             session.setAttribute("role", user.getRole());
+
             logger.info("logged in: sess({}) | login({})", session, login);
             return "redirect:" + Paths.VIEW_HOME;
-        } else {
-            session.setAttribute("login_status", "failed");
-            session.setAttribute("wrong_login", login);
-            return "redirect:" + Paths.VIEW_LOGIN;
         }
+
+        session.setAttribute("login_status", "Such user already exists");
+        session.setAttribute("wrong_login", login);
+        session.setAttribute("wrong_firstName", firstName);
+        session.setAttribute("wrong_secondName", secondName);
+        return "redirect:" + Paths.VIEW_REGISTER;
     }
 }

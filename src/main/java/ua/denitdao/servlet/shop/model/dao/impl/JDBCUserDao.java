@@ -9,6 +9,7 @@ import ua.denitdao.servlet.shop.model.entity.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class JDBCUserDao implements UserDao {
 
@@ -20,26 +21,69 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public void create(User entity) {
-        throw new UnsupportedOperationException();
+    public boolean create(User user) {
+        final String query = "insert into " +
+                "users (first_name, second_name, login, password, role, created_at, updated_at) " +
+                "values (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            pst.setString(1, user.getFirstName());
+            pst.setString(2, user.getSecondName());
+            pst.setString(3, user.getLogin());
+            pst.setString(4, user.getPassword());
+            pst.setString(5, user.getRole());
+            pst.setTimestamp(6, Timestamp.valueOf(user.getCreatedAt()));
+            pst.setTimestamp(7, Timestamp.valueOf(user.getUpdatedAt()));
+
+            if (pst.executeUpdate() == 0)
+                return false;
+            try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    user.setId(generatedKeys.getLong(1));
+                    return true;
+                }
+            }
+            return false;
+        } catch (SQLException e) {
+            logger.warn("Failed to create user -- {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public User findById(int id) {
+    public Optional<User> findById(Long id) {
         User user = null;
 
-        final String query = "select * from users where users.id=?";
+        final String query = "select * from users where id=?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, id);
+            pst.setLong(1, id);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 user = UserMapper.getInstance().extractFromResultSet(rs);
             }
         } catch (SQLException e) {
-            logger.warn("Failed to get user by id", e);
+            logger.warn("Failed to get user by id -- {}", e.getMessage());
             throw new RuntimeException(e);
         }
-        return user;
+        return Optional.ofNullable(user);
+    }
+
+    @Override
+    public Optional<User> findUserByLogin(String login) {
+        User user = null;
+
+        final String query = "select * from users where login=?";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setString(1, login);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                user = UserMapper.getInstance().extractFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            logger.warn("Failed to get user by login -- {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -53,38 +97,37 @@ public class JDBCUserDao implements UserDao {
                 users.add(UserMapper.getInstance().extractFromResultSet(rs));
             }
         } catch (SQLException e) {
-            logger.warn("Failed to get all users", e);
+            logger.warn("Failed to get all users -- {}", e.getMessage());
             throw new RuntimeException(e);
         }
         return users;
     }
 
     @Override
-    public void update(User entity) {
-        throw new UnsupportedOperationException();
-    }
+    public boolean update(User user) {
+        final String query = "update users " +
+                "set first_name=?, second_name=?, login=?, password=?, role=?, updated_at=?" +
+                "where id=?";
 
-    @Override
-    public void delete(int id) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public User findUserByLogin(String login) {
-        User user = null;
-
-        final String query = "select * from users where users.login=?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setString(1, login);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                user = UserMapper.getInstance().extractFromResultSet(rs);
-            }
+            pst.setString(1, user.getFirstName());
+            pst.setString(2, user.getSecondName());
+            pst.setString(3, user.getLogin());
+            pst.setString(4, user.getPassword());
+            pst.setString(5, user.getRole());
+            pst.setTimestamp(6, Timestamp.valueOf(user.getUpdatedAt()));
+            pst.setLong(7, user.getId());
+
+            return pst.execute();
         } catch (SQLException e) {
-            logger.warn("Failed to get user by login", e);
+            logger.warn("Failed to update user -- {}", e.getMessage());
             throw new RuntimeException(e);
         }
-        return user;
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -93,7 +136,7 @@ public class JDBCUserDao implements UserDao {
             connection.close();
             logger.debug("Connection closed");
         } catch (SQLException e) {
-            logger.warn("Failed to close connection", e);
+            logger.warn("Failed to close connection -- {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }

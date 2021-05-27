@@ -13,6 +13,8 @@ import ua.denitdao.servlet.shop.util.ContextUtil;
 import ua.denitdao.servlet.shop.util.PasswordManager;
 import ua.denitdao.servlet.shop.util.Paths;
 
+import java.util.Optional;
+
 public class LoginCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(LoginCommand.class);
@@ -30,19 +32,28 @@ public class LoginCommand implements Command {
 
         HttpSession session = req.getSession();
 
-        User user = userService.getUserByLogin(login);
-        if (user != null && PasswordManager.verifyPassword(password, user.getPassword())) {
-            // todo: add validation if user is registered in the context
+        Optional<User> userOpt = userService.getUserByLogin(login);
+        if (userOpt.isPresent() && PasswordManager.verifyPassword(password, userOpt.get().getPassword())) {
+            User user = userOpt.get();
+
+            if (ContextUtil.findUserInContext(req, user.getId())) {
+                session.setAttribute("login_status", "You are already logged in");
+                session.setAttribute("wrong_login", login);
+                return "redirect:" + Paths.VIEW_LOGIN;
+            }
+
             ContextUtil.addUserToContext(req, user.getId());
+
             session.setAttribute("user", user);
             session.setAttribute("role", user.getRole());
+
             logger.info("logged in: sess({}) | login({})", session, login);
             return "redirect:" + Paths.VIEW_HOME;
-        } else {
-            session.setAttribute("login_status", "failed");
-            session.setAttribute("wrong_login", login);
-            return "redirect:" + Paths.VIEW_LOGIN;
         }
+
+        session.setAttribute("login_status", "failed");
+        session.setAttribute("wrong_login", login);
+        return "redirect:" + Paths.VIEW_LOGIN;
     }
 
 

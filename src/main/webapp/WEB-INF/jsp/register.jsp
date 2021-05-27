@@ -16,8 +16,10 @@
 <br>
 
 <form action="<%= Paths.POST_REGISTER %>" method="post">
-    Name: <input type="text" name="name"
-                 value="${sessionScope.getOrDefault("wrong_name", "")}"><br>
+    Name: <input type="text" name="firstName"
+                 value="${sessionScope.getOrDefault("wrong_firstName", "")}">
+    <input type="text" name="secondName"
+           value="${sessionScope.getOrDefault("wrong_secondName", "")}"><br>
     Login: <input type="text" name="login"
                   value="${sessionScope.getOrDefault("wrong_login", "")}"><br>
     Password: <input type="text" name="password"><br>
@@ -30,5 +32,7 @@
 </c:if>
 <c:remove var="login_status" scope="session"/>
 <c:remove var="wrong_login" scope="session"/>
+<c:remove var="wrong_firstName" scope="session"/>
+<c:remove var="wrong_secondName" scope="session"/>
 </body>
 </html>

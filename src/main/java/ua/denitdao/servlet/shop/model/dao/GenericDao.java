@@ -1,18 +1,19 @@
 package ua.denitdao.servlet.shop.model.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GenericDao<T> extends AutoCloseable {
 
-    void create(T entity);
+    boolean create(T entity);
 
-    T findById(int id);
+    Optional<T> findById(Long id);
 
     List<T> findAll();
 
-    void update(T entity);
+    boolean update(T entity);
 
-    void delete(int id);
+    boolean delete(Long id);
 
     @Override
     void close();

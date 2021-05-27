@@ -17,7 +17,7 @@
 
 <form action="<%= Paths.POST_LOGIN %>" method="post">
     <fmt:message key="login_jsp.label.login"/>: <input type="text" name="login"
-                                                       value="${sessionScope.getOrDefault("wrong_login", "")}"><br>
+                                                       value="${sessionScope.wrong_login}"><br>
     <fmt:message key="login_jsp.label.password"/>: <input type="text" name="password"><br>
     <input type="submit" value='<fmt:message key="login_jsp.button.login"/>'>
 </form>

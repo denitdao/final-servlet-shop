@@ -3,12 +3,15 @@ package ua.denitdao.servlet.shop.model.service;
 import ua.denitdao.servlet.shop.model.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
-    User getUserById(int id);
+    boolean createUser(User user);
 
-    User getUserByLogin(String login);
+    Optional<User> getUserById(Long id);
+
+    Optional<User> getUserByLogin(String login);
 
     List<User> getAllUsers();
 }

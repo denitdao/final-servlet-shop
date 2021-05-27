@@ -27,7 +27,7 @@ public class UserMapper implements EntityMapper<User> {
                 .login(rs.getString("login"))
                 .password(rs.getString("password"))
                 .role(rs.getString("role"))
-                .blocked(rs.getBoolean("blocked"))
+//                .blocked(rs.getBoolean("blocked"))
                 .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
                 .updatedAt(rs.getTimestamp("updated_at").toLocalDateTime())
                 .build();

@@ -55,4 +55,11 @@ public class ContextUtil {
                 .setAttribute(ACTIVE_USERS, activeUsers);
     }
 
+    public static boolean findUserInContext(HttpServletRequest req, Long userId) {
+        @SuppressWarnings("unchecked")
+        HashSet<Long> activeUsers = (HashSet<Long>) req
+                .getServletContext()
+                .getAttribute(ACTIVE_USERS);
+        return activeUsers.contains(userId);
+    }
 }
