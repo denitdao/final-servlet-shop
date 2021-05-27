@@ -12,17 +12,20 @@
     <title>Home</title>
 </head>
 <body>
-<h3>Hello: ${sessionScope.getOrDefault("user", "(not logged in)")}</h3>
+<h3>${sessionScope.getOrDefault("user", "(Guest)")}</h3>
 <c:if test="${empty sessionScope.user}">
     <a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>">Login</a><br>
 </c:if>
 <c:if test="${not empty sessionScope.user}">
     <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
 </c:if>
-<a href="${pageContext.request.contextPath}<%= Paths.VIEW_CATEGORY %>?id=1">Category</a><br>
 
-<c:forEach var="user" items="${requestScope.users}">
-    <p>User: --- ${user}</p>
+<c:forEach var="category" items="${requestScope.categories}">
+    <c:url value="<%= Paths.VIEW_CATEGORY %>" var="catUrl">
+        <c:param name="id" value="${category.id}"/>
+    </c:url>
+
+    <p><a href="${catUrl}">${category.title}</a>: ${category}</p>
 </c:forEach>
 </body>
 </html>

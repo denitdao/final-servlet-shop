@@ -9,6 +9,8 @@ public class Product implements Serializable {
 
     private static final long serialVersionUID = 43780927822592334L;
     private Long id;
+    private String title;
+    private String description;
     private String color;
     private BigDecimal price;
     private Double height;
@@ -27,6 +29,16 @@ public class Product implements Serializable {
 
         public ProductBuilder id(Long id) {
             entity.setId(id);
+            return this;
+        }
+
+        public ProductBuilder title(String title) {
+            entity.setTitle(title);
+            return this;
+        }
+
+        public ProductBuilder description(String description) {
+            entity.setDescription(description);
             return this;
         }
 
@@ -75,7 +87,9 @@ public class Product implements Serializable {
         }
     }
 
-    public static ProductBuilder builder() { return new ProductBuilder(); }
+    public static ProductBuilder builder() {
+        return new ProductBuilder();
+    }
 
     public Long getId() {
         return id;
@@ -83,6 +97,22 @@ public class Product implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getColor() {

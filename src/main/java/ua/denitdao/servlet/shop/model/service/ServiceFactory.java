@@ -8,6 +8,8 @@ public abstract class ServiceFactory {
 
     public abstract UserService getUserService();
 
+    public abstract CategoryService getCategoryService();
+
     public static synchronized ServiceFactory getInstance() {
         if (serviceFactory == null)
             serviceFactory = new ServiceFactoryImpl(); // change implementation here, to make changes to the whole project
