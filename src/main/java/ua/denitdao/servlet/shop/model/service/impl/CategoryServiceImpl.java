@@ -19,6 +19,9 @@ public class CategoryServiceImpl implements CategoryService {
     private static final Logger logger = LogManager.getLogger(CategoryServiceImpl.class);
     private final DaoFactory daoFactory = DaoFactory.getInstance();
 
+    /**
+     * Get category with basic information and all products.
+     */
     @Override
     public Optional<Category> getCategoryWithProducts(Long id, Locale locale) {
         Optional<Category> categoryOpt;
@@ -26,13 +29,12 @@ public class CategoryServiceImpl implements CategoryService {
         Connection connection = daoFactory.getConnection();
         try (CategoryDao categoryDao = daoFactory.createCategoryDao(connection);
              ProductDao productDao = daoFactory.createProductDao(connection)) {
-            logger.info("set autocommit false");
             connection.setAutoCommit(false);
 
             categoryOpt = categoryDao.findById(id, locale);
             Category category = categoryOpt.orElseThrow(() -> new RuntimeException("category not found"));
             category.setProducts(productDao.findAllWithCategoryId(id, locale));
-            logger.info("making commit");
+
             connection.commit();
         } catch (SQLException e) {
             logger.warn("transaction failed -- {}", e.getMessage());
@@ -41,6 +43,9 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryOpt;
     }
 
+    /**
+     * Get all categories with only basic info
+     */
     @Override
     public List<Category> getAllCategories(Locale locale) {
         try (CategoryDao dao = daoFactory.createCategoryDao()) {

@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 public interface CategoryDao extends GenericDao<Category> {
+
     Optional<Category> findById(Long id, Locale locale);
 
     List<Category> findAll(Locale locale);

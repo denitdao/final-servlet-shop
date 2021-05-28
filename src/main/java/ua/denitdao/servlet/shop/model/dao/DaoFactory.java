@@ -20,6 +20,10 @@ public abstract class DaoFactory {
 
     public abstract ProductDao createProductDao(Connection connection);
 
+    public abstract CategoryPropertyDao createCategoryPropertyDao();
+
+    public abstract CategoryPropertyDao createCategoryPropertyDao(Connection connection);
+
     public static synchronized DaoFactory getInstance() {
         if (daoFactory == null)
             daoFactory = new JDBCDaoFactory(); // change implementation here, to make changes to the whole project

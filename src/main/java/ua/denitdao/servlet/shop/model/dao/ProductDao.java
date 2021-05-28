@@ -8,7 +8,13 @@ import java.util.Optional;
 
 public interface ProductDao extends GenericDao<Product> {
 
+    /**
+     * Get all products with basic information from specified category
+     */
     List<Product> findAllWithCategoryId(Long categoryId, Locale locale);
 
+    /**
+     * Get product with it's basic information and some category info.
+     */
     Optional<Product> findById(Long id, Locale locale);
 }

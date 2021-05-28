@@ -49,4 +49,14 @@ public class CategoryProperty implements Serializable {
     public void setDataType(String dataType) {
         this.dataType = dataType;
     }
+
+    @Override
+    public String toString() {
+        return "CategoryProperty{" +
+                "id=" + id +
+                ", locale=" + locale +
+                ", title='" + title + '\'' +
+                ", dataType='" + dataType + '\'' +
+                '}';
+    }
 }

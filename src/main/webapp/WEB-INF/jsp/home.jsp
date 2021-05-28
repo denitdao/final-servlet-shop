@@ -7,7 +7,7 @@
 <fmt:setBundle basename="resources"/>
 
 <!DOCTYPE html>
-<html>
+<html lang="${sessionScope.locale}">
 <head>
     <title>Home</title>
 </head>

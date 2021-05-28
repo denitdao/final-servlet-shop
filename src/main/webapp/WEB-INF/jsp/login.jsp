@@ -7,7 +7,7 @@
 <fmt:setBundle basename="resources"/>
 
 <!DOCTYPE html>
-<html>
+<html lang="${sessionScope.locale}">
 <head>
     <title><fmt:message key="login_jsp.title"/></title>
 </head>

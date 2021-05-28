@@ -1,4 +1,4 @@
-package ua.denitdao.servlet.shop.model.dao.impl;
+package ua.denitdao.servlet.shop.model.dao;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.logging.log4j.LogManager;

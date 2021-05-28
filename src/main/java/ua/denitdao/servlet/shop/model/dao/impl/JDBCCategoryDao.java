@@ -31,6 +31,9 @@ public class JDBCCategoryDao implements CategoryDao {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Get category with basic information
+     */
     @Override
     public Optional<Category> findById(Long id, Locale locale) {
         Category category = null;
@@ -59,6 +62,9 @@ public class JDBCCategoryDao implements CategoryDao {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Get all categories with their basic information
+     */
     @Override
     public List<Category> findAll(Locale locale) {
         List<Category> categories = new ArrayList<>();
@@ -72,7 +78,7 @@ public class JDBCCategoryDao implements CategoryDao {
             pst.setString(1, locale.toString());
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                categories.add(CategoryMapper.getInstance().extractFromResultSet(rs));
+                categories.add(CategoryMapper.getInstance().extractFromResultSet(rs)); // todo: optimize
             }
         } catch (SQLException e) {
             logger.warn("Failed to get all categories -- {}", e.getMessage());

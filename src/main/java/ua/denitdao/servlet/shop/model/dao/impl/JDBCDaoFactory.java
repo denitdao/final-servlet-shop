@@ -2,10 +2,7 @@ package ua.denitdao.servlet.shop.model.dao.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.denitdao.servlet.shop.model.dao.CategoryDao;
-import ua.denitdao.servlet.shop.model.dao.DaoFactory;
-import ua.denitdao.servlet.shop.model.dao.ProductDao;
-import ua.denitdao.servlet.shop.model.dao.UserDao;
+import ua.denitdao.servlet.shop.model.dao.*;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -47,6 +44,16 @@ public class JDBCDaoFactory extends DaoFactory {
     @Override
     public ProductDao createProductDao(Connection connection) {
         return new JDBCProductDao(connection);
+    }
+
+    @Override
+    public CategoryPropertyDao createCategoryPropertyDao() {
+        return new JDBCCategoryPropertyDao(getConnection());
+    }
+
+    @Override
+    public CategoryPropertyDao createCategoryPropertyDao(Connection connection) {
+        return new JDBCCategoryPropertyDao(connection);
     }
 
     @Override
