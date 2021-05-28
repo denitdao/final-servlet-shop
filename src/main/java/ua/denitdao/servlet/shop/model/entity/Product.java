@@ -187,7 +187,7 @@ public class Product implements Serializable {
                 ", price=" + price +
                 ", height=" + height +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", properties=" + properties.size() +
+                ", properties=" + ((properties != null) ? properties.size() : "-") +
                 ", category=" + ((category != null) ? category.getTitle() : "-") +
                 ", updatedAt=" + updatedAt +
                 ", createdAt=" + createdAt +

@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.denitdao.servlet.shop.model.entity.Roles;
 import ua.denitdao.servlet.shop.model.entity.User;
 import ua.denitdao.servlet.shop.model.exception.MyException;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;

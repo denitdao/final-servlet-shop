@@ -21,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Optional<Category> getCategoryWithProducts(Long id, Locale locale) {
-        Optional<Category> category;
+        Optional<Category> categoryOpt;
 
         Connection connection = daoFactory.getConnection();
         try (CategoryDao categoryDao = daoFactory.createCategoryDao(connection);
@@ -29,15 +29,16 @@ public class CategoryServiceImpl implements CategoryService {
             logger.info("set autocommit false");
             connection.setAutoCommit(false);
 
-            category = categoryDao.findById(id, locale);
-            // actions
+            categoryOpt = categoryDao.findById(id, locale);
+            Category category = categoryOpt.orElseThrow(() -> new RuntimeException("category not found"));
+            category.setProducts(productDao.findAllWithCategoryId(id, locale));
             logger.info("making commit");
             connection.commit();
         } catch (SQLException e) {
             logger.warn("transaction failed -- {}", e.getMessage());
             throw new RuntimeException(e);
         }
-        return category;
+        return categoryOpt;
     }
 
     @Override

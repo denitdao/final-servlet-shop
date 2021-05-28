@@ -131,6 +131,7 @@ public class Category implements Serializable {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", products=" + products +
                 ", categoryProperties=" + categoryProperties +
                 ", updatedAt=" + updatedAt +
                 ", createdAt=" + createdAt +

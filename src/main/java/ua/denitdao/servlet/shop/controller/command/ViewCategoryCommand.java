@@ -2,6 +2,8 @@ package ua.denitdao.servlet.shop.controller.command;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.exception.MyException;
 import ua.denitdao.servlet.shop.model.service.CategoryService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
@@ -11,6 +13,7 @@ import java.util.Locale;
 
 public class ViewCategoryCommand implements Command {
 
+    private static final Logger logger = LogManager.getLogger(ViewCategoryCommand.class);
     CategoryService categoryService;
 
     public ViewCategoryCommand() {
@@ -21,10 +24,9 @@ public class ViewCategoryCommand implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws MyException {
         Long id = Long.valueOf(req.getParameter("id"));
-
         req.setAttribute("category",
                 categoryService.getCategoryWithProducts(id, (Locale) req.getSession().getAttribute("locale"))
-                        .orElse(null));
+                .orElse(null));
         return Paths.CATEGORY_JSP;
     }
 }
