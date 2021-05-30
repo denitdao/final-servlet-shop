@@ -17,7 +17,7 @@
 
 <form action="<%= Paths.POST_LOGIN %>" method="post">
     <fmt:message key="login_jsp.label.login"/>: <input type="text" name="login"
-                                                       value="${sessionScope.wrong_login}"><br>
+                                                       value="${sessionScope.prev_params.get('login')}"><br>
     <fmt:message key="login_jsp.label.password"/>: <input type="text" name="password"><br>
     <input type="submit" value='<fmt:message key="login_jsp.button.login"/>'>
 </form>
@@ -27,6 +27,6 @@
     <h3>Error message: ${sessionScope.login_status}</h3>
 </c:if>
 <c:remove var="login_status" scope="session"/>
-<c:remove var="wrong_login" scope="session"/>
+<c:remove var="prev_params" scope="session"/>
 </body>
 </html>

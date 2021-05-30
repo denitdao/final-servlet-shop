@@ -16,6 +16,9 @@ public final class Commands {
     // admin
     public static final String POST_ADD_PRODUCT = "postAddProduct";
     public static final String VIEW_ADD_PRODUCT = "addProduct";
+    public static final String POST_UPDATE_PRODUCT = "postUpdateProduct";
+    public static final String VIEW_UPDATE_PRODUCT = "updateProduct";
+    public static final String POST_DELETE_PRODUCT = "postDeleteProduct";
     // other
     public static final String DEFAULT = "default";
     public static final String SOME = "some"; // stub

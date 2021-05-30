@@ -25,8 +25,23 @@
 <p>${requestScope.product.height}</p>
 <p>${requestScope.product.price}</p>
 <c:forEach var="property" items="${requestScope.product.properties}">
-    <p>${property.key}  -  ${property.value}</p>
+    <p>${property.key} - ${property.value}</p>
 </c:forEach>
-<a href="#">${requestScope.product.category}</a>
+
+<c:url value="<%= Paths.VIEW_CATEGORY %>" var="toCategoryUrl">
+    <c:param name="id" value="${requestScope.product.category.id}"/>
+</c:url>
+<p><a href="${toCategoryUrl}">Back to ${requestScope.product.category.title}</a></p>
+
+<c:url value="<%= Paths.VIEW_UPDATE_PRODUCT %>" var="editProdUrl">
+    <c:param name="id" value="${requestScope.product.id}"/>
+</c:url>
+<p><a href="${editProdUrl}">Edit</a></p>
+
+<c:url value="<%= Paths.POST_DELETE_PRODUCT %>" var="deleteProdUrl">
+    <c:param name="product_id" value="${requestScope.product.id}"/>
+    <c:param name="category_id" value="${requestScope.product.category.id}"/>
+</c:url>
+<p><a href="${deleteProdUrl}">Delete</a></p>
 </body>
 </html>

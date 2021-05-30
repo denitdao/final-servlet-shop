@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface CategoryService {
 
+    Optional<Category> getCategoryWithProperties(Long id, Locale locale);
+
     Optional<Category> getCategoryWithProducts(Long id, Locale locale);
 
     List<Category> getAllCategories(Locale locale);

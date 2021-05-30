@@ -17,11 +17,11 @@
 
 <form action="<%= Paths.POST_REGISTER %>" method="post">
     Name: <input type="text" name="firstName"
-                 value="${sessionScope.getOrDefault("wrong_firstName", "")}">
+                 value="${sessionScope.prev_params.get('firstName')}">
     <input type="text" name="secondName"
-           value="${sessionScope.getOrDefault("wrong_secondName", "")}"><br>
+           value="${sessionScope.prev_params.get('secondName')}"><br>
     Login: <input type="text" name="login"
-                  value="${sessionScope.getOrDefault("wrong_login", "")}"><br>
+                  value="${sessionScope.prev_params.get('login')}"><br>
     Password: <input type="text" name="password"><br>
     <input type="submit" value='Register'>
 </form>
@@ -31,8 +31,6 @@
     <h3>Error message: ${sessionScope.login_status}</h3>
 </c:if>
 <c:remove var="login_status" scope="session"/>
-<c:remove var="wrong_login" scope="session"/>
-<c:remove var="wrong_firstName" scope="session"/>
-<c:remove var="wrong_secondName" scope="session"/>
+<c:remove var="prev_params" scope="session"/>
 </body>
 </html>

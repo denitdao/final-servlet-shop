@@ -3,6 +3,7 @@ package ua.denitdao.servlet.shop.model.service.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.dao.CategoryDao;
+import ua.denitdao.servlet.shop.model.dao.CategoryPropertyDao;
 import ua.denitdao.servlet.shop.model.dao.DaoFactory;
 import ua.denitdao.servlet.shop.model.dao.ProductDao;
 import ua.denitdao.servlet.shop.model.entity.Category;
@@ -20,6 +21,30 @@ public class CategoryServiceImpl implements CategoryService {
     private final DaoFactory daoFactory = DaoFactory.getInstance();
 
     /**
+     * Get category with full information.
+     */
+    @Override
+    public Optional<Category> getCategoryWithProperties(Long id, Locale locale) {
+        Optional<Category> categoryOpt;
+
+        Connection connection = daoFactory.getConnection();
+        try (CategoryDao categoryDao = daoFactory.createCategoryDao(connection);
+             CategoryPropertyDao categoryPropertyDao = daoFactory.createCategoryPropertyDao(connection)) {
+            connection.setAutoCommit(false);
+
+            categoryOpt = categoryDao.findById(id, locale);
+            Category category = categoryOpt.orElseThrow(() -> new RuntimeException("category not found"));
+            category.setCategoryProperties(categoryPropertyDao.findAllWithCategoryId(id));
+
+            connection.commit();
+        } catch (SQLException e) {
+            logger.warn("transaction failed -- {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return categoryOpt;
+    }
+
+    /**
      * Get category with basic information and all products.
      */
     @Override
@@ -33,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
 
             categoryOpt = categoryDao.findById(id, locale);
             Category category = categoryOpt.orElseThrow(() -> new RuntimeException("category not found"));
-            category.setProducts(productDao.findAllWithCategoryId(id, locale));
+            category.setProducts(productDao.findAllWithCategoryId(id, locale.toString()));
 
             connection.commit();
         } catch (SQLException e) {

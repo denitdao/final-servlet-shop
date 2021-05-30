@@ -21,6 +21,11 @@
     <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
 </c:if>
 
+<c:url value="<%= Paths.VIEW_ADD_PRODUCT %>" var="addProdUrl">
+    <c:param name="id" value="${requestScope.category.id}"/>
+</c:url>
+<p><a href="${addProdUrl}">Add item</a></p>
+
 <c:forEach var="product" items="${requestScope.category.products}">
     <c:url value="<%= Paths.VIEW_PRODUCT %>" var="prodUrl">
         <c:param name="id" value="${product.id}"/>

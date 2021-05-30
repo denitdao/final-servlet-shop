@@ -12,6 +12,7 @@ import ua.denitdao.servlet.shop.model.service.UserService;
 import ua.denitdao.servlet.shop.util.ContextUtil;
 import ua.denitdao.servlet.shop.util.PasswordManager;
 import ua.denitdao.servlet.shop.util.Paths;
+import ua.denitdao.servlet.shop.util.SessionUtil;
 
 import java.util.Optional;
 
@@ -38,8 +39,8 @@ public class LoginCommand implements Command {
 
             if (ContextUtil.findUserInContext(req, user.getId())) {
                 session.setAttribute("login_status", "You are already logged in");
-                session.setAttribute("wrong_login", login);
-                return "redirect:" + Paths.VIEW_LOGIN;
+                SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
+                return "redirect:" + req.getHeader("referer");
             }
 
             ContextUtil.addUserToContext(req, user.getId());
@@ -52,8 +53,8 @@ public class LoginCommand implements Command {
         }
 
         session.setAttribute("login_status", "failed");
-        session.setAttribute("wrong_login", login);
-        return "redirect:" + Paths.VIEW_LOGIN;
+        SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
+        return "redirect:" + req.getHeader("referer");
     }
 
 

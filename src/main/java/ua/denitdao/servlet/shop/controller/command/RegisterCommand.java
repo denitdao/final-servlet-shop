@@ -11,6 +11,7 @@ import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.model.service.UserService;
 import ua.denitdao.servlet.shop.util.ContextUtil;
 import ua.denitdao.servlet.shop.util.Paths;
+import ua.denitdao.servlet.shop.util.SessionUtil;
 
 public class RegisterCommand implements Command {
 
@@ -47,9 +48,7 @@ public class RegisterCommand implements Command {
         }
 
         session.setAttribute("login_status", "Such user already exists");
-        session.setAttribute("wrong_login", login);
-        session.setAttribute("wrong_firstName", firstName);
-        session.setAttribute("wrong_secondName", secondName);
-        return "redirect:" + Paths.VIEW_REGISTER;
+        SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
+        return "redirect:" + req.getHeader("referer");
     }
 }

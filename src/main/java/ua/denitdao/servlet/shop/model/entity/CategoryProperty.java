@@ -11,6 +11,10 @@ public class CategoryProperty implements Serializable {
     private String title;
     private String dataType;
 
+    public CategoryProperty(Long id) {
+        this.id = id;
+    }
+
     public CategoryProperty(Long id, Locale locale, String title, String dataType) {
         this.id = id;
         this.locale = locale;

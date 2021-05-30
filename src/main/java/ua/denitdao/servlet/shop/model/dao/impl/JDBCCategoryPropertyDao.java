@@ -24,18 +24,40 @@ public class JDBCCategoryPropertyDao implements CategoryPropertyDao {
     }
 
     @Override
-    public Map<CategoryProperty, String> findAllWithProductId(Long productId, Locale locale) {
-        Map<CategoryProperty, String> properties = new HashMap<>();
+    public List<CategoryProperty> findAllWithCategoryId(Long categoryId) {
+        List<CategoryProperty> categoryProperties = new ArrayList<>();
+
+        final String query = "select *\n" +
+                "from category_properties\n" +
+                "where category_id = ? order by locale";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setLong(1, categoryId);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                CategoryProperty categoryProperty = CategoryPropertyMapper.getInstance().extractFromResultSet(rs);
+                categoryProperty.setLocale(new Locale(rs.getString("locale")));
+                categoryProperties.add(categoryProperty);
+            }
+        } catch (SQLException e) {
+            logger.warn("Failed to get properties of the category -- {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return categoryProperties;
+    }
+
+    @Override
+    public Map<CategoryProperty, String> findAllWithProductId(Long productId, String locale) {
+        Map<CategoryProperty, String> properties = new LinkedHashMap<>();
 
         final String query = "select cp.id, title, value, data_type\n" +
                 "from category_properties cp\n" +
                 "         left join product_properties pp on cp.id = pp.category_properties_id\n" +
                 "where product_id = ?\n" +
-                "  and locale = ?;";
+                "  and locale = ? order by locale";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, productId);
-            pst.setString(2, locale.toString());
+            pst.setString(2, locale);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 CategoryProperty categoryProperty = CategoryPropertyMapper.getInstance().extractFromResultSet(rs);

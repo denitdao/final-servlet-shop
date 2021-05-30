@@ -20,6 +20,10 @@ public final class Paths {
 
     public static final String POST_ADD_PRODUCT = BASE + Commands.POST_ADD_PRODUCT;
     public static final String VIEW_ADD_PRODUCT = BASE + Commands.VIEW_ADD_PRODUCT;
+    public static final String POST_UPDATE_PRODUCT = BASE + Commands.POST_UPDATE_PRODUCT;
+    public static final String VIEW_UPDATE_PRODUCT = BASE + Commands.VIEW_UPDATE_PRODUCT;
+    public static final String POST_DELETE_PRODUCT = BASE + Commands.POST_DELETE_PRODUCT;
+
 
     public static final String SOME = BASE + Commands.SOME;
     public static final String DEFAULT = BASE + Commands.DEFAULT;
@@ -28,9 +32,12 @@ public final class Paths {
     public static final String REGISTER_JSP = "/WEB-INF/jsp/register.jsp";
     public static final String HOME_JSP = "/WEB-INF/jsp/home.jsp";
     public static final String PRODUCT_JSP = "/WEB-INF/jsp/product.jsp";
+    public static final String ADD_PRODUCT_JSP = "/WEB-INF/jsp/add_product.jsp";
     public static final String CATEGORY_JSP = "/WEB-INF/jsp/category.jsp";
     public static final String PROFILE_JSP = "/WEB-INF/jsp/profile.jsp";
     public static final String ERROR_JSP = "/WEB-INF/jsp/error.jsp";
+    public static final String UPDATE_PRODUCT_JSP = "/WEB-INF/jsp/update_product.jsp";
+
 
     private Paths() {
     }
