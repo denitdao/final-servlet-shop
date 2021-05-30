@@ -5,8 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.User;
 import ua.denitdao.servlet.shop.model.exception.MyException;
+import ua.denitdao.servlet.shop.model.service.CartService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.model.service.UserService;
 import ua.denitdao.servlet.shop.util.ContextUtil;
@@ -20,10 +22,12 @@ public class LoginCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(LoginCommand.class);
     private final UserService userService;
+    private final CartService cartService;
 
     public LoginCommand() {
         final ServiceFactory serviceFactory = ServiceFactory.getInstance();
         userService = serviceFactory.getUserService();
+        cartService = serviceFactory.getCartService();
     }
 
     @Override
@@ -47,6 +51,10 @@ public class LoginCommand implements Command {
 
             session.setAttribute("user", user);
             session.setAttribute("role", user.getRole());
+
+            Cart cart = (Cart) session.getAttribute("cart");
+            if (cartService.syncCart(user.getId(), cart))
+                session.setAttribute("cart", cart);
 
             logger.info("logged in: sess({}) | login({})", session, login);
             return "redirect:" + Paths.VIEW_HOME;

@@ -27,14 +27,18 @@ public class CommandContainer {
         commands.put(Commands.POST_REGISTER, new RegisterCommand());
         commands.put(Commands.VIEW_REGISTER, new ViewRegisterCommand());
         commands.put(Commands.POST_LOGOUT, new LogoutCommand());
+
         commands.put(Commands.VIEW_HOME, new ViewHomeCommand());
         commands.put(Commands.VIEW_CATEGORY, new ViewCategoryCommand());
+        commands.put(Commands.VIEW_PRODUCT, new ViewProductCommand());
+        commands.put(Commands.POST_ADD_TO_CART, new AddToCartCommand());
+
         commands.put(Commands.POST_ADD_PRODUCT, new AddProductCommand());
         commands.put(Commands.VIEW_ADD_PRODUCT, new ViewAddProductCommand());
         commands.put(Commands.POST_UPDATE_PRODUCT, new UpdateProductCommand());
         commands.put(Commands.VIEW_UPDATE_PRODUCT, new ViewUpdateProductCommand());
         commands.put(Commands.POST_DELETE_PRODUCT, new DeleteProductCommand());
-        commands.put(Commands.VIEW_PRODUCT, new ViewProductCommand());
+
         commands.put(Commands.DEFAULT, new DefaultCommand());
         // ...
     }

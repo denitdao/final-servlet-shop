@@ -19,7 +19,7 @@
 <c:if test="${not empty sessionScope.user}">
     <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
 </c:if>
-
+<h4>Item in the cart: ${sessionScope.cart.products.size()}</h4>
 <c:forEach var="category" items="${requestScope.categories}">
     <c:url value="<%= Paths.VIEW_CATEGORY %>" var="catUrl">
         <c:param name="id" value="${category.id}"/>

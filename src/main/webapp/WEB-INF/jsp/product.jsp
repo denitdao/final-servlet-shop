@@ -43,5 +43,16 @@
     <c:param name="category_id" value="${requestScope.product.category.id}"/>
 </c:url>
 <p><a href="${deleteProdUrl}">Delete</a></p>
+
+<form action="<%= Paths.POST_ADD_TO_CART %>" method="post">
+    Amount to add: <input type="number" name="amount"
+                          value="${sessionScope.cart.products.get(requestScope.product.id)}"><br>
+    <input type="number" name="product_id" value="${requestScope.product.id}" hidden>
+    <input type="submit" value='Add to cart'>
+</form>
+<c:if test="${not empty sessionScope.errorMessage}">
+    <h3>Error message: ${sessionScope.errorMessage}</h3>
+</c:if>
+<c:remove var="errorMessage" scope="session"/>
 </body>
 </html>

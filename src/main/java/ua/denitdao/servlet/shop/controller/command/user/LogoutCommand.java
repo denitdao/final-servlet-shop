@@ -6,10 +6,13 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
+import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.User;
 import ua.denitdao.servlet.shop.model.exception.MyException;
 import ua.denitdao.servlet.shop.util.ContextUtil;
 import ua.denitdao.servlet.shop.util.Paths;
+
+import java.util.LinkedHashMap;
 
 public class LogoutCommand implements Command {
 
@@ -26,7 +29,7 @@ public class LogoutCommand implements Command {
 
         session.removeAttribute("user");
         session.removeAttribute("role");
-        session.removeAttribute("cart");
+        session.setAttribute("cart", new Cart(new LinkedHashMap<>()));
 
         return "redirect:" + Paths.VIEW_HOME;
     }

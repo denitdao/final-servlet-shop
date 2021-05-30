@@ -57,6 +57,16 @@ public class JDBCDaoFactory extends DaoFactory {
     }
 
     @Override
+    public CartDao createCartDao() {
+        return new JDBCCartDao(getConnection());
+    }
+
+    @Override
+    public CartDao createCartDao(Connection connection) {
+        return new JDBCCartDao(connection);
+    }
+
+    @Override
     public Connection getConnection() {
         try {
             logger.debug("Connection opened");

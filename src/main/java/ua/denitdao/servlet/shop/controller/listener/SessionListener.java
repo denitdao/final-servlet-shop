@@ -6,11 +6,13 @@ import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.User;
 import ua.denitdao.servlet.shop.util.ContextUtil;
 
+import java.util.LinkedHashMap;
+
 public class SessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        se.getSession().setAttribute("cart", new Cart());
+        se.getSession().setAttribute("cart", new Cart(new LinkedHashMap<>()));
     }
 
     @Override

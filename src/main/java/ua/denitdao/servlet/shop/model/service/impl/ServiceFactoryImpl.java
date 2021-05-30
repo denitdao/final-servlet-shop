@@ -1,9 +1,6 @@
 package ua.denitdao.servlet.shop.model.service.impl;
 
-import ua.denitdao.servlet.shop.model.service.CategoryService;
-import ua.denitdao.servlet.shop.model.service.ProductService;
-import ua.denitdao.servlet.shop.model.service.ServiceFactory;
-import ua.denitdao.servlet.shop.model.service.UserService;
+import ua.denitdao.servlet.shop.model.service.*;
 
 public class ServiceFactoryImpl extends ServiceFactory {
 
@@ -20,5 +17,10 @@ public class ServiceFactoryImpl extends ServiceFactory {
     @Override
     public ProductService getProductService() {
         return new ProductServiceImpl();
+    }
+
+    @Override
+    public CartService getCartService() {
+        return new CartServiceImpl();
     }
 }

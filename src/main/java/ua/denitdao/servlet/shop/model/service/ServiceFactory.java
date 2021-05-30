@@ -12,6 +12,8 @@ public abstract class ServiceFactory {
 
     public abstract ProductService getProductService();
 
+    public abstract CartService getCartService();
+
     public static synchronized ServiceFactory getInstance() {
         if (serviceFactory == null)
             serviceFactory = new ServiceFactoryImpl(); // change implementation here, to make changes to the whole project

@@ -14,6 +14,7 @@ public final class Paths {
     public static final String VIEW_HOME = BASE + Commands.VIEW_HOME;
     public static final String VIEW_CATEGORY = BASE + Commands.VIEW_CATEGORY;
     public static final String VIEW_PRODUCT = BASE + Commands.VIEW_PRODUCT;
+    public static final String POST_ADD_TO_CART = BASE + Commands.POST_ADD_TO_CART;
 
     public static final String POST_PROFILE = BASE + Commands.POST_PROFILE;
     public static final String VIEW_PROFILE = BASE + Commands.VIEW_PROFILE;

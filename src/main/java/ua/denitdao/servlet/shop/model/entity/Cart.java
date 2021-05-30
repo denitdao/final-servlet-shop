@@ -8,20 +8,20 @@ import java.util.Map;
  */
 public class Cart implements Serializable {
 
-    private Map<Product, Integer> products; // product - amount
+    private Map<Long, Integer> products; // productId - amount
 
     public Cart() {
     }
 
-    public Cart(Map<Product, Integer> products) {
+    public Cart(Map<Long, Integer> products) {
         this.products = products;
     }
 
-    public Map<Product, Integer> getProducts() {
+    public Map<Long, Integer> getProducts() {
         return products;
     }
 
-    public void setProducts(Map<Product, Integer> products) {
+    public void setProducts(Map<Long, Integer> products) {
         this.products = products;
     }
 

@@ -9,6 +9,7 @@ public final class Commands {
     public static final String VIEW_HOME = "home";
     public static final String VIEW_CATEGORY = "category";
     public static final String VIEW_PRODUCT = "product";
+    public static final String POST_ADD_TO_CART = "postAddToCart";
     // user
     public static final String POST_LOGOUT = "postLogout";
     public static final String VIEW_PROFILE = "profile";

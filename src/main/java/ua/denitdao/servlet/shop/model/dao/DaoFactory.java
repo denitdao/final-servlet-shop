@@ -24,6 +24,10 @@ public abstract class DaoFactory {
 
     public abstract CategoryPropertyDao createCategoryPropertyDao(Connection connection);
 
+    public abstract CartDao createCartDao();
+
+    public abstract CartDao createCartDao(Connection connection);
+
     public static synchronized DaoFactory getInstance() {
         if (daoFactory == null)
             daoFactory = new JDBCDaoFactory(); // change implementation here, to make changes to the whole project
