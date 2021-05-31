@@ -5,10 +5,13 @@ import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.dao.CartDao;
 import ua.denitdao.servlet.shop.model.dao.DaoFactory;
 import ua.denitdao.servlet.shop.model.entity.Cart;
+import ua.denitdao.servlet.shop.model.entity.OrderProduct;
 import ua.denitdao.servlet.shop.model.service.CartService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CartServiceImpl implements CartService {
@@ -32,7 +35,6 @@ public class CartServiceImpl implements CartService {
             // persist items stored in the DB before logout
             dao.findById(userId)
                     .ifPresent(value -> cart.setProducts(value.getProducts()));
-            logger.info("cart health {} , {}", queryFailed.get(), cart.getProducts());
             if (!queryFailed.get())
                 connection.commit();
             return !queryFailed.get();
@@ -40,5 +42,15 @@ public class CartServiceImpl implements CartService {
             logger.warn("cart update transaction failed -- {}", e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public List<OrderProduct> getProductsInCart(Long userId, String locale) {
+        try (CartDao dao = daoFactory.createCartDao()) {
+            return dao.findProductsInCart(userId, locale);
+        } catch (RuntimeException e) {
+            logger.warn("no products found -- {}", e.getMessage());
+        }
+        return Collections.emptyList();
     }
 }

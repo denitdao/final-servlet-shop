@@ -18,13 +18,17 @@ public final class Paths {
 
     public static final String POST_PROFILE = BASE + Commands.POST_PROFILE;
     public static final String VIEW_PROFILE = BASE + Commands.VIEW_PROFILE;
+    public static final String VIEW_CART = BASE + Commands.VIEW_CART;
+    public static final String POST_ADD_ORDER = BASE + Commands.POST_ADD_ORDER;
+    public static final String VIEW_ALL_ORDERS = BASE + Commands.VIEW_ALL_ORDERS;
 
     public static final String POST_ADD_PRODUCT = BASE + Commands.POST_ADD_PRODUCT;
     public static final String VIEW_ADD_PRODUCT = BASE + Commands.VIEW_ADD_PRODUCT;
     public static final String POST_UPDATE_PRODUCT = BASE + Commands.POST_UPDATE_PRODUCT;
     public static final String VIEW_UPDATE_PRODUCT = BASE + Commands.VIEW_UPDATE_PRODUCT;
     public static final String POST_DELETE_PRODUCT = BASE + Commands.POST_DELETE_PRODUCT;
-
+    public static final String POST_UPDATE_ORDER = BASE + Commands.POST_UPDATE_ORDER;
+    public static final String VIEW_ORDER = BASE + Commands.VIEW_ORDER;
 
     public static final String SOME = BASE + Commands.SOME;
     public static final String DEFAULT = BASE + Commands.DEFAULT;
@@ -33,11 +37,13 @@ public final class Paths {
     public static final String REGISTER_JSP = "/WEB-INF/jsp/register.jsp";
     public static final String HOME_JSP = "/WEB-INF/jsp/home.jsp";
     public static final String PRODUCT_JSP = "/WEB-INF/jsp/product.jsp";
-    public static final String ADD_PRODUCT_JSP = "/WEB-INF/jsp/add_product.jsp";
+    public static final String ADD_PRODUCT_JSP = "/WEB-INF/jsp/admin/add_product.jsp";
     public static final String CATEGORY_JSP = "/WEB-INF/jsp/category.jsp";
-    public static final String PROFILE_JSP = "/WEB-INF/jsp/profile.jsp";
+    public static final String CART_JSP = "/WEB-INF/jsp/user/cart.jsp";
+    public static final String ORDER_JSP = "/WEB-INF/jsp/admin/order.jsp";
+    public static final String ALL_ORDERS_JSP = "/WEB-INF/jsp/user/all_orders.jsp";
     public static final String ERROR_JSP = "/WEB-INF/jsp/error.jsp";
-    public static final String UPDATE_PRODUCT_JSP = "/WEB-INF/jsp/update_product.jsp";
+    public static final String UPDATE_PRODUCT_JSP = "/WEB-INF/jsp/admin/update_product.jsp";
 
 
     private Paths() {

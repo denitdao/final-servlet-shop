@@ -20,18 +20,15 @@
     <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
 </c:if>
 
-<c:forEach var="item" items="${sessionScope.cart.products}">
+<c:forEach var="item" items="${requestScope.orderProducts}">
     <c:url value="<%= Paths.VIEW_PRODUCT %>" var="prodUrl">
-        <c:param name="id" value="${item.key.id}"/>
+        <c:param name="id" value="${item.product.id}"/>
     </c:url>
 
-    <p><a href="${prodUrl}">${item.key.title}</a>: ${item.value}</p>
+    <p><a href="${prodUrl}">${item.product.title}</a>: ${item.amount}</p>
 </c:forEach>
-<%--
-get list of carted items and check their id's in the session cart and get amount
---%>
-<c:url value="<%= Paths.VIEW_PRODUCT %>" var="orderUrl">
-    <c:param name="id" value="${item.key.id}"/>
+<c:url value="<%= Paths.POST_ADD_ORDER %>" var="orderUrl">
+    <c:param name="id" value="${sessionScope.user.id}"/>
 </c:url>
 <p><a href="${orderUrl}">Make order</a></p>
 </body>

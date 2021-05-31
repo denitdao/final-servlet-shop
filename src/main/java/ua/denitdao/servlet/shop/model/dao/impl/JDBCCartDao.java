@@ -3,15 +3,14 @@ package ua.denitdao.servlet.shop.model.dao.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.dao.CartDao;
+import ua.denitdao.servlet.shop.model.dao.mapper.ProductMapper;
 import ua.denitdao.servlet.shop.model.dao.mapper.UserMapper;
 import ua.denitdao.servlet.shop.model.entity.Cart;
+import ua.denitdao.servlet.shop.model.entity.OrderProduct;
 import ua.denitdao.servlet.shop.model.entity.User;
 
 import java.sql.*;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class JDBCCartDao implements CartDao {
 
@@ -60,7 +59,7 @@ public class JDBCCartDao implements CartDao {
             }
             cart = new Cart(products);
         } catch (SQLException e) {
-            logger.warn("Failed to get user by id -- {}", e.getMessage());
+            logger.warn("Failed to get cart by id -- {}", e.getMessage());
             throw new RuntimeException(e);
         }
         return Optional.of(cart);
@@ -69,6 +68,32 @@ public class JDBCCartDao implements CartDao {
     @Override
     public List<Cart> findAll() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<OrderProduct> findProductsInCart(Long userId, String locale) {
+        final String query = "select products.*, pi.title, pi.description, pi.color, amount\n" +
+                "from products\n" +
+                "         left join product_info pi on products.id = pi.product_id\n" +
+                "         inner join shopping_carts sc on products.id = sc.product_id\n" +
+                "where user_id = ?\n" +
+                "  and locale = ?";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setLong(1, userId);
+            pst.setString(2, locale);
+            ResultSet rs = pst.executeQuery();
+
+            List<OrderProduct> orderProducts = new ArrayList<>();
+            while (rs.next()) {
+                orderProducts.add(
+                        new OrderProduct(ProductMapper.getInstance().extractFromResultSet(rs), rs.getInt("amount"))
+                );
+            }
+            return orderProducts;
+        } catch (SQLException e) {
+            logger.warn("Failed to get cart products -- {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

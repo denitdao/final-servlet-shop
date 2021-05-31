@@ -49,6 +49,10 @@ public class Order implements Serializable {
         public Order build() { return entity; }
     }
 
+    public static OrderBuilder builder() {
+        return new OrderBuilder();
+    }
+
     public Long getId() {
         return id;
     }
@@ -87,5 +91,16 @@ public class Order implements Serializable {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", status='" + status + '\'' +
+                ", products=" + ((products != null) ? products.size() : "-" ) +
+                ", updatedAt=" + updatedAt +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

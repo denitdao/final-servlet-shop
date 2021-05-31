@@ -14,12 +14,17 @@ public final class Commands {
     public static final String POST_LOGOUT = "postLogout";
     public static final String VIEW_PROFILE = "profile";
     public static final String POST_PROFILE = "postProfile";
+    public static final String VIEW_CART = "cart";
+    public static final String POST_ADD_ORDER = "postAddOrder";
+    public static final String VIEW_ALL_ORDERS = "allOrders";
     // admin
     public static final String POST_ADD_PRODUCT = "postAddProduct";
     public static final String VIEW_ADD_PRODUCT = "addProduct";
     public static final String POST_UPDATE_PRODUCT = "postUpdateProduct";
     public static final String VIEW_UPDATE_PRODUCT = "updateProduct";
     public static final String POST_DELETE_PRODUCT = "postDeleteProduct";
+    public static final String VIEW_ORDER = "order";
+    public static final String POST_UPDATE_ORDER = "postUpdateOrder";
     // other
     public static final String DEFAULT = "default";
     public static final String SOME = "some"; // stub

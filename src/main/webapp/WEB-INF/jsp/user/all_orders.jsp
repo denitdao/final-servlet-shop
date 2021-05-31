@@ -9,25 +9,24 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 <head>
-    <title>Home</title>
+    <title>All orders</title>
 </head>
 <body>
-<h3>${sessionScope.getOrDefault("user", "(Guest)")}</h3>
+
 <c:if test="${empty sessionScope.user}">
     <a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>">Login</a><br>
 </c:if>
 <c:if test="${not empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.VIEW_CART %>">Cart</a><br>
-    <a href="${pageContext.request.contextPath}<%= Paths.VIEW_ALL_ORDERS %>">All orders</a><br>
     <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
 </c:if>
-<h4>Item in the cart: ${sessionScope.cart.products.size()}</h4>
-<c:forEach var="category" items="${requestScope.categories}">
-    <c:url value="<%= Paths.VIEW_CATEGORY %>" var="catUrl">
-        <c:param name="id" value="${category.id}"/>
-    </c:url>
 
-    <p><a href="${catUrl}">${category.title}</a>: ${category}</p>
+<c:forEach var="order" items="${requestScope.orders}">
+    <c:url value="<%= Paths.VIEW_ORDER %>" var="orderUrl">
+        <c:param name="id" value="${order.id}"/>
+    </c:url>
+    <p>Status: ${requestScope.order.status}</p>
+    <p><a href="${orderUrl}">View order ${order.id}</a>: ${order}</p>
 </c:forEach>
+
 </body>
 </html>

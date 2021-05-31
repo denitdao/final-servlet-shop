@@ -67,6 +67,16 @@ public class JDBCDaoFactory extends DaoFactory {
     }
 
     @Override
+    public OrderDao createOrderDao() {
+        return new JDBCOrderDao(getConnection());
+    }
+
+    @Override
+    public OrderDao createOrderDao(Connection connection) {
+        return new JDBCOrderDao(connection);
+    }
+
+    @Override
     public Connection getConnection() {
         try {
             logger.debug("Connection opened");

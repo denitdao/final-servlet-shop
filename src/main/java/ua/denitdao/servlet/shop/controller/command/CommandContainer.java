@@ -3,7 +3,7 @@ package ua.denitdao.servlet.shop.controller.command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.admin.*;
-import ua.denitdao.servlet.shop.controller.command.user.LogoutCommand;
+import ua.denitdao.servlet.shop.controller.command.user.*;
 import ua.denitdao.servlet.shop.util.Commands;
 
 import java.util.HashMap;
@@ -33,11 +33,17 @@ public class CommandContainer {
         commands.put(Commands.VIEW_PRODUCT, new ViewProductCommand());
         commands.put(Commands.POST_ADD_TO_CART, new AddToCartCommand());
 
+        commands.put(Commands.VIEW_CART, new ViewCartCommand());
+        commands.put(Commands.VIEW_ALL_ORDERS, new ViewAllOrdersCommand());
+        commands.put(Commands.POST_ADD_ORDER, new AddOrderCommand());
+
         commands.put(Commands.POST_ADD_PRODUCT, new AddProductCommand());
         commands.put(Commands.VIEW_ADD_PRODUCT, new ViewAddProductCommand());
         commands.put(Commands.POST_UPDATE_PRODUCT, new UpdateProductCommand());
         commands.put(Commands.VIEW_UPDATE_PRODUCT, new ViewUpdateProductCommand());
         commands.put(Commands.POST_DELETE_PRODUCT, new DeleteProductCommand());
+        commands.put(Commands.VIEW_ORDER, new ViewOrderCommand());
+        commands.put(Commands.POST_UPDATE_ORDER, new UpdateOrderCommand());
 
         commands.put(Commands.DEFAULT, new DefaultCommand());
         // ...
