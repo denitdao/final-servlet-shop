@@ -9,25 +9,30 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 <head>
-    <title>Home</title>
+    <title><fmt:message key="home_jsp.title"/></title>
+    <%@ include file="/WEB-INF/parts/head_tags.jspf" %>
 </head>
 <body>
-<h3>${sessionScope.getOrDefault("user", "(Guest)")}</h3>
-<c:if test="${empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>">Login</a><br>
-</c:if>
-<c:if test="${not empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.VIEW_CART %>">Cart</a><br>
-    <a href="${pageContext.request.contextPath}<%= Paths.VIEW_ALL_ORDERS %>">All orders</a><br>
-    <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
-</c:if>
-<h4>Item in the cart: ${sessionScope.cart.products.size()}</h4>
-<c:forEach var="category" items="${requestScope.categories}">
-    <c:url value="<%= Paths.VIEW_CATEGORY %>" var="catUrl">
-        <c:param name="id" value="${category.id}"/>
-    </c:url>
+<%@ include file="/WEB-INF/parts/header.jspf" %>
 
-    <p><a href="${catUrl}">${category.title}</a>: ${category}</p>
-</c:forEach>
+<main class="container">
+    <h3 class="h3 m-5"><fmt:message key="home_jsp.h3"/></h3>
+    <div class="row m-md-2">
+        <c:forEach var="category" items="${requestScope.categories}">
+            <c:url value="<%= Paths.VIEW_CATEGORY %>" var="catUrl">
+                <c:param name="id" value="${category.id}"/>
+            </c:url>
+            <div class="col-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="h5 card-title">${category.title}</h5>
+                        <p class="card-text">${category.description}</p>
+                        <a href="${catUrl}" class="btn btn-primary"><fmt:message key="home_jsp.item.button"/></a>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+</main>
 </body>
 </html>

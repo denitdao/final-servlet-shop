@@ -9,88 +9,174 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 <head>
-    <title>Update Product</title>
+    <title><fmt:message key="update_product_jsp.title"/></title>
+    <%@ include file="/WEB-INF/parts/head_tags.jspf" %>
 </head>
 <body>
+<%@ include file="/WEB-INF/parts/header.jspf" %>
 
-<h3>Update item</h3>
-<c:if test="${empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>">Login</a><br>
-</c:if>
-<c:if test="${not empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
-</c:if>
-<c:catch var="exceptionThrown">
+<main class="container">
 
-    <form action="<%= Paths.POST_UPDATE_PRODUCT %>" method="post">
-        <c:choose>
-            <c:when test="${empty sessionScope.prev_params}">
-                Назва (uk): <input type="text" name="title_uk" value="${requestScope.product.get('uk').title}"><br>
-                Title (en): <input type="text" name="title_en" value="${requestScope.product.get('en').title}"><br>
-                Опис (uk): <input type="text" name="description_uk"
-                                  value="${requestScope.product.get('uk').description}"><br>
-                Description (en): <input type="text" name="description_en"
-                                         value="${requestScope.product.get('en').description}"><br>
-                Колір (uk): <input type="text" name="color_uk"
-                                   value="${requestScope.product.get('uk').color}"><br>
-                Color (en): <input type="text" name="color_en"
-                                   value="${requestScope.product.get('en').color}"><br>
-                <c:forEach var="local_product" items="${requestScope.product}">
-                    <c:forEach var="property" items="${local_product.value.properties}">
-                        <c:set var="prop_name" value="cp_${property.key.id}_${local_product.key}"/>
-                        ${property.key.title} (${local_product.key}): <input type="${property.key.dataType}"
-                                                                             name="${prop_name}"
-                                                                             value="${property.value}"><br>
+    <h3 class="h3 m-5"><fmt:message key="update_product_jsp.title"/></h3>
+    <div class="form-product">
+        <form action="<%= Paths.POST_UPDATE_PRODUCT %>" method="post">
+            <div class="form-text mt-4 mb-2 text-center"><fmt:message key="add_product_jsp.label.general"/></div>
+            <c:choose>
+                <c:when test="${empty sessionScope.prev_params}">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Назва товару</span>
+                        <input type="text" name="title_uk" value="${requestScope.product.get('uk').title}"
+                               maxlength="40" class="form-control" placeholder="Назва товару" aria-label="Назва товару">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Title</span>
+                        <input type="text" name="title_en" value="${requestScope.product.get('en').title}"
+                               maxlength="40" class="form-control" placeholder="Title" aria-label="Title">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Опис товару</span>
+                        <textarea class="form-control" name="description_uk" maxlength="300"
+                                  aria-label="Опис товару">${requestScope.product.get('uk').description}</textarea>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Description</span>
+                        <textarea class="form-control" name="description_en" maxlength="300"
+                                  aria-label="Description">${requestScope.product.get('en').description}</textarea>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Колір</span>
+                        <input type="text" name="color_uk" value="${requestScope.product.get('uk').color}"
+                               maxlength="20" class="form-control" placeholder="Колір" aria-label="Колір">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Color</span>
+                        <input type="text" name="color_en" value="${requestScope.product.get('en').color}"
+                               maxlength="20" class="form-control" placeholder="Color" aria-label="Color">
+                    </div>
+
+                    <hr>
+                    <div class="form-text mt-4 mb-2 text-center">
+                        <fmt:message key="add_product_jsp.label.specific"/>
+                    </div>
+                    <c:forEach var="local_product" items="${requestScope.product}">
+                        <c:forEach var="property" items="${local_product.value.properties}">
+                            <c:set var="prop_name" value="cp_${property.key.id}_${local_product.key}"/>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">${property.key.title}</span>
+                                <input type="${property.key.dataType}" name="${prop_name}"
+                                       value="${property.value}"
+                                       maxlength="100" class="form-control" placeholder="${property.key.title}"
+                                       aria-label="${property.key.title}">
+                            </div>
+                        </c:forEach>
                     </c:forEach>
-                </c:forEach>
-                Price: <input type="number" name="price" value="${requestScope.product.get('en').price}"><br>
-                Height: <input type="number" name="height" value="${requestScope.product.get('en').height}"><br>
-                <input type="number" value="${requestScope.product.get('en').id}" name="id" hidden>
-            </c:when>
-            <c:otherwise>
-                Назва (uk): <input type="text" name="title_uk" value="${sessionScope.prev_params.get('title_uk')}"><br>
-                Title (en): <input type="text" name="title_en" value="${sessionScope.prev_params.get('title_en')}"><br>
-                Опис (uk): <input type="text" name="description_uk"
-                                  value="${sessionScope.prev_params.get('description_uk')}"><br>
-                Description (en): <input type="text" name="description_en"
-                                         value="${sessionScope.prev_params.get('description_en')}"><br>
-                Колір (uk): <input type="text" name="color_uk" value="${sessionScope.prev_params.get('color_uk')}"><br>
-                Color (en): <input type="text" name="color_en" value="${sessionScope.prev_params.get('color_en')}"><br>
-                <c:forEach var="property" items="${requestScope.category.categoryProperties}">
-                    <c:set var="prop_name" value="cp_${property.id}_${property.locale}"/>
 
-                    <%--  add cutom tag to display int or string parameters  --%>
-                    ${property.title} (${property.locale}): <input type="${property.dataType}"
-                                                                   name="${prop_name}"
-                                                                   value="${sessionScope.prev_params.get(prop_name)}"><br>
-                </c:forEach>
-                <c:forEach var="local_product" items="${requestScope.product}">
-                    <c:forEach var="property" items="${local_product.value.properties}">
-                        <c:set var="prop_name" value="cp_${property.key.id}_${local_product.key}"/>
-                        ${property.key.title} (${local_product.key}): <input type="${property.key.dataType}"
-                                                                             name="${prop_name}"
-                                                                             value="${sessionScope.prev_params.get(prop_name)}"><br>
+                    <hr>
+                    <div class="form-text mt-4 mb-2 text-center"><fmt:message key="add_product_jsp.label.common"/></div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><fmt:message key="product.param.height"/></span>
+                        <input type="number" name="height" value="${requestScope.product.get('en').height}"
+                               class="form-control"
+                               placeholder="<fmt:message key="product.param.height"/>"
+                               maxlength="10" step='0.01' aria-label="<fmt:message key="product.param.height"/>">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">$</span>
+                        <input type="number" name="price" value="${requestScope.product.get('en').price}"
+                               class="form-control"
+                               placeholder="<fmt:message key="product.param.price"/>"
+                               maxlength="10" step='0.01' aria-label="<fmt:message key="product.param.price"/>">
+                        <span class="input-group-text">.00</span>
+                    </div>
+
+                </c:when>
+                <c:otherwise>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Назва товару</span>
+                        <input type="text" name="title_uk" value="${sessionScope.prev_params.get('title_uk')}"
+                               maxlength="40" class="form-control" placeholder="Назва товару" aria-label="Назва товару">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Title</span>
+                        <input type="text" name="title_en" value="${sessionScope.prev_params.get('title_en')}"
+                               maxlength="40" class="form-control" placeholder="Title" aria-label="Title">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Опис товару</span>
+                        <textarea class="form-control" name="description_uk" maxlength="300"
+                                  aria-label="Опис товару">${sessionScope.prev_params.get('description_uk')}</textarea>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Description</span>
+                        <textarea class="form-control" name="description_en" maxlength="300"
+                                  aria-label="Description">${sessionScope.prev_params.get('description_en')}</textarea>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Колір</span>
+                        <input type="text" name="color_uk" value="${sessionScope.prev_params.get('color_uk')}"
+                               maxlength="20" class="form-control" placeholder="Колір" aria-label="Колір">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Color</span>
+                        <input type="text" name="color_en" value="${sessionScope.prev_params.get('color_en')}"
+                               maxlength="20" class="form-control" placeholder="Color" aria-label="Color">
+                    </div>
+                    <hr>
+                    <div class="form-text mt-4 mb-2 text-center">
+                        <fmt:message key="add_product_jsp.label.specific"/>
+                    </div>
+                    <c:forEach var="local_product" items="${requestScope.product}">
+                        <c:forEach var="property" items="${local_product.value.properties}">
+                            <c:set var="prop_name" value="cp_${property.key.id}_${local_product.key}"/>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">${property.key.title}</span>
+                                <input type="${property.key.dataType}" name="${prop_name}"
+                                       value="${sessionScope.prev_params.get(prop_name)}"
+                                       maxlength="100" class="form-control" placeholder="${property.key.title}"
+                                       aria-label="${property.key.title}">
+                            </div>
+                        </c:forEach>
                     </c:forEach>
-                </c:forEach>
-                Price: <input type="number" name="price" value="${sessionScope.prev_params.get('price')}"><br>
-                Height: <input type="number" name="height" value="${sessionScope.prev_params.get('height')}"><br>
-                <input type="number" value="${requestScope.product.get('en').id}" name="id" hidden>
-            </c:otherwise>
-        </c:choose>
-        <input type="submit" value='Update'>
-    </form>
 
-</c:catch>
+                    <hr>
+                    <div class="form-text mt-4 mb-2 text-center"><fmt:message key="add_product_jsp.label.common"/></div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><fmt:message key="product.param.height"/></span>
+                        <input type="number" name="height" value="${sessionScope.prev_params.get('height')}"
+                               class="form-control"
+                               placeholder="<fmt:message key="product.param.height"/>"
+                               maxlength="10" step='0.01' aria-label="<fmt:message key="product.param.height"/>">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">$</span>
+                        <input type="number" name="price" value="${sessionScope.prev_params.get('price')}"
+                               class="form-control"
+                               placeholder="<fmt:message key="product.param.price"/>"
+                               maxlength="10" step='0.01' aria-label="<fmt:message key="product.param.price"/>">
+                        <span class="input-group-text">.00</span>
+                    </div>
 
-<c:if test="${exceptionThrown != null}">
-    <p>The exception is : ${exceptionThrown} <br/>
-        There is an exception: ${exceptionThrown.message}
-    </p>
-</c:if>
+                </c:otherwise>
+            </c:choose>
+            <input type="number" value="${requestScope.product.get('en').id}" name="id"
+                   aria-label="id" hidden>
+            <input type="submit" class="btn btn-primary mb-5" value='<fmt:message key="update_product_jsp.title"/>'>
 
-<c:if test="${not empty sessionScope.errorMessage}">
-    <h3>Error message: ${sessionScope.errorMessage}</h3>
-</c:if>
+            <c:if test="${not empty sessionScope.errorMessage}">
+                <pre class="h5 mb-5">${sessionScope.errorMessage}</pre>
+            </c:if>
+        </form>
+    </div>
+</main>
+
+
 <c:remove var="prev_params" scope="session"/>
 <c:remove var="errorMessage" scope="session"/>
 </body>

@@ -42,7 +42,7 @@ public class LoginCommand implements Command {
             User user = userOpt.get();
 
             if (ContextUtil.findUserInContext(req, user.getId())) {
-                session.setAttribute("login_status", "You are already logged in");
+                session.setAttribute("errorMessage", "You are already logged in");
                 SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
                 return "redirect:" + req.getHeader("referer");
             }
@@ -60,7 +60,7 @@ public class LoginCommand implements Command {
             return "redirect:" + Paths.VIEW_HOME;
         }
 
-        session.setAttribute("login_status", "failed");
+        session.setAttribute("errorMessage", "Wrong credentials");
         SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
         return "redirect:" + req.getHeader("referer");
     }

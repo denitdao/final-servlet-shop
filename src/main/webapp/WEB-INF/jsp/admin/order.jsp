@@ -10,38 +10,42 @@
 <html lang="${sessionScope.locale}">
 <head>
     <title>Order # ${requestScope.order.id}</title>
+    <%@ include file="/WEB-INF/parts/head_tags.jspf" %>
 </head>
 <body>
+<%@ include file="/WEB-INF/parts/header.jspf" %>
 
-<c:if test="${empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>">Login</a><br>
-</c:if>
-<c:if test="${not empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
-</c:if>
-<p>Status: ${requestScope.order.status}</p>
-<c:forEach var="item" items="${requestScope.order.products}">
-    <c:url value="<%= Paths.VIEW_PRODUCT %>" var="prodUrl">
-        <c:param name="id" value="${item.product.id}"/>
-    </c:url>
+<main class="container">
+    <!-- todo: copy from the cart -->
+    <p>Status: ${requestScope.order.status}</p>
+    <c:forEach var="item" items="${requestScope.order.products}">
+        <c:url value="<%= Paths.VIEW_PRODUCT %>" var="prodUrl">
+            <c:param name="id" value="${item.product.id}"/>
+        </c:url>
 
-    <p><a href="${prodUrl}">${item.product.title}</a>: ${item.amount}</p>
-</c:forEach>
+        <p><a href="${prodUrl}">${item.product.title}</a>: ${item.amount}</p>
+        <p>${item.product}</p>
+    </c:forEach>
 
-<form action="<%=Paths.POST_UPDATE_ORDER%>" method="post">
+    <form action="<%= Paths.POST_UPDATE_ORDER %>" method="post">
 
-    <select name="status">
-        <c:forEach var="status" items="${requestScope.statuses}">
-            <option value="${status.toString()}"
-                    <c:if test="${status.toString() eq requestScope.order.status}">
-                        selected
-                    </c:if>
-            >${status.toString()}</option>
-        </c:forEach>
-    </select>
-    <input type="number" name="id" value="${requestScope.order.id}" hidden>
-    <input type="submit" value='Add to cart'>
-</form>
+        <select name="status">
+            <c:forEach var="status" items="${requestScope.statuses}">
+                <option value="${status.toString()}"
+                        <c:if test="${status.toString() eq requestScope.order.status}">
+                            selected
+                        </c:if>
+                >${status.toString()}</option>
+            </c:forEach>
+        </select>
+        <input type="number" name="id" value="${requestScope.order.id}" hidden>
+        <input type="submit" value='Update'>
+        <c:if test="${not empty sessionScope.errorMessage}">
+            <h3 class="h3">Error message: ${sessionScope.errorMessage}</h3>
+        </c:if>
+    </form>
+</main>
 
+<c:remove var="errorMessage" scope="session"/>
 </body>
 </html>

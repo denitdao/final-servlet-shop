@@ -47,7 +47,7 @@ public class RegisterCommand implements Command {
             return "redirect:" + Paths.VIEW_HOME;
         }
 
-        session.setAttribute("login_status", "Such user already exists");
+        session.setAttribute("errorMessage", "Such user already exists");
         SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
         return "redirect:" + req.getHeader("referer");
     }

@@ -9,29 +9,69 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 <head>
-    <title>Category</title>
+    <title><fmt:message key="category_jsp.title"/>: ${requestScope.category.title}</title>
+    <%@ include file="/WEB-INF/parts/head_tags.jspf" %>
 </head>
 <body>
+<%@ include file="/WEB-INF/parts/header.jspf" %>
 
-<h3>${requestScope.category.title}</h3>
-<c:if test="${empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>">Login</a><br>
-</c:if>
-<c:if test="${not empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
-</c:if>
+<main class="container">
+    <nav class="m-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="${pageContext.request.contextPath}<%= Paths.VIEW_HOME %>">
+                    <fmt:message key="home_jsp.title"/>
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">${requestScope.category.title}</li>
+        </ol>
+    </nav>
 
-<c:url value="<%= Paths.VIEW_ADD_PRODUCT %>" var="addProdUrl">
-    <c:param name="id" value="${requestScope.category.id}"/>
-</c:url>
-<p><a href="${addProdUrl}">Add item</a></p>
+    <div class="row justify-content-between">
+        <div class="col mx-5 mt-4 mb-5">
+            <h3 class="h3">${requestScope.category.title}</h3>
+        </div>
+        <c:if test="${sessionScope.role eq 'ADMIN'}">
+            <div class="col-auto mx-5 mt-4 mb-5">
+                <c:url value="<%= Paths.VIEW_ADD_PRODUCT %>" var="addProdUrl">
+                    <c:param name="id" value="${requestScope.category.id}"/>
+                </c:url>
+                <a href="${addProdUrl}" class="btn btn-success"><fmt:message key="add_product_jsp.title"/></a>
+            </div>
+        </c:if>
+    </div>
 
-<c:forEach var="item" items="${requestScope.category.products}">
-    <c:url value="<%= Paths.VIEW_PRODUCT %>" var="prodUrl">
-        <c:param name="id" value="${item.id}"/>
-    </c:url>
+    <div class="row m-md-2">
+        <c:forEach var="item" items="${requestScope.category.products}">
+            <c:url value="<%= Paths.VIEW_PRODUCT %>" var="prodUrl">
+                <c:param name="id" value="${item.id}"/>
+            </c:url>
+            <div class="col-3 mb-4">
+                <div class="card shadow-sm">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Solid_gray.png"
+                         class="card-img-top"
+                         alt="image of the product">
+                    <div class="card-body p-2">
+                        <h5 class="card-title h5 pb-2">${item.title}</h5>
+                        <p class="card-text">${item.description}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item p-2"><fmt:message key="product.param.color"/>: ${item.color}</li>
+                        <li class="list-group-item p-2"><fmt:message key="product.param.height"/>: ${item.height}</li>
+                    </ul>
+                    <div class="card-body p-2 d-flex justify-content-between align-items-baseline">
+                        <div>
+                            <a href="${prodUrl}" class="btn btn-primary">
+                                <fmt:message key="category_jsp.item.button"/>
+                            </a>
+                        </div>
+                        <p class="fw-bold m-auto">$ ${item.price}</p>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
 
-    <p><a href="${prodUrl}">${item.title}</a>: ${item}</p>
-</c:forEach>
+</main>
 </body>
 </html>

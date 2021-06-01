@@ -9,15 +9,22 @@
 <html lang="${sessionScope.locale}">
 <head>
     <title>Error</title>
+    <%@ include file="/WEB-INF/parts/head_tags.jspf" %>
 </head>
 <body>
-<h2>Oops! An error occurred</h2>
-<c:if test="${not empty requestScope.errorMessage}">
-    <h3>Error message: ${requestScope.errorMessage}</h3>
-</c:if>
-<c:if test="${not empty sessionScope.errorMessage}">
-    <h3>Error message: ${sessionScope.errorMessage}</h3>
-</c:if>
+<%@ include file="/WEB-INF/parts/header.jspf" %>
+
+<main class="container">
+    <h2 class="h2">Oops! An error occurred</h2>
+    <c:if test="${not empty requestScope.errorMessage}">
+        <h3 class="h3">Error message: ${requestScope.errorMessage}</h3>
+    </c:if>
+    <c:if test="${not empty sessionScope.errorMessage}">
+        <h3 class="h3">Error message: ${sessionScope.errorMessage}</h3>
+    </c:if>
+</main>
+
+
 <c:remove var="errorMessage" scope="session"/>
 </body>
 </html>

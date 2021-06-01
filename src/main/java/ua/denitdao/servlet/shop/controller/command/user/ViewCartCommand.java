@@ -13,6 +13,7 @@ import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.util.Paths;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ViewCartCommand implements Command {
 
@@ -27,7 +28,8 @@ public class ViewCartCommand implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws MyException {
         User user = (User) req.getSession().getAttribute("user");
-        List<OrderProduct> orderProducts = cartService.getProductsInCart(user.getId(), req.getLocale().toString());
+        Locale locale = (Locale) req.getSession().getAttribute("locale");
+        List<OrderProduct> orderProducts = cartService.getProductsInCart(user.getId(), locale.toString());
 
         req.setAttribute("orderProducts", orderProducts);
 

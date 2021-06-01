@@ -36,8 +36,8 @@ public class Servlet extends HttpServlet {
         try {
             path = command.execute(req, resp);
         } catch (RuntimeException e) {
-            logger.warn("Command execution failed -- {}", e.getMessage());
-            req.setAttribute("errorMessage", e);
+            logger.warn("Command execution failed", e);
+            req.setAttribute("errorMessage", e.getMessage());
         }
 
         if (path.contains("redirect:")) {

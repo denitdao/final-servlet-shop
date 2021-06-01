@@ -7,11 +7,14 @@ import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
 import ua.denitdao.servlet.shop.model.entity.CategoryProperty;
 import ua.denitdao.servlet.shop.model.entity.Product;
+import ua.denitdao.servlet.shop.model.exception.EmptyFieldException;
+import ua.denitdao.servlet.shop.model.exception.InvalidValueException;
 import ua.denitdao.servlet.shop.model.exception.MyException;
 import ua.denitdao.servlet.shop.model.service.ProductService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.util.Paths;
 import ua.denitdao.servlet.shop.util.SessionUtil;
+import ua.denitdao.servlet.shop.util.Validator;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -29,21 +32,30 @@ public class AddProductCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws MyException {
-        Map<String, Product> localizedProduct = new HashMap<>();
-        long categoryId = Long.parseLong(req.getParameter("category_id"));
+        try {
+            Validator.validateProductRequest(req);
 
-        // todo: validate fields
+            long categoryId = Long.parseLong(req.getParameter("category_id"));
+            Map<String, Product> localizedProduct = new HashMap<>();
 
-        localizedProduct.put("uk", getProductFromRequest(req, "uk"));
-        localizedProduct.put("en", getProductFromRequest(req, "en"));
+            localizedProduct.put("uk", getProductFromRequest(req, "uk"));
+            Validator.validateProduct(localizedProduct.get("uk"));
+            localizedProduct.put("en", getProductFromRequest(req, "en"));
+            Validator.validateProduct(localizedProduct.get("en"));
 
-        if (productService.create(categoryId, localizedProduct)) {
-            return "redirect:" + Paths.VIEW_CATEGORY + "?id=" + categoryId;
-        } else {
-            SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
-            req.getSession().setAttribute("errorMessage", "Invalid parameters");
-            return "redirect:" + req.getHeader("referer");
+            if (productService.create(categoryId, localizedProduct)) {
+                return "redirect:" + Paths.VIEW_CATEGORY + "?id=" + categoryId;
+            }
+            req.getSession().setAttribute("errorMessage", "Couldn't create product");
+        } catch (InvalidValueException | EmptyFieldException e) {
+            logger.warn(e.getMessage());
+            req.getSession().setAttribute("errorMessage", e.getMessage());
+        } catch (RuntimeException e) {
+            logger.warn("Failed creating product -- {}", e.getMessage());
+            req.getSession().setAttribute("errorMessage", "Invalid parameters passed");
         }
+        SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
+        return "redirect:" + req.getHeader("referer");
     }
 
     /**

@@ -10,27 +10,58 @@
 <html lang="${sessionScope.locale}">
 <head>
     <title>Register</title>
+    <%@ include file="/WEB-INF/parts/head_tags.jspf" %>
 </head>
 <body>
-<h1>Register here</h1>
-<br>
+<%@ include file="/WEB-INF/parts/header.jspf" %>
+<main class="text-center container">
+    <div class="form-register">
+        <form action="<%= Paths.POST_REGISTER %>" method="post">
+            <h1 class="h1 mb-3 fw-normal"><fmt:message key="register_jsp.h1"/></h1>
+            <div class="mb-3">
+                <label for="firstName" class="form-label">
+                    <fmt:message key="register_jsp.label.first_name"/>
+                </label>
+                <input type="text" id="firstName" name="firstName" value="${sessionScope.prev_params.get('firstName')}"
+                       class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="secondName" class="form-label">
+                    <fmt:message key="register_jsp.label.second_name"/>
+                </label>
+                <input type="text" id="secondName" name="secondName"
+                       value="${sessionScope.prev_params.get('secondName')}"
+                       class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="login" class="form-label">
+                    <fmt:message key="register_jsp.label.login"/>
+                </label>
+                <input type="text" id="login" name="login" value="${sessionScope.prev_params.get('login')}"
+                       class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">
+                    <fmt:message key="register_jsp.label.password"/>
+                </label>
+                <input type="password" id="password" name="password" class="form-control">
+            </div>
+            <div class="mb-3">
+                <input type="submit" class="btn btn-primary"
+                       value='<fmt:message key="register_jsp.button.register"/>'>
+            </div>
+            <a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>" class="link-primary">
+                <fmt:message key="login_jsp.title"/>
+            </a>
 
-<form action="<%= Paths.POST_REGISTER %>" method="post">
-    Name: <input type="text" name="firstName"
-                 value="${sessionScope.prev_params.get('firstName')}">
-    <input type="text" name="secondName"
-           value="${sessionScope.prev_params.get('secondName')}"><br>
-    Login: <input type="text" name="login"
-                  value="${sessionScope.prev_params.get('login')}"><br>
-    Password: <input type="text" name="password"><br>
-    <input type="submit" value='Register'>
-</form>
+            <c:if test="${not empty sessionScope.errorMessage}">
+                <pre class="h5 mb-5">${sessionScope.errorMessage}</pre>
+            </c:if>
+        </form>
+    </div>
+</main>
 
-<a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>">Login</a><br>
-<c:if test="${not empty sessionScope.login_status}">
-    <h3>Error message: ${sessionScope.login_status}</h3>
-</c:if>
-<c:remove var="login_status" scope="session"/>
+<c:remove var="errorMessage" scope="session"/>
 <c:remove var="prev_params" scope="session"/>
 </body>
 </html>

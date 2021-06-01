@@ -15,9 +15,18 @@ public interface OrderService {
 
     boolean updateOrder(Long orderId, String status);
 
+    /**
+     * Get order with full information and products.
+     */
     Optional<Order> getOrder(Long orderId, String locale);
 
+    /**
+     * Get all orders with basic information.
+     */
     List<Order> getAll();
 
+    /**
+     * Get all orders of the user with basic information.
+     */
     List<Order> getAllOfUser(Long userId);
 }

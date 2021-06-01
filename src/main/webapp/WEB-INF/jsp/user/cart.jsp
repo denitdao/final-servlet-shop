@@ -9,27 +9,62 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 <head>
-    <title>My Cart</title>
+    <title><fmt:message key="cart_jsp.title"/></title>
+    <%@ include file="/WEB-INF/parts/head_tags.jspf" %>
 </head>
 <body>
+<%@ include file="/WEB-INF/parts/header.jspf" %>
 
-<c:if test="${empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.VIEW_LOGIN %>">Login</a><br>
-</c:if>
-<c:if test="${not empty sessionScope.user}">
-    <a href="${pageContext.request.contextPath}<%= Paths.POST_LOGOUT %>">Logout</a><br>
-</c:if>
+<main class="container">
+    <div class="col mx-5 mt-4 mb-5">
+        <h3 class="h3"><fmt:message key="cart_jsp.title"/></h3>
+    </div>
+    <c:if test="${not empty requestScope.orderProducts}">
+        <table class="table table-hover">
+            <thead>
+            <%-- todo: localize--%>
+            <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Price</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:set var="totalPrice" value="0" scope="page"/>
+            <c:forEach var="item" items="${requestScope.orderProducts}">
+                <c:url value="<%= Paths.VIEW_PRODUCT %>" var="prodUrl">
+                    <c:param name="id" value="${item.product.id}"/>
+                </c:url>
+                <tr>
+                    <th scope="row"><a href="${prodUrl}">${item.product.title}</a></th>
+                    <td>$ ${item.product.price}</td>
+                    <td>${item.amount}</td>
+                    <td>$ ${item.amount * item.product.price}</td>
+                    <c:set var="totalPrice" value="${totalPrice + item.amount * item.product.price}" scope="page"/>
+                </tr>
+            </c:forEach>
 
-<c:forEach var="item" items="${requestScope.orderProducts}">
-    <c:url value="<%= Paths.VIEW_PRODUCT %>" var="prodUrl">
-        <c:param name="id" value="${item.product.id}"/>
-    </c:url>
+            <tr>
+                <th scope="row" colspan="3">Total</th>
+                <td>$ ${totalPrice}</td>
+            </tr>
+            </tbody>
+        </table>
+        <p><a href="<%= Paths.POST_ADD_ORDER %>" class="btn btn-primary">Make order</a></p>
 
-    <p><a href="${prodUrl}">${item.product.title}</a>: ${item.amount}</p>
-</c:forEach>
-<c:url value="<%= Paths.POST_ADD_ORDER %>" var="orderUrl">
-    <c:param name="id" value="${sessionScope.user.id}"/>
-</c:url>
-<p><a href="${orderUrl}">Make order</a></p>
+
+    </c:if>
+
+    <c:if test="${empty requestScope.orderProducts}">
+        <p>Cart is empty</p>
+    </c:if>
+
+    <c:if test="${not empty sessionScope.errorMessage}">
+        <h3 class="h3">Error message: ${sessionScope.errorMessage}</h3>
+    </c:if>
+</main>
+
+<c:remove var="errorMessage" scope="session"/>
 </body>
 </html>

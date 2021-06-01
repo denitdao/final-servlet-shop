@@ -10,23 +10,43 @@
 <html lang="${sessionScope.locale}">
 <head>
     <title><fmt:message key="login_jsp.title"/></title>
+    <%@ include file="/WEB-INF/parts/head_tags.jspf" %>
 </head>
 <body>
-<h1>Login here</h1>
-<br>
+<%@ include file="/WEB-INF/parts/header.jspf" %>
+<main class="text-center container">
+    <div class="form-login">
+        <form action="<%= Paths.POST_LOGIN %>" method="post">
+            <h1 class="h1 mb-3 fw-normal"><fmt:message key="login_jsp.h1"/></h1>
+            <div class="mb-3">
+                <label for="login" class="form-label">
+                    <fmt:message key="login_jsp.label.login"/>
+                </label>
+                <input type="text" id="login" name="login" value="${sessionScope.prev_params.get('login')}"
+                       class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">
+                    <fmt:message key="login_jsp.label.password"/>
+                </label>
+                <input type="password" id="password" name="password" class="form-control">
+            </div>
+            <div class="mb-3">
+                <input type="submit" class="btn btn-primary"
+                       value='<fmt:message key="login_jsp.button.login"/>'>
+            </div>
+            <a href="${pageContext.request.contextPath}<%= Paths.VIEW_REGISTER %>" class="link-primary">
+                <fmt:message key="register_jsp.title"/>
+            </a>
 
-<form action="<%= Paths.POST_LOGIN %>" method="post">
-    <fmt:message key="login_jsp.label.login"/>: <input type="text" name="login"
-                                                       value="${sessionScope.prev_params.get('login')}"><br>
-    <fmt:message key="login_jsp.label.password"/>: <input type="text" name="password"><br>
-    <input type="submit" value='<fmt:message key="login_jsp.button.login"/>'>
-</form>
+            <c:if test="${not empty sessionScope.errorMessage}">
+                <pre class="h5 mb-5">${sessionScope.errorMessage}</pre>
+            </c:if>
+        </form>
+    </div>
+</main>
 
-<a href="${pageContext.request.contextPath}<%= Paths.VIEW_REGISTER %>">Register</a><br>
-<c:if test="${not empty sessionScope.login_status}">
-    <h3>Error message: ${sessionScope.login_status}</h3>
-</c:if>
-<c:remove var="login_status" scope="session"/>
+<c:remove var="errorMessage" scope="session"/>
 <c:remove var="prev_params" scope="session"/>
 </body>
 </html>

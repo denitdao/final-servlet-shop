@@ -1,0 +1,12 @@
+.form-login, .form-register {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-product {
+    width: 100%;
+    max-width: 650px;
+    margin: auto;
+}

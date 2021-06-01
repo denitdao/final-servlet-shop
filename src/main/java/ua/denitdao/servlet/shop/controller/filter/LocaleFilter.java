@@ -47,7 +47,7 @@ public class LocaleFilter implements Filter {
     private static void setLocale(HttpServletRequest httpRequest, String locale) {
         if (!supportedLocales.contains(locale))
             locale = defaultLocale;
-        logger.warn("---- setting locale: {}", locale);
+        logger.info("---- setting locale: {}", locale);
         httpRequest.getSession().setAttribute(LOCALE_ATTR, new Locale(locale));
     }
 
