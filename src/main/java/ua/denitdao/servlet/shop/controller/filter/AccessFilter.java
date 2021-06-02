@@ -25,10 +25,10 @@ public class AccessFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        accessMap.put(Roles.ADMIN.toString(), asList(filterConfig.getInitParameter("admin").split(" ")));
-        accessMap.put(Roles.USER.toString(), asList(filterConfig.getInitParameter("user").split(" ")));
-        accessMap.put(Roles.GUEST.toString(), asList(filterConfig.getInitParameter("guest").split(" ")));
-        outOfControl = asList(filterConfig.getInitParameter("out-of-control").split(" "));
+        accessMap.put(Roles.ADMIN.toString(), asList(filterConfig.getInitParameter("admin").split("\\s+")));
+        accessMap.put(Roles.USER.toString(), asList(filterConfig.getInitParameter("user").split("\\s+")));
+        accessMap.put(Roles.GUEST.toString(), asList(filterConfig.getInitParameter("guest").split("\\s+")));
+        outOfControl = asList(filterConfig.getInitParameter("out-of-control").split("\\s+"));
         logger.trace("Access map: {} \nOut of control: {}", accessMap, outOfControl);
     }
 

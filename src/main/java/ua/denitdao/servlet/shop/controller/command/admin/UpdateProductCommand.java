@@ -9,7 +9,7 @@ import ua.denitdao.servlet.shop.model.entity.CategoryProperty;
 import ua.denitdao.servlet.shop.model.entity.Product;
 import ua.denitdao.servlet.shop.model.exception.EmptyFieldException;
 import ua.denitdao.servlet.shop.model.exception.InvalidValueException;
-import ua.denitdao.servlet.shop.model.exception.MyException;
+import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.ProductService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.util.Paths;
@@ -32,9 +32,9 @@ public class UpdateProductCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws MyException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         try {
-            Validator.validateProductRequest(req);
+            Validator.validateNonEmptyRequest(req);
 
             long id = Long.parseLong(req.getParameter("id"));
             Map<String, Product> localizedProduct = new HashMap<>();

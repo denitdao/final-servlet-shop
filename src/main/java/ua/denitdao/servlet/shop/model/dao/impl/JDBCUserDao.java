@@ -7,6 +7,7 @@ import ua.denitdao.servlet.shop.model.dao.mapper.UserMapper;
 import ua.denitdao.servlet.shop.model.entity.User;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +55,10 @@ public class JDBCUserDao implements UserDao {
     public Optional<User> findById(Long id) {
         User user = null;
 
-        final String query = "select * from users where id=?";
+        final String query = "select u.*, IF(bu.user_id is not null, true, false) blocked\n" +
+                "from users u\n" +
+                "left join blocked_users bu on u.id = bu.user_id\n" +
+                "where id=?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, id);
             ResultSet rs = pst.executeQuery();
@@ -72,7 +76,10 @@ public class JDBCUserDao implements UserDao {
     public Optional<User> findUserByLogin(String login) {
         User user = null;
 
-        final String query = "select * from users where login=?";
+        final String query = "select u.*, IF(bu.user_id is not null, true, false) blocked\n" +
+                "from users u\n" +
+                "left join blocked_users bu on u.id = bu.user_id\n" +
+                "where login=?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setString(1, login);
             ResultSet rs = pst.executeQuery();
@@ -90,7 +97,9 @@ public class JDBCUserDao implements UserDao {
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
 
-        final String query = "select * from users";
+        final String query = "select u.*, IF(bu.user_id is not null, true, false) blocked\n" +
+                "from users u\n" +
+                "left join blocked_users bu on u.id = bu.user_id";
         try (Statement st = connection.createStatement()) { // open and close statement
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
@@ -101,6 +110,37 @@ public class JDBCUserDao implements UserDao {
             throw new RuntimeException(e);
         }
         return users;
+    }
+
+    @Override
+    public boolean block(Long userId) {
+        final String query = "insert into blocked_users (user_id, created_at) " +
+                "values (?, ?)";
+
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setLong(1, userId);
+            pst.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+
+            return pst.execute();
+        } catch (SQLException e) {
+            logger.warn("Failed to block user -- {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean unblock(Long userId) {
+        final String query = "delete from blocked_users " +
+                "where user_id=?";
+
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setLong(1, userId);
+
+            return pst.execute();
+        } catch (SQLException e) {
+            logger.warn("Failed to unblock user -- {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

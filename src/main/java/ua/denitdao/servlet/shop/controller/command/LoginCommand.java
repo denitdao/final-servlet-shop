@@ -7,16 +7,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.User;
-import ua.denitdao.servlet.shop.model.exception.MyException;
+import ua.denitdao.servlet.shop.model.exception.EmptyFieldException;
+import ua.denitdao.servlet.shop.model.exception.InvalidValueException;
+import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.CartService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.model.service.UserService;
-import ua.denitdao.servlet.shop.util.ContextUtil;
-import ua.denitdao.servlet.shop.util.PasswordManager;
-import ua.denitdao.servlet.shop.util.Paths;
-import ua.denitdao.servlet.shop.util.SessionUtil;
-
-import java.util.Optional;
+import ua.denitdao.servlet.shop.util.*;
 
 public class LoginCommand implements Command {
 
@@ -31,21 +28,25 @@ public class LoginCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws MyException {
-        String login = req.getParameter("login");
-        String password = req.getParameter("password");
-
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         HttpSession session = req.getSession();
+        try {
+            Validator.validateNonEmptyRequest(req);
 
-        Optional<User> userOpt = userService.getUserByLogin(login);
-        if (userOpt.isPresent() && PasswordManager.verifyPassword(password, userOpt.get().getPassword())) {
-            User user = userOpt.get();
+            String login = req.getParameter("login");
+            String password = req.getParameter("password");
 
-            if (ContextUtil.findUserInContext(req, user.getId())) {
-                session.setAttribute("errorMessage", "You are already logged in");
-                SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
-                return "redirect:" + req.getHeader("referer");
-            }
+            User user = userService.getUserByLogin(login)
+                    .orElseThrow(() -> new InvalidValueException("No such login exists"));
+
+            if (!PasswordManager.verifyPassword(password, user.getPassword()))
+                throw new InvalidValueException("Wrong password");
+
+            if (user.isBlocked())
+                throw new ActionFailedException("You were blocked by admin");
+
+            if (ContextUtil.findUserInContext(req, user.getId()))
+                throw new ActionFailedException("You are already logged in");
 
             ContextUtil.addUserToContext(req, user.getId());
 
@@ -58,9 +59,9 @@ public class LoginCommand implements Command {
 
             logger.info("logged in: sess({}) | login({})", session, login);
             return "redirect:" + Paths.VIEW_HOME;
+        } catch (InvalidValueException | EmptyFieldException | ActionFailedException e) {
+            session.setAttribute("errorMessage", e.getMessage());
         }
-
-        session.setAttribute("errorMessage", "Wrong credentials");
         SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
         return "redirect:" + req.getHeader("referer");
     }

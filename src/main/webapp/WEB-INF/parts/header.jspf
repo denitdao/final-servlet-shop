@@ -16,13 +16,6 @@
         <a href="${pageContext.request.contextPath}<%= Paths.VIEW_HOME %>"
            class="nav-link link-dark px-2 active"><fmt:message key="home_jsp.title"/></a>
     </li>
-
-    <c:if test="${sessionScope.role eq 'ADMIN'}">
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}<%= Paths.VIEW_HOME %>"
-               class="nav-link link-dark px-2">(<fmt:message key="all_users_jsp.title"/>)</a>
-        </li>
-    </c:if>
 </ul>
 
 <ul class="navbar-nav">
@@ -34,6 +27,12 @@
     </c:if>
 
     <c:if test="${not empty sessionScope.user}">
+        <c:if test="${sessionScope.role eq 'ADMIN'}">
+            <li class="nav-item">
+                <a href="${pageContext.request.contextPath}<%= Paths.VIEW_ALL_USERS %>"
+                   class="nav-link link-dark px-2"><fmt:message key="all_users_jsp.title"/></a>
+            </li>
+        </c:if>
         <li class="nav-item">
             <a href="${pageContext.request.contextPath}<%= Paths.VIEW_ALL_ORDERS %>"
                class="nav-link link-dark px-2"><fmt:message key="all_orders_jsp.title"/></a>

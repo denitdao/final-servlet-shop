@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.User;
-import ua.denitdao.servlet.shop.model.exception.MyException;
+import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.CartService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 
@@ -22,7 +22,7 @@ public class AddToCartCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws MyException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         long productId = Long.parseLong(req.getParameter("product_id"));
         int amount = Integer.parseInt(req.getParameter("amount"));
         // todo validate amount

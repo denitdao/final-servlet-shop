@@ -44,6 +44,8 @@ public class CommandContainer {
         commands.put(Commands.POST_DELETE_PRODUCT, new DeleteProductCommand());
         commands.put(Commands.VIEW_ORDER, new ViewOrderCommand());
         commands.put(Commands.POST_UPDATE_ORDER, new UpdateOrderCommand());
+        commands.put(Commands.VIEW_ALL_USERS, new ViewAllUsersCommand());
+        commands.put(Commands.POST_EDIT_USER, new EditUserCommand());
 
         commands.put(Commands.DEFAULT, new DefaultCommand());
         // ...

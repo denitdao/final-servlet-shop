@@ -7,4 +7,8 @@ import java.util.Optional;
 public interface UserDao extends GenericDao<User> {
 
     Optional<User> findUserByLogin(String login);
+
+    boolean block(Long userId);
+
+    boolean unblock(Long userId);
 }

@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
 import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.User;
-import ua.denitdao.servlet.shop.model.exception.MyException;
+import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.util.ContextUtil;
 import ua.denitdao.servlet.shop.util.Paths;
 
@@ -19,7 +19,7 @@ public class LogoutCommand implements Command {
     private final Logger logger = LogManager.getLogger(LogoutCommand.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws MyException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         HttpSession session = req.getSession();
         logger.info("logged out: sess({})", session);
 

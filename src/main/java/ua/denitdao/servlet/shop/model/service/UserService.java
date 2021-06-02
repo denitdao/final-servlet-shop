@@ -14,4 +14,6 @@ public interface UserService {
     Optional<User> getUserByLogin(String login);
 
     List<User> getAllUsers();
+
+    boolean changeUserBlock(Long userId, boolean block);
 }

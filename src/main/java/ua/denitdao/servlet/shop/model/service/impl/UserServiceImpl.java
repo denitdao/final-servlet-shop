@@ -49,4 +49,11 @@ public class UserServiceImpl implements UserService {
             return dao.findAll();
         }
     }
+
+    @Override
+    public boolean changeUserBlock(Long userId, boolean block) {
+        try (UserDao dao = daoFactory.createUserDao()) {
+            return (block) ? dao.block(userId) : dao.unblock(userId);
+        }
+    }
 }

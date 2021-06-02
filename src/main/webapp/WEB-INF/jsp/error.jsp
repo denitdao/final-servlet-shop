@@ -8,22 +8,23 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 <head>
-    <title>Error</title>
+    <title><fmt:message key="error_jsp.title"/></title>
     <%@ include file="/WEB-INF/parts/head_tags.jspf" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/parts/header.jspf" %>
 
 <main class="container">
-    <h2 class="h2">Oops! An error occurred</h2>
+    <div class="col mx-5 mt-4 mb-5">
+        <h3 class="h3"><fmt:message key="error_jsp.h3"/></h3>
+    </div>
     <c:if test="${not empty requestScope.errorMessage}">
-        <h3 class="h3">Error message: ${requestScope.errorMessage}</h3>
+        <pre class="h5 mt-3 mb-5">${requestScope.errorMessage}</pre>
     </c:if>
     <c:if test="${not empty sessionScope.errorMessage}">
-        <h3 class="h3">Error message: ${sessionScope.errorMessage}</h3>
+        <pre class="h5 mt-3 mb-5">${sessionScope.errorMessage}</pre>
     </c:if>
 </main>
-
 
 <c:remove var="errorMessage" scope="session"/>
 </body>

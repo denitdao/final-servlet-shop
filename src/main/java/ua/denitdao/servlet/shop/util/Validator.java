@@ -13,7 +13,7 @@ public final class Validator {
     private Validator() {
     }
 
-    public static void validateProductRequest(HttpServletRequest req) {
+    public static void validateNonEmptyRequest(HttpServletRequest req) throws EmptyFieldException {
         StringBuilder sb = new StringBuilder();
         Map<String, String[]> parameterMap = req.getParameterMap();
 
@@ -27,7 +27,7 @@ public final class Validator {
             throw new EmptyFieldException(sb.toString());
     }
 
-    public static void validateProduct(Product product) {
+    public static void validateProduct(Product product) throws InvalidValueException {
         StringBuilder sb = new StringBuilder();
         if (product.getPrice().compareTo(BigDecimal.ZERO) <= 0)
             sb.append("Invalid price value\n");
@@ -38,4 +38,18 @@ public final class Validator {
             throw new InvalidValueException(sb.toString());
     }
 
+    public static void validateNewUserRequest(HttpServletRequest req) throws InvalidValueException {
+        StringBuilder sb = new StringBuilder();
+        if (req.getParameter("firstName").trim().length() < 2)
+            sb.append("First name is too short\n");
+        if (req.getParameter("secondName").trim().length() < 2)
+            sb.append("Second name is too short\n");
+        if (req.getParameter("login").trim().length() < 2)
+            sb.append("Login is too short\n");
+        if (req.getParameter("password").trim().length() < 2)
+            sb.append("Password is too short\n");
+
+        if (sb.length() > 0)
+            throw new InvalidValueException(sb.toString());
+    }
 }

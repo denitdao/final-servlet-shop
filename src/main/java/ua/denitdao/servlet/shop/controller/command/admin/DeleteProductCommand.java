@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
 import ua.denitdao.servlet.shop.model.entity.CategoryProperty;
 import ua.denitdao.servlet.shop.model.entity.Product;
-import ua.denitdao.servlet.shop.model.exception.MyException;
+import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.ProductService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.util.Paths;
@@ -27,7 +27,7 @@ public class DeleteProductCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws MyException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         long productId = Long.parseLong(req.getParameter("product_id"));
         long categoryId = Long.parseLong(req.getParameter("category_id"));
         if (productService.delete(productId)) {

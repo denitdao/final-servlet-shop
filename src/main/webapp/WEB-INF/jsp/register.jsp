@@ -54,11 +54,11 @@
                 <fmt:message key="login_jsp.title"/>
             </a>
 
-            <c:if test="${not empty sessionScope.errorMessage}">
-                <pre class="h5 mb-5">${sessionScope.errorMessage}</pre>
-            </c:if>
         </form>
     </div>
+    <c:if test="${not empty sessionScope.errorMessage}">
+        <pre class="h5 mb-5">${sessionScope.errorMessage}</pre>
+    </c:if>
 </main>
 
 <c:remove var="errorMessage" scope="session"/>

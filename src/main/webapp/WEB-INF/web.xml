@@ -20,7 +20,8 @@
         <filter-class>ua.denitdao.servlet.shop.controller.filter.AccessFilter</filter-class>
         <init-param>
             <param-name>admin</param-name>
-            <param-value>postLogout profile postProfile cart allOrders postAddOrder postAddProduct addProduct postUpdateProduct updateProduct postDeleteProduct postUpdateOrder order</param-value>
+            <param-value>postLogout profile postProfile cart allOrders postAddOrder
+                postAddProduct addProduct postUpdateProduct updateProduct postDeleteProduct postUpdateOrder order allUsers postEditUser</param-value>
         </init-param>
         <init-param>
             <param-name>user</param-name>

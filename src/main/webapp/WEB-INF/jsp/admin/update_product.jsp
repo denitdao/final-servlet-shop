@@ -167,7 +167,7 @@
             </c:choose>
             <input type="number" value="${requestScope.product.get('en').id}" name="id"
                    aria-label="id" hidden>
-            <input type="submit" class="btn btn-primary mb-5" value='<fmt:message key="update_product_jsp.title"/>'>
+            <input type="submit" class="btn btn-primary mb-5" value='<fmt:message key="update_product_jsp.form.button"/>'>
 
             <c:if test="${not empty sessionScope.errorMessage}">
                 <pre class="h5 mt-3 mb-5">${sessionScope.errorMessage}</pre>

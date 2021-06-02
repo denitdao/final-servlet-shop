@@ -56,6 +56,9 @@
             </div>
         </c:forEach>
     </div>
+    <c:if test="${empty requestScope.orders}">
+        <p><fmt:message key="all_orders_jsp.message.empty"/></p>
+    </c:if>
 </main>
 </body>
 </html>

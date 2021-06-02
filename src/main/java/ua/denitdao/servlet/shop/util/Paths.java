@@ -16,8 +16,8 @@ public final class Paths {
     public static final String VIEW_PRODUCT = BASE + Commands.VIEW_PRODUCT;
     public static final String POST_ADD_TO_CART = BASE + Commands.POST_ADD_TO_CART;
 
-    public static final String POST_PROFILE = BASE + Commands.POST_PROFILE;
-    public static final String VIEW_PROFILE = BASE + Commands.VIEW_PROFILE;
+    public static final String POST_EDIT_USER = BASE + Commands.POST_EDIT_USER;
+    public static final String VIEW_ALL_USERS = BASE + Commands.VIEW_ALL_USERS;
     public static final String VIEW_CART = BASE + Commands.VIEW_CART;
     public static final String POST_ADD_ORDER = BASE + Commands.POST_ADD_ORDER;
     public static final String VIEW_ALL_ORDERS = BASE + Commands.VIEW_ALL_ORDERS;
@@ -30,7 +30,6 @@ public final class Paths {
     public static final String POST_UPDATE_ORDER = BASE + Commands.POST_UPDATE_ORDER;
     public static final String VIEW_ORDER = BASE + Commands.VIEW_ORDER;
 
-    public static final String SOME = BASE + Commands.SOME;
     public static final String DEFAULT = BASE + Commands.DEFAULT;
 
     public static final String LOGIN_JSP = "/WEB-INF/jsp/login.jsp";
@@ -42,9 +41,9 @@ public final class Paths {
     public static final String CART_JSP = "/WEB-INF/jsp/user/cart.jsp";
     public static final String ORDER_JSP = "/WEB-INF/jsp/admin/order.jsp";
     public static final String ALL_ORDERS_JSP = "/WEB-INF/jsp/user/all_orders.jsp";
-    public static final String ERROR_JSP = "/WEB-INF/jsp/error.jsp";
+    public static final String ALL_USERS_JSP = "/WEB-INF/jsp/admin/all_users.jsp";
     public static final String UPDATE_PRODUCT_JSP = "/WEB-INF/jsp/admin/update_product.jsp";
-
+    public static final String ERROR_JSP = "/WEB-INF/jsp/error.jsp";
 
     private Paths() {
     }
