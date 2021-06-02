@@ -86,7 +86,7 @@
             <input type="submit" class="btn btn-primary mb-5" value='<fmt:message key="add_product_jsp.title"/>'>
 
             <c:if test="${not empty sessionScope.errorMessage}">
-                <pre class="h5 mb-5">${sessionScope.errorMessage}</pre>
+                <pre class="h5 mt-3 mb-5">${sessionScope.errorMessage}</pre>
             </c:if>
         </form>
     </div>

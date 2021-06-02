@@ -22,12 +22,11 @@
     <c:if test="${not empty requestScope.orderProducts}">
         <table class="table table-hover">
             <thead>
-            <%-- todo: localize--%>
             <tr>
-                <th scope="col">Item</th>
-                <th scope="col">Price</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Total</th>
+                <th scope="col"><fmt:message key="order_jsp.table.item"/></th>
+                <th scope="col"><fmt:message key="order_jsp.table.price"/></th>
+                <th scope="col"><fmt:message key="order_jsp.table.amount"/></th>
+                <th scope="col"><fmt:message key="order_jsp.table.total"/></th>
             </tr>
             </thead>
             <tbody>
@@ -46,22 +45,21 @@
             </c:forEach>
 
             <tr>
-                <th scope="row" colspan="3">Total</th>
+                <th scope="row" colspan="3"><fmt:message key="order_jsp.table.total_all"/></th>
                 <td>$ ${totalPrice}</td>
             </tr>
             </tbody>
         </table>
-        <p><a href="<%= Paths.POST_ADD_ORDER %>" class="btn btn-primary">Make order</a></p>
-
+        <a href="<%= Paths.POST_ADD_ORDER %>" class="btn btn-primary"><fmt:message key="cart_jsp.button"/></a>
 
     </c:if>
 
     <c:if test="${empty requestScope.orderProducts}">
-        <p>Cart is empty</p>
+        <p><fmt:message key="cart_jsp.message.empty"/></p>
     </c:if>
 
     <c:if test="${not empty sessionScope.errorMessage}">
-        <h3 class="h3">Error message: ${sessionScope.errorMessage}</h3>
+        <pre class="h5 mt-3 mb-5">${sessionScope.errorMessage}</pre>
     </c:if>
 </main>
 

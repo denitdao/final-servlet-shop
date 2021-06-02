@@ -39,7 +39,7 @@
                                 type="date"
                                 pattern="dd.MM.yyyy - HH:mm"/>
                         </li>
-                        <li class="list-group-item"><fmt:formatDate
+                        <li class="list-group-item"><fmt:message key="all_orders_jsp.item.create"/>: <fmt:formatDate
                                 value="${Timestamp.valueOf(order.createdAt)}"
                                 type="date"
                                 pattern="dd.MM.yyyy - HH:mm"/>

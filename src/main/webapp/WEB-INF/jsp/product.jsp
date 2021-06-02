@@ -41,12 +41,12 @@
                 <c:url value="<%= Paths.VIEW_UPDATE_PRODUCT %>" var="editProdUrl">
                     <c:param name="id" value="${requestScope.product.id}"/>
                 </c:url>
-                <a href="${editProdUrl}" class="btn btn-success">Edit</a>
+                <a href="${editProdUrl}" class="btn btn-warning"><fmt:message key="action.edit"/></a>
                 <c:url value="<%= Paths.POST_DELETE_PRODUCT %>" var="deleteProdUrl">
                     <c:param name="product_id" value="${requestScope.product.id}"/>
                     <c:param name="category_id" value="${requestScope.product.category.id}"/>
                 </c:url>
-                <a href="${deleteProdUrl}" class="btn btn-warning">Delete</a>
+                <a href="${deleteProdUrl}" class="btn btn-danger"><fmt:message key="action.delete"/></a>
             </div>
         </c:if>
     </div>
@@ -59,21 +59,22 @@
         <p>${property.key.title} - ${property.value}</p>
     </c:forEach>
 
-    <form action="<%= Paths.POST_ADD_TO_CART %>" method="post">
-        <div class="mb-3">
-            <label for="amount" class="form-label">
-                Amount to add
-            </label>
-            <input type="number" name="amount" id="amount" class="form-control"
-                   value="${sessionScope.cart.products.get(requestScope.product.id)}">
+    <form action="<%= Paths.POST_ADD_TO_CART %>" method="post" class="row">
+        <div class="mb-3 col-2">
+            <div class="input-group">
+                <span class="input-group-text">Amount</span>
+                <input type="number" min="0" name="amount" value="${sessionScope.cart.products.get(requestScope.product.id)}"
+                       class="form-control" placeholder="0" maxlength="3" aria-label="amount">
+            </div>
         </div>
-        <input type="number" name="product_id" value="${requestScope.product.id}" hidden>
-        <div class="mb-3">
-            <input class="btn btn-primary" type="submit" value='Add to cart'>
+
+        <input type="number" name="product_id" aria-label="product_id" value="${requestScope.product.id}" hidden>
+        <div class="mb-3 col-auto">
+            <input class="btn btn-primary" type="submit" value='<fmt:message key="product_jsp.form.button"/>'>
         </div>
 
         <c:if test="${not empty sessionScope.errorMessage}">
-            <h3 class="h3">Error message: ${sessionScope.errorMessage}</h3>
+            <pre class="h5 mt-3 mb-5">${sessionScope.errorMessage}</pre>
         </c:if>
     </form>
 </main>

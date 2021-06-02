@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpSessionEvent;
 
 import java.util.HashSet;
 
-public class ContextUtil {
+public final class ContextUtil {
 
     private static final String ACTIVE_USERS = "activeUsers";
 
