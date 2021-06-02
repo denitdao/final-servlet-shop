@@ -69,7 +69,7 @@ public class UpdateProductCommand implements Command {
                 .description(req.getParameter("description_" + locale))
                 .color(req.getParameter("color_" + locale))
                 .height(Double.valueOf(req.getParameter("height")))
-                .price(BigDecimal.valueOf(Long.parseLong(req.getParameter("price"))))
+                .price(BigDecimal.valueOf(Double.parseDouble(req.getParameter("price"))))
                 .build();
         product.setProperties(req.getParameterMap()
                 .entrySet()

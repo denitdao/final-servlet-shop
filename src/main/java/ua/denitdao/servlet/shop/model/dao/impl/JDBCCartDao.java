@@ -4,10 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.dao.CartDao;
 import ua.denitdao.servlet.shop.model.dao.mapper.ProductMapper;
-import ua.denitdao.servlet.shop.model.dao.mapper.UserMapper;
 import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.OrderProduct;
-import ua.denitdao.servlet.shop.model.entity.User;
+import ua.denitdao.servlet.shop.model.entity.Status;
 
 import java.sql.*;
 import java.util.*;
@@ -16,29 +15,10 @@ public class JDBCCartDao implements CartDao {
 
     private static final Logger logger = LogManager.getLogger(JDBCCartDao.class);
     private final Connection connection;
+    private static final String CART_STATUS = String.valueOf(Status.CART);
 
     public JDBCCartDao(Connection connection) {
         this.connection = connection;
-    }
-
-    @Override
-    public boolean createOrUpdate(Long userId, Long productId, Integer amount) {
-        final String query = "insert into " +
-                "shopping_carts (user_id, product_id, amount) " +
-                "values (?, ?, ?) " +
-                "on duplicate key update amount=?";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setLong(1, userId);
-            pst.setLong(2, productId);
-            pst.setInt(3, amount);
-            pst.setInt(4, amount);
-
-            return pst.executeUpdate() != 0;
-        } catch (SQLException e) {
-            logger.warn("Failed to update cart -- {}", e.getMessage());
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -47,11 +27,34 @@ public class JDBCCartDao implements CartDao {
     }
 
     @Override
-    public Optional<Cart> findById(Long userId) {
-        Cart cart;
-        final String query = "select product_id, amount from shopping_carts where user_id=?";
+    public boolean addToCart(Long userId, Long productId, Integer amount) {
+        this.createIfNotExists(userId);
+        final String query = "insert into order_product (order_id, product_id, amount) " +
+                "values ((select o.id from orders o where o.user_id = ? and o.status = ?), ?, ?) " +
+                "on duplicate key update amount=?";
+
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, userId);
+            pst.setString(2, CART_STATUS);
+            pst.setLong(3, productId);
+            pst.setInt(4, amount);
+            pst.setInt(5, amount);
+
+            return pst.executeUpdate() != 0;
+        } catch (SQLException e) {
+            logger.warn("Failed to add or update cart -- {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Cart> findById(Long userId) {
+        Cart cart;
+        final String query = "select product_id, amount from order_product " +
+                "where order_id=(select o.id from orders o where o.user_id = ? and o.status = ?) ";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setLong(1, userId);
+            pst.setString(2, CART_STATUS);
             ResultSet rs = pst.executeQuery();
             Map<Long, Integer> products = new LinkedHashMap<>();
             while (rs.next()) {
@@ -59,7 +62,7 @@ public class JDBCCartDao implements CartDao {
             }
             cart = new Cart(products);
         } catch (SQLException e) {
-            logger.warn("Failed to get cart by id -- {}", e.getMessage());
+            logger.warn("Failed to get cart of the user -- {}", e.getMessage());
             throw new RuntimeException(e);
         }
         return Optional.of(cart);
@@ -75,12 +78,13 @@ public class JDBCCartDao implements CartDao {
         final String query = "select products.*, pi.title, pi.description, pi.color, amount\n" +
                 "from products\n" +
                 "         left join product_info pi on products.id = pi.product_id\n" +
-                "         inner join shopping_carts sc on products.id = sc.product_id\n" +
-                "where user_id = ?\n" +
+                "         inner join order_product op on products.id = op.product_id\n" +
+                "where order_id=(select o.id from orders o where o.user_id = ? and o.status = ?)\n" +
                 "  and locale = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, userId);
-            pst.setString(2, locale);
+            pst.setString(2, CART_STATUS);
+            pst.setString(3, locale);
             ResultSet rs = pst.executeQuery();
 
             List<OrderProduct> orderProducts = new ArrayList<>();
@@ -108,15 +112,40 @@ public class JDBCCartDao implements CartDao {
 
     @Override
     public boolean delete(Long userId, Long productId) {
-        final String query = "delete from shopping_carts " +
-                "where user_id=? and product_id=?";
+        final String query = "delete from order_product " +
+                "where order_id=(select o.id from orders o where o.user_id = ? and o.status = ?) " +
+                "and product_id=?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, userId);
-            pst.setLong(2, productId);
-            return pst.executeUpdate() != 0;
+            pst.setString(2, CART_STATUS);
+            pst.setLong(3, productId);
+            return pst.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.warn("Failed to delete from cart -- {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Create order for the user that will act as a cart if it doesn't exist
+     */
+    private boolean createIfNotExists(Long userId) {
+        final String query = "insert into orders (user_id, status)\n" +
+                "select *\n" +
+                "from (select ? as user_id, ? as status) as tmp\n" +
+                "where not exists(\n" +
+                "        select user_id, status from orders where user_id = tmp.user_id and status = tmp.status\n" +
+                "    )\n" +
+                "limit 1";
+
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setLong(1, userId);
+            pst.setString(2, CART_STATUS);
+
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.warn("Failed to create cart (order) -- {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }

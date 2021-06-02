@@ -2,7 +2,6 @@ package ua.denitdao.servlet.shop.model.service.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.denitdao.servlet.shop.model.dao.CartDao;
 import ua.denitdao.servlet.shop.model.dao.DaoFactory;
 import ua.denitdao.servlet.shop.model.dao.OrderDao;
 import ua.denitdao.servlet.shop.model.entity.Cart;
@@ -10,14 +9,11 @@ import ua.denitdao.servlet.shop.model.entity.Order;
 import ua.denitdao.servlet.shop.model.entity.Status;
 import ua.denitdao.servlet.shop.model.service.OrderService;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OrderServiceImpl implements OrderService {
 
@@ -26,34 +22,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean makeOrder(Long userId, Cart sessionCart) {
-        Connection connection = daoFactory.getConnection();
-        try (OrderDao orderDao = daoFactory.createOrderDao(connection);
-             CartDao cartDao = daoFactory.createCartDao(connection)) {
-            connection.setAutoCommit(false);
-
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
             Order order = Order.builder()
                     .status(Status.REGISTERED.toString())
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now()).build();
-            if (!orderDao.create(userId, order)) {
+            if (!orderDao.create(userId, order))
                 return false;
-            }
-
-            AtomicBoolean queryFailed = new AtomicBoolean(false);
-            sessionCart.getProducts().forEach((productId, amount) -> {
-                boolean addToOrder = orderDao.addProduct(order.getId(), productId, amount);
-                boolean deleteFromCart = cartDao.delete(userId, productId);
-                if (!deleteFromCart || !addToOrder)
-                    queryFailed.set(true);
-            });
-
-            if (!queryFailed.get()) {
-                connection.commit();
-                sessionCart.setProducts(new LinkedHashMap<>());
-            }
-            return !queryFailed.get();
-        } catch (RuntimeException | SQLException e) {
-            logger.warn("make order transaction failed: ", e);
+            sessionCart.setProducts(new LinkedHashMap<>());
+            return true;
+        } catch (RuntimeException e) {
+            logger.warn("make order failed: ", e);
             return false;
         }
     }

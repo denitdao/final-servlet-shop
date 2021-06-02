@@ -12,7 +12,7 @@ import ua.denitdao.servlet.shop.model.service.OrderService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.util.Paths;
 
-import java.util.Optional;
+import java.util.Locale;
 
 public class ViewOrderCommand implements Command {
 
@@ -28,14 +28,13 @@ public class ViewOrderCommand implements Command {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         Long id = Long.valueOf(req.getParameter("id"));
 
+        Locale locale = (Locale) req.getSession().getAttribute("locale");
+        Order order = orderService.getOrder(id, locale.toString())
+                .orElseThrow(() -> new RuntimeException("No such order exists."));
 
-        Optional<Order> order = orderService.getOrder(id, req.getLocale().toString());
-        if (order.isPresent()) {
-            req.setAttribute("order", order.get());
-            req.setAttribute("statuses", Status.values());
-        } else {
-            req.setAttribute("errorMessage", "No such order exists.");
-        }
+        req.setAttribute("order", order);
+        Status[] statuses = { Status.REGISTERED, Status.DELIVERED, Status.CANCELLED };
+        req.setAttribute("statuses", statuses);
 
         return Paths.ORDER_JSP;
     }

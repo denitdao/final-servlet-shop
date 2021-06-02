@@ -9,8 +9,6 @@ public interface OrderDao extends GenericDao<Order> {
 
     boolean create(Long userId, Order order);
 
-    boolean addProduct(Long orderId, Long productId, Integer amount);
-
     List<OrderProduct> findProductsInOrder(Long orderId, String locale);
 
     List<Order> findAllOfUser(Long userId);

@@ -5,16 +5,15 @@ import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.dao.OrderDao;
 import ua.denitdao.servlet.shop.model.dao.mapper.OrderMapper;
 import ua.denitdao.servlet.shop.model.dao.mapper.ProductMapper;
-import ua.denitdao.servlet.shop.model.dao.mapper.UserMapper;
 import ua.denitdao.servlet.shop.model.entity.Order;
 import ua.denitdao.servlet.shop.model.entity.OrderProduct;
-import ua.denitdao.servlet.shop.model.entity.User;
+import ua.denitdao.servlet.shop.model.entity.Status;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 
 public class JDBCOrderDao implements OrderDao {
 
@@ -32,25 +31,18 @@ public class JDBCOrderDao implements OrderDao {
 
     @Override
     public boolean create(Long userId, Order order) {
-        final String query = "insert into " +
-                "orders (user_id, status, created_at, updated_at) " +
-                "values (?, ?, ?, ?)";
+        final String query = "update orders " +
+                "set status=?, created_at=?, updated_at=? " +
+                "where user_id = ? and status = ?";
 
-        try (PreparedStatement pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            pst.setLong(1, userId);
-            pst.setString(2, order.getStatus());
-            pst.setTimestamp(3, Timestamp.valueOf(order.getCreatedAt()));
-            pst.setTimestamp(4, Timestamp.valueOf(order.getUpdatedAt()));
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setString(1, order.getStatus());
+            pst.setTimestamp(2, Timestamp.valueOf(order.getCreatedAt()));
+            pst.setTimestamp(3, Timestamp.valueOf(order.getUpdatedAt()));
+            pst.setLong(4, userId);
+            pst.setString(5, String.valueOf(Status.CART));
 
-            if (pst.executeUpdate() == 0)
-                return false;
-            try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    order.setId(generatedKeys.getLong(1));
-                    return true;
-                }
-            }
-            return false;
+            return pst.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.warn("Failed to create order -- {}", e.getMessage());
             throw new RuntimeException(e);
@@ -58,27 +50,8 @@ public class JDBCOrderDao implements OrderDao {
     }
 
     @Override
-    public boolean addProduct(Long orderId, Long productId, Integer amount) {
-        final String query = "insert into " +
-                "order_product (order_id, product_id, amount) " +
-                "values (?, ?, ?)";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setLong(1, orderId);
-            pst.setLong(2, productId);
-            pst.setInt(3, amount);
-
-            return pst.executeUpdate() != 0;
-        } catch (SQLException e) {
-            logger.warn("Failed to add product to the order -- {}", e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public Optional<Order> findById(Long orderId) {
         Order order = null;
-
         final String query = "select * from orders where id=?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, orderId);
@@ -123,7 +96,13 @@ public class JDBCOrderDao implements OrderDao {
     public List<Order> findAll() {
         List<Order> orders = new ArrayList<>();
 
-        final String query = "select * from orders";
+        final String query = "select * from orders " +
+                "where status <> 'CART' " +
+                "order by case status " +
+                "when '" + Status.REGISTERED + "' then 1 " +
+                "when '" + Status.DELIVERED + "' then 2 " +
+                "when '" + Status.CANCELLED + "' then 3 " +
+                "end, updated_at desc";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -140,7 +119,13 @@ public class JDBCOrderDao implements OrderDao {
     public List<Order> findAllOfUser(Long userId) {
         List<Order> orders = new ArrayList<>();
 
-        final String query = "select * from orders where user_id=?";
+        final String query = "select * from orders " +
+                "where user_id=? and status <> 'CART' " +
+                "order by case status " +
+                "when '" + Status.REGISTERED + "' then 1 " +
+                "when '" + Status.DELIVERED + "' then 2 " +
+                "when '" + Status.CANCELLED + "' then 3 " +
+                "end, updated_at desc";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, userId);
             ResultSet rs = pst.executeQuery();

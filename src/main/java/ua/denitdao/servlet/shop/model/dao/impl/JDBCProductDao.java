@@ -156,7 +156,7 @@ public class JDBCProductDao implements ProductDao {
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Product product = ProductMapper.getInstance().extractFromResultSet(rs);
-                products.add(product); // todo: optimize
+                products.add(product);
             }
         } catch (SQLException e) {
             logger.warn("Failed to get category by id -- {}", e.getMessage());

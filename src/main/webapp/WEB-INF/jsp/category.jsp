@@ -1,6 +1,7 @@
 <%@ page import="ua.denitdao.servlet.shop.util.Paths" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>
@@ -46,14 +47,14 @@
             <c:url value="<%= Paths.VIEW_PRODUCT %>" var="prodUrl">
                 <c:param name="id" value="${item.id}"/>
             </c:url>
-            <div class="col-3 mb-4">
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="card shadow-sm">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Solid_gray.png"
                          class="card-img-top"
                          alt="image of the product">
                     <div class="card-body p-2">
                         <h5 class="card-title h5 pb-2">${item.title}</h5>
-                        <p class="card-text">${item.description}</p>
+                        <p class="card-text">${fn:substring(item.description, 0, 100)}...</p>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item p-2"><fmt:message key="product.param.color"/>: ${item.color}</li>
@@ -65,14 +66,14 @@
                                 <fmt:message key="category_jsp.item.button"/>
                             </a>
                         </div>
-                        <p class="fw-bold m-auto">$ ${item.price}</p>
+                        <p class="fw-bold mx-auto">$ ${item.price}</p>
                     </div>
                 </div>
             </div>
         </c:forEach>
     </div>
 
-    <nav>
+    <!--<nav>
         <ul class="pagination">
             <li class="page-item">
                 <a class="page-link" href="#" aria-label="Previous">
@@ -88,7 +89,7 @@
                 </a>
             </li>
         </ul>
-    </nav>
+    </nav>-->
 </main>
 </body>
 </html>

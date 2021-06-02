@@ -20,9 +20,6 @@ public class CategoryServiceImpl implements CategoryService {
     private static final Logger logger = LogManager.getLogger(CategoryServiceImpl.class);
     private final DaoFactory daoFactory = DaoFactory.getInstance();
 
-    /**
-     * Get category with full information.
-     */
     @Override
     public Optional<Category> getCategoryWithProperties(Long id, Locale locale) {
         Optional<Category> categoryOpt;
@@ -44,9 +41,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryOpt;
     }
 
-    /**
-     * Get category with basic information and all products.
-     */
     @Override
     public Optional<Category> getCategoryWithProducts(Long id, Locale locale) {
         Optional<Category> categoryOpt;
@@ -68,9 +62,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryOpt;
     }
 
-    /**
-     * Get all categories with only basic info
-     */
     @Override
     public List<Category> getAllCategories(Locale locale) {
         try (CategoryDao dao = daoFactory.createCategoryDao()) {

@@ -27,16 +27,16 @@ public class CartServiceImpl implements CartService {
 
             AtomicBoolean queryFailed = new AtomicBoolean(false);
             cart.getProducts().forEach((productId, amount) -> {
-                boolean success = (amount <= 0) ? dao.delete(userId, productId) : dao.createOrUpdate(userId, productId, amount);
-                if (!success)
-                    queryFailed.set(true);
+                boolean success = (amount <= 0) ? dao.delete(userId, productId) : dao.addToCart(userId, productId, amount);
+                if (!success) queryFailed.set(true);
             });
 
             // persist items stored in the DB before logout
-            dao.findById(userId)
-                    .ifPresent(value -> cart.setProducts(value.getProducts()));
-            if (!queryFailed.get())
+            if (!queryFailed.get()) {
+                dao.findById(userId)
+                        .ifPresent(value -> cart.setProducts(value.getProducts()));
                 connection.commit();
+            }
             return !queryFailed.get();
         } catch (RuntimeException | SQLException e) {
             logger.warn("cart update transaction failed -- {}", e.getMessage());

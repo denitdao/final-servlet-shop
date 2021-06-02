@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface CartDao extends GenericDao<Cart> {
 
-    boolean createOrUpdate(Long userId, Long productId, Integer amount);
-
     boolean delete(Long userId, Long productId);
+
+    boolean addToCart(Long userId, Long productId, Integer amount);
 
     List<OrderProduct> findProductsInCart(Long userId, String locale);
 }
