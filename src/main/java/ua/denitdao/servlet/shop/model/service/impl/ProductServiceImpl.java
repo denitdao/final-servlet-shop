@@ -110,17 +110,12 @@ public class ProductServiceImpl implements ProductService {
                     product.setUpdatedAt(LocalDateTime.now());
                     updated.set(dao.update(product));
                 }
-                if (!dao.updateLocalizedProperties(product, locale))
+                if (!dao.updateLocalizedProperties(product, locale) || !updated.get())
                     throw new RuntimeException("Failed to update localized properties");
             });
 
-            if (updated.get()) {
-                connection.commit();
-                return true;
-            } else {
-                connection.rollback();
-                return false;
-            }
+            connection.commit();
+            return true;
         } catch (RuntimeException | SQLException e) {
             logger.warn("product update transaction failed -- {}", e.getMessage());
             return false;
@@ -137,28 +132,3 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 }
-
-/*
-        MANUAL CONNECTION FAIL HANDLING
-
-        Connection connection = daoFactory.getConnection();
-        try (ProductDao productDao = daoFactory.createProductDao(connection);
-             CategoryPropertyDao categoryPropertyDao = daoFactory.createCategoryPropertyDao(connection)) {
-            try {
-                connection.setAutoCommit(false);
-
-                DO ACTIONS WITH DAO
-
-                connection.commit();
-            } catch (SQLException e) {
-                connection.rollback();
-                logger.warn("rollback. transaction failed -- {}", e.getMessage());
-                throw new RuntimeException(e);
-            } finally {
-                connection.setAutoCommit(true);
-            }
-        } catch (SQLException e) {
-            logger.warn(e.getMessage());
-            throw new RuntimeException(e);
-        }
-*/

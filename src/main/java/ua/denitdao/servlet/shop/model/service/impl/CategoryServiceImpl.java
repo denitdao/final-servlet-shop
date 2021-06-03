@@ -8,6 +8,7 @@ import ua.denitdao.servlet.shop.model.dao.DaoFactory;
 import ua.denitdao.servlet.shop.model.dao.ProductDao;
 import ua.denitdao.servlet.shop.model.entity.Category;
 import ua.denitdao.servlet.shop.model.service.CategoryService;
+import ua.denitdao.servlet.shop.model.util.Pageable;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -42,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> getCategoryWithProducts(Long id, Locale locale) {
+    public Optional<Category> getCategoryWithProducts(Long id, Locale locale, Pageable pageable) {
         Optional<Category> categoryOpt;
 
         Connection connection = daoFactory.getConnection();
@@ -52,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
 
             categoryOpt = categoryDao.findById(id, locale);
             Category category = categoryOpt.orElseThrow(() -> new RuntimeException("category not found"));
-            category.setProducts(productDao.findAllWithCategoryId(id, locale.toString()));
+            category.setProducts(productDao.findAllWithCategoryId(id, locale.toString(), pageable));
 
             connection.commit();
         } catch (SQLException e) {

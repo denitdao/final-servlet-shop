@@ -1,5 +1,7 @@
 package ua.denitdao.servlet.shop.model.entity;
 
+import ua.denitdao.servlet.shop.model.util.Page;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,7 +16,7 @@ public class Category implements Serializable {
     private String title;
     private String description;
     private List<CategoryProperty> categoryProperties;
-    private List<Product> products;
+    private Page<Product> products;
     private LocalDateTime updatedAt;
     private LocalDateTime createdAt;
 
@@ -45,7 +47,7 @@ public class Category implements Serializable {
             return this;
         }
 
-        public CategoryBuilder products(List<Product> products) {
+        public CategoryBuilder products(Page<Product> products) {
             entity.setProducts(products);
             return this;
         }
@@ -101,11 +103,11 @@ public class Category implements Serializable {
         this.categoryProperties = categoryProperties;
     }
 
-    public List<Product> getProducts() {
+    public Page<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(Page<Product> products) {
         this.products = products;
     }
 

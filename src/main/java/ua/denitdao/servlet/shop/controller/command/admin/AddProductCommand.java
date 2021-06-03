@@ -66,8 +66,8 @@ public class AddProductCommand implements Command {
                 .color(req.getParameter("color_" + locale))
                 .title(req.getParameter("title_" + locale))
                 .description(req.getParameter("description_" + locale))
-                .height(Double.valueOf(req.getParameter("height")))
-                .price(BigDecimal.valueOf(Double.parseDouble(req.getParameter("price"))))
+                .weight(Double.valueOf(req.getParameter("weight")))
+                .price(new BigDecimal(req.getParameter("price")))
                 .build();
         product.setProperties(req.getParameterMap()
                 .entrySet()

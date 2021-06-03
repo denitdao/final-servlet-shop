@@ -76,11 +76,11 @@
                     <hr>
                     <div class="form-text mt-4 mb-2 text-center"><fmt:message key="add_product_jsp.label.common"/></div>
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><fmt:message key="product.param.height"/></span>
-                        <input type="number" name="height" value="${requestScope.product.get('en').height}"
+                        <span class="input-group-text"><fmt:message key="product.param.weight"/></span>
+                        <input type="number" name="weight" value="${requestScope.product.get('en').weight}"
                                class="form-control"
-                               placeholder="<fmt:message key="product.param.height"/>"
-                               maxlength="10" step='0.01' aria-label="<fmt:message key="product.param.height"/>">
+                               placeholder="<fmt:message key="product.param.weight"/>"
+                               maxlength="10" step='0.01' aria-label="<fmt:message key="product.param.weight"/>">
                         <span class="input-group-text">.00</span>
                     </div>
                     <div class="input-group mb-3">
@@ -147,11 +147,11 @@
                     <hr>
                     <div class="form-text mt-4 mb-2 text-center"><fmt:message key="add_product_jsp.label.common"/></div>
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><fmt:message key="product.param.height"/></span>
-                        <input type="number" name="height" value="${sessionScope.prev_params.get('height')}"
+                        <span class="input-group-text"><fmt:message key="product.param.weight"/></span>
+                        <input type="number" name="weight" value="${sessionScope.prev_params.get('weight')}"
                                class="form-control"
-                               placeholder="<fmt:message key="product.param.height"/>"
-                               maxlength="10" step='0.01' aria-label="<fmt:message key="product.param.height"/>">
+                               placeholder="<fmt:message key="product.param.weight"/>"
+                               maxlength="10" step='0.01' aria-label="<fmt:message key="product.param.weight"/>">
                         <span class="input-group-text">.00</span>
                     </div>
                     <div class="input-group mb-3">

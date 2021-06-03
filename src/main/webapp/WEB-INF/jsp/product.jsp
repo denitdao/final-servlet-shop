@@ -53,7 +53,7 @@
 
     <p>${requestScope.product.description}</p>
     <p>${requestScope.product.color}</p>
-    <p>${requestScope.product.height}</p>
+    <p>${requestScope.product.weight}</p>
     <p>${requestScope.product.price}</p>
     <c:forEach var="property" items="${requestScope.product.properties}">
         <p>${property.key.title} - ${property.value}</p>

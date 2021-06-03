@@ -31,8 +31,8 @@ public final class Validator {
         StringBuilder sb = new StringBuilder();
         if (product.getPrice().compareTo(BigDecimal.ZERO) <= 0)
             sb.append("Invalid price value\n");
-        if (product.getHeight() <= 0)
-            sb.append("Invalid height value\n");
+        if (product.getWeight() <= 0)
+            sb.append("Invalid weight value\n");
 
         if (sb.length() > 0)
             throw new InvalidValueException(sb.toString());

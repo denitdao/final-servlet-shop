@@ -6,6 +6,8 @@ import ua.denitdao.servlet.shop.model.dao.ProductDao;
 import ua.denitdao.servlet.shop.model.dao.mapper.ProductMapper;
 import ua.denitdao.servlet.shop.model.entity.Category;
 import ua.denitdao.servlet.shop.model.entity.Product;
+import ua.denitdao.servlet.shop.model.util.Page;
+import ua.denitdao.servlet.shop.model.util.Pageable;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -31,16 +33,15 @@ public class JDBCProductDao implements ProductDao {
     @Override
     public boolean create(Long categoryId, Product product) {
         final String query = "insert into " +
-                "products (category_id, price, weight, height, created_at, updated_at) " +
+                "products (category_id, price, weight, created_at, updated_at) " +
                 "values (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             pst.setLong(1, categoryId);
             pst.setBigDecimal(2, product.getPrice());
-            pst.setDouble(3, 0.);
-            pst.setDouble(4, product.getHeight());
-            pst.setTimestamp(5, Timestamp.valueOf(product.getCreatedAt()));
-            pst.setTimestamp(6, Timestamp.valueOf(product.getUpdatedAt()));
+            pst.setDouble(3, product.getWeight());
+            pst.setTimestamp(4, Timestamp.valueOf(product.getCreatedAt()));
+            pst.setTimestamp(5, Timestamp.valueOf(product.getUpdatedAt()));
 
             if (pst.executeUpdate() == 0)
                 return false;
@@ -141,42 +142,49 @@ public class JDBCProductDao implements ProductDao {
     }
 
     @Override
-    public List<Product> findAllWithCategoryId(Long categoryId, String locale) {
+    public Page<Product> findAllWithCategoryId(Long categoryId, String locale, Pageable pageable) {
         List<Product> products = new ArrayList<>();
 
         final String query = "select products.*, pi.*\n" +
                 "from products\n" +
                 "         left join product_info pi on products.id = pi.product_id\n" +
                 "where category_id = ?" +
-                "  and locale = ? and deleted=0";
+                "  and locale = ? and deleted = 0 " +
+                "limit ?,?";
+
+        int totalProducts = countWithCategoryId(categoryId);
+        int totalPages = (int) Math.ceil((double) totalProducts / pageable.getPageSize());
+        if (pageable.getCurrentPage() > totalPages && totalPages != 0)
+            pageable.setCurrentPage(totalPages);
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, categoryId);
             pst.setString(2, locale);
+            pst.setInt(3, (pageable.getCurrentPage() - 1) * pageable.getPageSize());
+            pst.setInt(4, pageable.getCurrentPage() * pageable.getPageSize());
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Product product = ProductMapper.getInstance().extractFromResultSet(rs);
                 products.add(product);
             }
         } catch (SQLException e) {
-            logger.warn("Failed to get category by id -- {}", e.getMessage());
+            logger.warn("Failed to get products page from category -- {}", e.getMessage());
             throw new RuntimeException(e);
         }
-        return products;
+        return new Page<>(totalPages, products);
     }
 
     @Override
     public boolean update(Product product) {
         final String query = "update products\n" +
-                "set price=?, weight=?, height=?, updated_at=?\n" +
+                "set price=?, weight=?, updated_at=?\n" +
                 " where id=?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setBigDecimal(1, product.getPrice());
-            pst.setDouble(2, 0.);
-            pst.setDouble(3, product.getHeight());
-            pst.setTimestamp(4, Timestamp.valueOf(product.getUpdatedAt()));
-            pst.setLong(5, product.getId());
+            pst.setDouble(2, product.getWeight());
+            pst.setTimestamp(3, Timestamp.valueOf(product.getUpdatedAt()));
+            pst.setLong(4, product.getId());
 
             return pst.executeUpdate() != 0;
         } catch (SQLException e) {
@@ -239,6 +247,24 @@ public class JDBCProductDao implements ProductDao {
             return pst.executeUpdate() != 0;
         } catch (SQLException e) {
             logger.warn("Failed to delete product -- {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    private int countWithCategoryId(Long categoryId) {
+        final String query = "select count(*) as total " +
+                "from products p\n" +
+                "         left join categories c on p.category_id = c.id\n" +
+                "where category_id = ? and p.deleted=0";
+
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setLong(1, categoryId);
+
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            return rs.getInt("total");
+        } catch (SQLException e) {
+            logger.warn("Failed to count products in category -- {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }

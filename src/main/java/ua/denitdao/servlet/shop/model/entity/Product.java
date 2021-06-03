@@ -13,7 +13,7 @@ public class Product implements Serializable {
     private String description;
     private String color;
     private BigDecimal price;
-    private Double height;
+    private Double weight;
     private String imageUrl;
     private Map<CategoryProperty, String> properties;
     private Category category;
@@ -52,8 +52,8 @@ public class Product implements Serializable {
             return this;
         }
 
-        public ProductBuilder height(Double height) {
-            entity.setHeight(height);
+        public ProductBuilder weight(Double weight) {
+            entity.setWeight(weight);
             return this;
         }
 
@@ -131,12 +131,12 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public Double getHeight() {
-        return height;
+    public Double getWeight() {
+        return weight;
     }
 
-    public void setHeight(Double height) {
-        this.height = height;
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
     public String getImageUrl() {
@@ -185,7 +185,7 @@ public class Product implements Serializable {
                 "id=" + id +
                 ", color='" + color + '\'' +
                 ", price=" + price +
-                ", height=" + height +
+                ", weight=" + weight +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", properties=" + ((properties != null) ? properties.size() : "-") +
                 ", category=" + ((category != null) ? category.getTitle() : "-") +

@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="resources"/>
@@ -43,7 +44,7 @@
     </div>
 
     <div class="row m-md-2">
-        <c:forEach var="item" items="${requestScope.category.products}">
+        <c:forEach var="item" items="${requestScope.category.products.content}">
             <c:url value="<%= Paths.VIEW_PRODUCT %>" var="prodUrl">
                 <c:param name="id" value="${item.id}"/>
             </c:url>
@@ -58,7 +59,7 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item p-2"><fmt:message key="product.param.color"/>: ${item.color}</li>
-                        <li class="list-group-item p-2"><fmt:message key="product.param.height"/>: ${item.height}</li>
+                        <li class="list-group-item p-2"><fmt:message key="product.param.weight"/>: ${item.weight}</li>
                     </ul>
                     <div class="card-body p-2 d-flex justify-content-between align-items-baseline">
                         <div>
@@ -73,23 +74,17 @@
         </c:forEach>
     </div>
 
-    <!--<nav>
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">«</span>
-                </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">»</span>
-                </a>
-            </li>
+    <nav class="my-5">
+        <ul class="pagination justify-content-center">
+            <c:forEach begin="1" end="${requestScope.category.products.totalPages}" varStatus="loop">
+                <li class="page-item <c:if test='${loop.index eq requestScope.currentPage}'>active</c:if>">
+                    <a href="<my:replaceParam name='page' value='${loop.index}'/>" class="page-link">
+                            ${loop.index}
+                    </a>
+                </li>
+            </c:forEach>
         </ul>
-    </nav>-->
+    </nav>
 </main>
 </body>
 </html>

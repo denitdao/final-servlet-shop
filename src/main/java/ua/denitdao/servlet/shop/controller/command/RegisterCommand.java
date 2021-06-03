@@ -13,10 +13,7 @@ import ua.denitdao.servlet.shop.model.exception.InvalidValueException;
 import ua.denitdao.servlet.shop.model.service.CartService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.model.service.UserService;
-import ua.denitdao.servlet.shop.util.ContextUtil;
-import ua.denitdao.servlet.shop.util.Paths;
-import ua.denitdao.servlet.shop.util.SessionUtil;
-import ua.denitdao.servlet.shop.util.Validator;
+import ua.denitdao.servlet.shop.util.*;
 
 public class RegisterCommand implements Command {
 
@@ -47,11 +44,11 @@ public class RegisterCommand implements Command {
                     .firstName(firstName)
                     .secondName(secondName)
                     .login(login)
-                    .password(password).build();
+                    .password(PasswordManager.hashPassword(password)).build();
 
             if (userService.createUser(user)) {
                 ContextUtil.addUserToContext(req, user.getId());
-
+                user.setPassword(null);
                 session.setAttribute("user", user);
                 session.setAttribute("role", user.getRole());
 

@@ -44,11 +44,11 @@
                         <input type="number" name="id" aria-label="id" value="${user.id}" hidden>
                         <c:if test="${user.blocked}">
                             <input type="number" name="block" aria-label="block" value="0" hidden>
-                            <input type="submit" class="btn btn-outline-warning" value='<fmt:message key="all_users_jsp.form.unblock"/>'>
+                            <input type="submit" class="btn btn-outline-danger btn-sm" value='<fmt:message key="all_users_jsp.form.unblock"/>'>
                         </c:if>
                         <c:if test="${not user.blocked}">
                             <input type="number" name="block" aria-label="block" value="1" hidden>
-                            <input type="submit" class="btn btn-outline-success" value='<fmt:message key="all_users_jsp.form.block"/>'>
+                            <input type="submit" class="btn btn-outline-success btn-sm" value='<fmt:message key="all_users_jsp.form.block"/>'>
                         </c:if>
                     </form>
                 </td>

@@ -41,7 +41,7 @@ public class LoginCommand implements Command {
 
             if (!PasswordManager.verifyPassword(password, user.getPassword()))
                 throw new InvalidValueException("Wrong password");
-
+            user.setPassword(null);
             if (user.isBlocked())
                 throw new ActionFailedException("You were blocked by admin");
 
