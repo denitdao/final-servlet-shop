@@ -6,9 +6,12 @@ import ua.denitdao.servlet.shop.model.dao.ProductDao;
 import ua.denitdao.servlet.shop.model.dao.mapper.ProductMapper;
 import ua.denitdao.servlet.shop.model.entity.Category;
 import ua.denitdao.servlet.shop.model.entity.Product;
+import ua.denitdao.servlet.shop.model.entity.enums.SortingOrder;
+import ua.denitdao.servlet.shop.model.entity.enums.SortingParam;
 import ua.denitdao.servlet.shop.model.util.Page;
 import ua.denitdao.servlet.shop.model.util.Pageable;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -142,7 +145,8 @@ public class JDBCProductDao implements ProductDao {
     }
 
     @Override
-    public Page<Product> findAllWithCategoryId(Long categoryId, String locale, Pageable pageable) {
+    public Page<Product> findAllWithCategoryId(Long categoryId, String locale, Pageable pageable,
+                                               SortingOrder sortingOrder, SortingParam sortingParam, BigDecimal priceMin, BigDecimal priceMax) {
         List<Product> products = new ArrayList<>();
 
         final String query = "select products.*, pi.*\n" +
@@ -150,9 +154,11 @@ public class JDBCProductDao implements ProductDao {
                 "         left join product_info pi on products.id = pi.product_id\n" +
                 "where category_id = ?" +
                 "  and locale = ? and deleted = 0 " +
-                "limit ?,?";
+                "  and price between ? and ? " +
+                "  order by " + sortingParam.getValue() + " " + sortingOrder.getValue() +
+                " limit ?,?";
 
-        int totalProducts = countWithCategoryId(categoryId);
+        int totalProducts = countWithCategoryId(categoryId, priceMin, priceMax);
         int totalPages = (int) Math.ceil((double) totalProducts / pageable.getPageSize());
         if (pageable.getCurrentPage() > totalPages && totalPages != 0)
             pageable.setCurrentPage(totalPages);
@@ -160,8 +166,10 @@ public class JDBCProductDao implements ProductDao {
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, categoryId);
             pst.setString(2, locale);
-            pst.setInt(3, (pageable.getCurrentPage() - 1) * pageable.getPageSize());
-            pst.setInt(4, pageable.getCurrentPage() * pageable.getPageSize());
+            pst.setBigDecimal(3, priceMin);
+            pst.setBigDecimal(4, priceMax);
+            pst.setInt(5, (pageable.getCurrentPage() - 1) * pageable.getPageSize());
+            pst.setInt(6, pageable.getCurrentPage() * pageable.getPageSize());
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Product product = ProductMapper.getInstance().extractFromResultSet(rs);
@@ -251,14 +259,17 @@ public class JDBCProductDao implements ProductDao {
         }
     }
 
-    private int countWithCategoryId(Long categoryId) {
+    private int countWithCategoryId(Long categoryId, BigDecimal priceMin, BigDecimal priceMax) {
         final String query = "select count(*) as total " +
                 "from products p\n" +
                 "         left join categories c on p.category_id = c.id\n" +
-                "where category_id = ? and p.deleted=0";
+                "where category_id = ? and p.deleted=0 " +
+                "  and price between ? and ? ";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, categoryId);
+            pst.setBigDecimal(2, priceMin);
+            pst.setBigDecimal(3, priceMax);
 
             ResultSet rs = pst.executeQuery();
             rs.next();

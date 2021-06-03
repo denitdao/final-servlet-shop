@@ -6,7 +6,7 @@ import ua.denitdao.servlet.shop.model.dao.CartDao;
 import ua.denitdao.servlet.shop.model.dao.mapper.ProductMapper;
 import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.OrderProduct;
-import ua.denitdao.servlet.shop.model.entity.Status;
+import ua.denitdao.servlet.shop.model.entity.enums.Status;
 
 import java.sql.*;
 import java.util.*;

@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.dao.DaoFactory;
 import ua.denitdao.servlet.shop.model.dao.UserDao;
-import ua.denitdao.servlet.shop.model.entity.Roles;
+import ua.denitdao.servlet.shop.model.entity.enums.Roles;
 import ua.denitdao.servlet.shop.model.entity.User;
 import ua.denitdao.servlet.shop.model.service.UserService;
 

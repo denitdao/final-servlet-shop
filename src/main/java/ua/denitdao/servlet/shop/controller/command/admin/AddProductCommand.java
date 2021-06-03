@@ -34,6 +34,7 @@ public class AddProductCommand implements Command {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         try {
             Validator.validateNonEmptyRequest(req);
+            // todo edit - replace exception based logic with normal
 
             long categoryId = Long.parseLong(req.getParameter("category_id"));
             Map<String, Product> localizedProduct = new HashMap<>();

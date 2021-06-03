@@ -37,8 +37,8 @@ public class Servlet extends HttpServlet {
             path = command.execute(req, resp);
         } catch (RuntimeException e) {
             logger.warn("Command execution failed", e);
-            req.setAttribute("errorMessage", e.getMessage());
-        }
+            req.setAttribute("errorMessage", "Something went wrong");
+        } // todo add handling for custom errors. on runtime write something went wrong
 
         if (path.contains("redirect:")) {
             logger.debug("~~~ redirect to: '{}'", path);

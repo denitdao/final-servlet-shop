@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.denitdao.servlet.shop.model.entity.Roles;
+import ua.denitdao.servlet.shop.model.entity.enums.Roles;
 import ua.denitdao.servlet.shop.model.entity.User;
 import ua.denitdao.servlet.shop.util.Paths;
 

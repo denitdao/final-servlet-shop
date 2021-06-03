@@ -16,7 +16,7 @@
 <%@ include file="/WEB-INF/parts/header.jspf" %>
 
 <main class="container">
-    <nav class="m-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <nav class="mt-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="${pageContext.request.contextPath}<%= Paths.VIEW_HOME %>"><fmt:message
@@ -33,11 +33,11 @@
     </nav>
 
     <div class="row justify-content-between">
-        <div class="col mx-5 mt-4 mb-5">
+        <div class="col mx-5 mt-2 mb-5">
             <h3 class="h3">${requestScope.product.title}</h3>
         </div>
         <c:if test="${sessionScope.role eq 'ADMIN'}">
-            <div class="col-auto mx-5 mt-4 mb-5">
+            <div class="col-auto mx-5 mt-2 mb-5">
                 <c:url value="<%= Paths.VIEW_UPDATE_PRODUCT %>" var="editProdUrl">
                     <c:param name="id" value="${requestScope.product.id}"/>
                 </c:url>

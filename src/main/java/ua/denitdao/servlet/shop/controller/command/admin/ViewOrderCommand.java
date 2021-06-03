@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
 import ua.denitdao.servlet.shop.model.entity.Order;
-import ua.denitdao.servlet.shop.model.entity.Status;
+import ua.denitdao.servlet.shop.model.entity.enums.Status;
 import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.OrderService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;

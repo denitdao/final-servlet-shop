@@ -16,7 +16,9 @@
 <%@ include file="/WEB-INF/parts/header.jspf" %>
 
 <main class="container">
-    <h3 class="h3 m-5"><fmt:message key="home_jsp.h3"/></h3>
+    <div class="col mx-5 mt-4 mb-5">
+        <h3 class="h3"><fmt:message key="home_jsp.h3"/></h3>
+    </div>
     <div class="row m-md-2">
         <c:forEach var="category" items="${requestScope.categories}">
             <c:url value="<%= Paths.VIEW_CATEGORY %>" var="catUrl">

@@ -6,7 +6,7 @@ import ua.denitdao.servlet.shop.model.dao.DaoFactory;
 import ua.denitdao.servlet.shop.model.dao.OrderDao;
 import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.Order;
-import ua.denitdao.servlet.shop.model.entity.Status;
+import ua.denitdao.servlet.shop.model.entity.enums.Status;
 import ua.denitdao.servlet.shop.model.service.OrderService;
 
 import java.time.LocalDateTime;

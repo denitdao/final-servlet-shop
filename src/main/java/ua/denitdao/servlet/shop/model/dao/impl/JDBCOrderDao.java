@@ -7,7 +7,7 @@ import ua.denitdao.servlet.shop.model.dao.mapper.OrderMapper;
 import ua.denitdao.servlet.shop.model.dao.mapper.ProductMapper;
 import ua.denitdao.servlet.shop.model.entity.Order;
 import ua.denitdao.servlet.shop.model.entity.OrderProduct;
-import ua.denitdao.servlet.shop.model.entity.Status;
+import ua.denitdao.servlet.shop.model.entity.enums.Status;
 
 import java.sql.*;
 import java.util.ArrayList;

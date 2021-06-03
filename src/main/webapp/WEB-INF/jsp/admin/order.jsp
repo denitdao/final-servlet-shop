@@ -59,10 +59,9 @@
                 <select class="form-select pb-1" name="status" id="statusSelect">
                     <c:forEach var="status" items="${requestScope.statuses}">
                         <option value="${status.toString()}"
-                                <c:if test="${status.toString() eq requestScope.order.status}">
-                                    selected
-                                </c:if>
-                        ><fmt:message key="status.${status.toString()}"/></option>
+                            ${status.toString() eq requestScope.order.status ? 'selected' : ''}>
+                            <fmt:message key="status.${status.toString()}"/>
+                        </option>
                     </c:forEach>
                 </select>
                 <label for="statusSelect"><fmt:message key="order_jsp.form.label"/></label>

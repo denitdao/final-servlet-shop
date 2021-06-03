@@ -38,7 +38,6 @@
             <a href="${pageContext.request.contextPath}<%= Paths.VIEW_REGISTER %>" class="link-primary">
                 <fmt:message key="register_jsp.title"/>
             </a>
-
         </form>
     </div>
     <c:if test="${not empty sessionScope.errorMessage}">

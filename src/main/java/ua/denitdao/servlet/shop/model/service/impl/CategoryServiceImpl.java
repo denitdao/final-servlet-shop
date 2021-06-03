@@ -7,9 +7,12 @@ import ua.denitdao.servlet.shop.model.dao.CategoryPropertyDao;
 import ua.denitdao.servlet.shop.model.dao.DaoFactory;
 import ua.denitdao.servlet.shop.model.dao.ProductDao;
 import ua.denitdao.servlet.shop.model.entity.Category;
+import ua.denitdao.servlet.shop.model.entity.enums.SortingOrder;
+import ua.denitdao.servlet.shop.model.entity.enums.SortingParam;
 import ua.denitdao.servlet.shop.model.service.CategoryService;
 import ua.denitdao.servlet.shop.model.util.Pageable;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -43,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> getCategoryWithProducts(Long id, Locale locale, Pageable pageable) {
+    public Optional<Category> getCategoryWithProducts(Long id, Locale locale, Pageable pageable, SortingOrder sortingOrder, SortingParam sortingParam, BigDecimal priceMin, BigDecimal priceMax) {
         Optional<Category> categoryOpt;
 
         Connection connection = daoFactory.getConnection();
@@ -52,8 +55,9 @@ public class CategoryServiceImpl implements CategoryService {
             connection.setAutoCommit(false);
 
             categoryOpt = categoryDao.findById(id, locale);
-            Category category = categoryOpt.orElseThrow(() -> new RuntimeException("category not found"));
-            category.setProducts(productDao.findAllWithCategoryId(id, locale.toString(), pageable));
+            Category category = categoryOpt
+                    .orElseThrow(() -> new RuntimeException("category not found"));
+            category.setProducts(productDao.findAllWithCategoryId(id, locale.toString(), pageable, sortingOrder, sortingParam, priceMin, priceMax));
 
             connection.commit();
         } catch (SQLException e) {
