@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
 import ua.denitdao.servlet.shop.model.entity.OrderProduct;
 import ua.denitdao.servlet.shop.model.entity.User;
-import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.CartService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.util.Paths;
@@ -18,7 +17,7 @@ import java.util.Locale;
 public class ViewCartCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(ViewCartCommand.class);
-    CartService cartService;
+    private final CartService cartService;
 
     public ViewCartCommand() {
         final ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -26,7 +25,7 @@ public class ViewCartCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) req.getSession().getAttribute("user");
         Locale locale = (Locale) req.getSession().getAttribute("locale");
         List<OrderProduct> orderProducts = cartService.getProductsInCart(user.getId(), locale.toString());

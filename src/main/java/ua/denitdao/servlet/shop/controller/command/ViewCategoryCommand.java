@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.entity.enums.SortingOrder;
 import ua.denitdao.servlet.shop.model.entity.enums.SortingParam;
-import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
+import ua.denitdao.servlet.shop.model.exception.PageNotFoundException;
 import ua.denitdao.servlet.shop.model.service.CategoryService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.model.util.Pageable;
@@ -27,9 +27,10 @@ public class ViewCategoryCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws PageNotFoundException {
         int pageSize = 2;
 
+        // todo: move this logic into mapper
         Long id = Long.valueOf(req.getParameter("id"));
         SortingOrder sortingOrder = SortingOrder.valueOf(Optional.ofNullable(req.getParameter("sorting_order"))
                 .orElse(SortingOrder.ASC.toString()));
@@ -44,10 +45,10 @@ public class ViewCategoryCommand implements Command {
 
         Pageable pageable = new Pageable((currentPage <= 0) ? 1 : currentPage, pageSize);
         Locale locale = (Locale) req.getSession().getAttribute("locale");
-
+        // todo pack sorting parameters into the object
         req.setAttribute("category",
                 categoryService.getCategoryWithProducts(id, locale, pageable, sortingOrder, sortingParam, priceMin, priceMax)
-                        .orElse(null));
+                        .orElseThrow(() -> new PageNotFoundException("No such category exists.")));
 
         req.setAttribute("currentPage", pageable.getCurrentPage());
         req.setAttribute("sortingOrder", sortingOrder);

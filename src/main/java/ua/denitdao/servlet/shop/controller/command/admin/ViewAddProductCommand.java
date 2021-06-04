@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
 import ua.denitdao.servlet.shop.model.entity.Category;
-import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
+import ua.denitdao.servlet.shop.model.exception.PageNotFoundException;
 import ua.denitdao.servlet.shop.model.service.CategoryService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.util.Paths;
@@ -24,11 +24,12 @@ public class ViewAddProductCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws PageNotFoundException {
         Long categoryId = Long.valueOf(req.getParameter("id"));
 
-        Category category = categoryService.getCategoryWithProperties(categoryId, (Locale) req.getSession().getAttribute("locale"))
-                .orElseGet(null);
+        Category category = categoryService.getCategoryWithProperties(categoryId,
+                (Locale) req.getSession().getAttribute("locale"))
+                .orElseThrow(() -> new PageNotFoundException("No such category exists."));
         req.setAttribute("category", category);
 
         return Paths.ADD_PRODUCT_JSP;

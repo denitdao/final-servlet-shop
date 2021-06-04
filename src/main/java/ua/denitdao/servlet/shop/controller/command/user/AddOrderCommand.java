@@ -27,17 +27,14 @@ public class AddOrderCommand implements Command {
         HttpSession session = req.getSession();
 
         Cart cart = (Cart) session.getAttribute("cart");
-        if (cart.getProducts().size() == 0) {
-            session.setAttribute("errorMessage", "Your cart is empty.");
-            return "redirect:" + req.getHeader("referer");
-        }
+        if (cart.getProducts().size() == 0)
+            throw new ActionFailedException("Your cart is empty.");
 
         User user = (User) session.getAttribute("user");
-        if (orderService.makeOrder(user.getId(), cart))
-            session.setAttribute("cart", cart);
-        else
-            session.setAttribute("errorMessage", "Sorry, we can't make an order.");
+        if (!orderService.makeOrder(user.getId(), cart))
+            throw new ActionFailedException("Sorry, we can't make an order.");
 
+        session.setAttribute("cart", cart);
         return "redirect:" + req.getHeader("referer");
     }
 

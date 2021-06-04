@@ -62,8 +62,9 @@ public class ProductServiceImpl implements ProductService {
             connection.setAutoCommit(false);
 
             productOpt = productDao.findById(id, locale.toString());
-            Product product = productOpt.orElseThrow(() -> new RuntimeException("product not found"));
-            product.setProperties(categoryPropertyDao.findAllWithProductId(id, locale.toString()));
+            productOpt.ifPresent(p ->
+                    p.setProperties(categoryPropertyDao.findAllWithProductId(id, locale.toString()))
+            );
 
             connection.commit();
             // no autoCommit(true) because of 'enableAutoCommitOnReturn'

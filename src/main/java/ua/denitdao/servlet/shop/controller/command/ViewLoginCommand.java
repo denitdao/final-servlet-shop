@@ -8,7 +8,7 @@ import ua.denitdao.servlet.shop.util.Paths;
 public class ViewLoginCommand implements Command {
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         return Paths.LOGIN_JSP;
     }
 }

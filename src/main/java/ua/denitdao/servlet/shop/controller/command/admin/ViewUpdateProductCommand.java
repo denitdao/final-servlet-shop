@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
-import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.ProductService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.util.Paths;
@@ -21,9 +20,10 @@ public class ViewUpdateProductCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         Long id = Long.valueOf(req.getParameter("id"));
-        req.setAttribute("product", productService.getLocalizedProductById(id, new String[] {"en", "uk"}));
+        req.setAttribute("product",
+                productService.getLocalizedProductById(id, new String[] {"en", "uk"}));
         return Paths.UPDATE_PRODUCT_JSP;
     }
 

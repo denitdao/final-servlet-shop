@@ -19,7 +19,8 @@ public interface CategoryService {
     /**
      * Get category with basic information and all products.
      */
-    Optional<Category> getCategoryWithProducts(Long id, Locale locale, Pageable pageable, SortingOrder sortingOrder, SortingParam sortingParam, BigDecimal priceMin, BigDecimal priceMax);
+    Optional<Category> getCategoryWithProducts(Long id, Locale locale, Pageable pageable,
+                                               SortingOrder sortingOrder, SortingParam sortingParam, BigDecimal priceMin, BigDecimal priceMax);
 
     /**
      * Get all categories with only basic info

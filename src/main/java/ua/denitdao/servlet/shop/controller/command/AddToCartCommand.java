@@ -25,7 +25,7 @@ public class AddToCartCommand implements Command {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         long productId = Long.parseLong(req.getParameter("product_id"));
         int amount = Integer.parseInt(req.getParameter("amount"));
-        // todo validate amount
+        // todo: validate amount
         HttpSession session = req.getSession();
 
         Cart cart = (Cart) session.getAttribute("cart");
@@ -33,10 +33,9 @@ public class AddToCartCommand implements Command {
 
         User user = (User) session.getAttribute("user");
         if (user != null) {
-            if (cartService.syncCart(user.getId(), cart))
-                session.setAttribute("cart", cart);
-            else
-                session.setAttribute("errorMessage", "failed to add to cart");
+            if (!cartService.syncCart(user.getId(), cart))
+                throw new ActionFailedException("Failed to add to cart");
+            session.setAttribute("cart", cart);
         }
         return "redirect:" + req.getHeader("referer");
     }

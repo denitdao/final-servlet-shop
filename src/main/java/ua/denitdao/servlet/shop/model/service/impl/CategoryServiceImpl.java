@@ -34,9 +34,9 @@ public class CategoryServiceImpl implements CategoryService {
             connection.setAutoCommit(false);
 
             categoryOpt = categoryDao.findById(id, locale);
-            Category category = categoryOpt.orElseThrow(() -> new RuntimeException("category not found"));
-            category.setCategoryProperties(categoryPropertyDao.findAllWithCategoryId(id));
-
+            categoryOpt.ifPresent(c ->
+                    c.setCategoryProperties(categoryPropertyDao.findAllWithCategoryId(id))
+            );
             connection.commit();
         } catch (SQLException e) {
             logger.warn("transaction failed -- {}", e.getMessage());
@@ -46,7 +46,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> getCategoryWithProducts(Long id, Locale locale, Pageable pageable, SortingOrder sortingOrder, SortingParam sortingParam, BigDecimal priceMin, BigDecimal priceMax) {
+    public Optional<Category> getCategoryWithProducts(Long id, Locale locale, Pageable pageable,
+                                                      SortingOrder sortingOrder, SortingParam sortingParam, BigDecimal priceMin, BigDecimal priceMax) {
         Optional<Category> categoryOpt;
 
         Connection connection = daoFactory.getConnection();
@@ -55,10 +56,10 @@ public class CategoryServiceImpl implements CategoryService {
             connection.setAutoCommit(false);
 
             categoryOpt = categoryDao.findById(id, locale);
-            Category category = categoryOpt
-                    .orElseThrow(() -> new RuntimeException("category not found"));
-            category.setProducts(productDao.findAllWithCategoryId(id, locale.toString(), pageable, sortingOrder, sortingParam, priceMin, priceMax));
-
+            categoryOpt.ifPresent(c ->
+                    c.setProducts(productDao.findAllWithCategoryId(id, locale.toString(), pageable,
+                            sortingOrder, sortingParam, priceMin, priceMax))
+            );
             connection.commit();
         } catch (SQLException e) {
             logger.warn("transaction failed -- {}", e.getMessage());

@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
-import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.model.service.UserService;
 import ua.denitdao.servlet.shop.util.Paths;
@@ -22,7 +21,7 @@ public class ViewAllUsersCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         req.setAttribute("users", userService.getAllUsers());
         return Paths.ALL_USERS_JSP;
     }

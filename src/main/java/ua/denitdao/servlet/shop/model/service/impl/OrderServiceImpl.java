@@ -49,15 +49,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Optional<Order> getOrder(Long orderId, String locale) {
-        Order order = null;
+        Optional<Order> orderOpt;
         try (OrderDao dao = daoFactory.createOrderDao()) {
-            order = dao.findById(orderId)
-                    .orElseThrow(() -> new RuntimeException("could not find an order"));
-            order.setProducts(dao.findProductsInOrder(orderId, locale));
-        } catch (RuntimeException e) {
-            logger.warn("no order found -- {}", e.getMessage());
+            orderOpt = dao.findById(orderId);
+            orderOpt.ifPresent(o ->
+                    o.setProducts(dao.findProductsInOrder(orderId, locale))
+            );
         }
-        return Optional.ofNullable(order);
+        return orderOpt;
     }
 
     @Override

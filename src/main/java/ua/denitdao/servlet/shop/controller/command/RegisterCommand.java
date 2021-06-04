@@ -7,9 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.User;
-import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
-import ua.denitdao.servlet.shop.model.exception.EmptyFieldException;
-import ua.denitdao.servlet.shop.model.exception.InvalidValueException;
+import ua.denitdao.servlet.shop.model.exception.ValidationException;
 import ua.denitdao.servlet.shop.model.service.CartService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.model.service.UserService;
@@ -21,7 +19,6 @@ public class RegisterCommand implements Command {
     private final UserService userService;
     private final CartService cartService;
 
-
     public RegisterCommand() {
         final ServiceFactory serviceFactory = ServiceFactory.getInstance();
         userService = serviceFactory.getUserService();
@@ -29,42 +26,26 @@ public class RegisterCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ValidationException {
+        Validator.validateNonEmptyRequest(req);
+
+        User user = RequestMapper.buildRegistrationUser(req);
+        Validator.validateNewUser(user);
+
         HttpSession session = req.getSession();
-        try {
-            Validator.validateNonEmptyRequest(req);
-            Validator.validateNewUserRequest(req);
+        user.setPassword(PasswordManager.hashPassword(user.getPassword()));
+        if (!userService.createUser(user))
+            throw new ValidationException("Such user already exists");
 
-            String firstName = req.getParameter("firstName");
-            String secondName = req.getParameter("secondName");
-            String login = req.getParameter("login");
-            String password = req.getParameter("password");
+        user.setPassword(null);
+        ContextUtil.addUserToContext(req, user.getId());
+        session.setAttribute("user", user);
+        session.setAttribute("role", user.getRole());
+        Cart cart = (Cart) session.getAttribute("cart");
+        if (cartService.syncCart(user.getId(), cart))
+            session.setAttribute("cart", cart);
 
-            User user = User.builder()
-                    .firstName(firstName)
-                    .secondName(secondName)
-                    .login(login)
-                    .password(PasswordManager.hashPassword(password)).build();
-
-            if (userService.createUser(user)) {
-                ContextUtil.addUserToContext(req, user.getId());
-                user.setPassword(null);
-                session.setAttribute("user", user);
-                session.setAttribute("role", user.getRole());
-
-                Cart cart = (Cart) session.getAttribute("cart");
-                if (cartService.syncCart(user.getId(), cart))
-                    session.setAttribute("cart", cart);
-
-                logger.info("registered: sess({}) | login({})", session, login);
-                return "redirect:" + Paths.VIEW_HOME;
-            } else {
-                session.setAttribute("errorMessage", "Such user already exists");
-            }
-        } catch (InvalidValueException | EmptyFieldException e) {
-            session.setAttribute("errorMessage", e.getMessage());
-        }
-        SessionUtil.addRequestParametersToSession(req.getSession(), req, "prev_params");
-        return "redirect:" + req.getHeader("referer");
+        logger.info("registered: sess({}) | login({})", session, user.getLogin());
+        return "redirect:" + Paths.VIEW_HOME;
     }
 }

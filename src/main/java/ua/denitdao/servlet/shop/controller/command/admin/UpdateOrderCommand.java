@@ -22,12 +22,10 @@ public class UpdateOrderCommand implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         Long id = Long.valueOf(req.getParameter("id"));
-        String status = req.getParameter("status");
-
-        // todo: validate status
+        String status = req.getParameter("status"); // todo rewrite to use enum
 
         if (!orderService.updateOrder(id, status))
-            req.getSession().setAttribute("errorMessage", "Order update failed.");
+            throw new ActionFailedException("Order update failed");
 
         return "redirect:" + req.getHeader("referer");
     }
