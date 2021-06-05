@@ -37,7 +37,7 @@ public class JDBCProductDao implements ProductDao {
     public boolean create(Long categoryId, Product product) {
         final String query = "insert into " +
                 "products (category_id, price, weight, created_at, updated_at) " +
-                "values (?, ?, ?, ?, ?, ?)";
+                "values (?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             pst.setLong(1, categoryId);

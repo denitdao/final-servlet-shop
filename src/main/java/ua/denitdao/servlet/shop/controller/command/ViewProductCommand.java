@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.exception.PageNotFoundException;
 import ua.denitdao.servlet.shop.model.service.ProductService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
+import ua.denitdao.servlet.shop.util.ExceptionMessages;
 import ua.denitdao.servlet.shop.util.Paths;
 
 import java.util.Locale;
@@ -26,7 +27,7 @@ public class ViewProductCommand implements Command {
         Long id = Long.valueOf(req.getParameter("id"));
         req.setAttribute("product",
                 productService.getProductById(id, (Locale) req.getSession().getAttribute("locale"))
-                        .orElseThrow(() -> new PageNotFoundException("No such product exists.")));
+                        .orElseThrow(() -> new PageNotFoundException("No such product", ExceptionMessages.NO_PRODUCT)));
         return Paths.PRODUCT_JSP;
     }
 }

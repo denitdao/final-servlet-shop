@@ -169,15 +169,11 @@
                    aria-label="id" hidden>
             <input type="submit" class="btn btn-primary mb-5" value='<fmt:message key="update_product_jsp.form.button"/>'>
 
-            <c:if test="${not empty sessionScope.errorMessage}">
-                <pre class="h5 mt-3 mb-5">${sessionScope.errorMessage}</pre>
-            </c:if>
+            <%@ include file="/WEB-INF/parts/error_message.jspf" %>
         </form>
     </div>
 </main>
 
-
 <c:remove var="prev_params" scope="session"/>
-<c:remove var="errorMessage" scope="session"/>
 </body>
 </html>

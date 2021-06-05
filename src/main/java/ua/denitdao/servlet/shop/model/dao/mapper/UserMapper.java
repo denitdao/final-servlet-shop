@@ -1,6 +1,7 @@
 package ua.denitdao.servlet.shop.model.dao.mapper;
 
 import ua.denitdao.servlet.shop.model.entity.User;
+import ua.denitdao.servlet.shop.model.entity.enums.Roles;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +27,7 @@ public class UserMapper implements EntityMapper<User> {
                 .secondName(rs.getString("second_name"))
                 .login(rs.getString("login"))
                 .password(rs.getString("password"))
-                .role(rs.getString("role"))
+                .role(Roles.valueOf(rs.getString("role")))
                 .blocked(rs.getBoolean("blocked"))
                 .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
                 .updatedAt(rs.getTimestamp("updated_at").toLocalDateTime())

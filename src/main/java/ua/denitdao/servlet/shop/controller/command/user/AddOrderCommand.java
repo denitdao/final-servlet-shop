@@ -11,6 +11,7 @@ import ua.denitdao.servlet.shop.model.entity.User;
 import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.OrderService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
+import ua.denitdao.servlet.shop.util.ExceptionMessages;
 
 public class AddOrderCommand implements Command {
 
@@ -28,11 +29,11 @@ public class AddOrderCommand implements Command {
 
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart.getProducts().size() == 0)
-            throw new ActionFailedException("Your cart is empty.");
+            throw new ActionFailedException("Cart is empty", ExceptionMessages.FAIL_CART_EMPTY);
 
         User user = (User) session.getAttribute("user");
         if (!orderService.makeOrder(user.getId(), cart))
-            throw new ActionFailedException("Sorry, we can't make an order.");
+            throw new ActionFailedException("Can't make an order", ExceptionMessages.FAIL_CREATE_ORDER);
 
         session.setAttribute("cart", cart);
         return "redirect:" + req.getHeader("referer");

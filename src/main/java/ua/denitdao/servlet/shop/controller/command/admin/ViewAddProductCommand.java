@@ -9,6 +9,7 @@ import ua.denitdao.servlet.shop.model.entity.Category;
 import ua.denitdao.servlet.shop.model.exception.PageNotFoundException;
 import ua.denitdao.servlet.shop.model.service.CategoryService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
+import ua.denitdao.servlet.shop.util.ExceptionMessages;
 import ua.denitdao.servlet.shop.util.Paths;
 
 import java.util.Locale;
@@ -29,7 +30,7 @@ public class ViewAddProductCommand implements Command {
 
         Category category = categoryService.getCategoryWithProperties(categoryId,
                 (Locale) req.getSession().getAttribute("locale"))
-                .orElseThrow(() -> new PageNotFoundException("No such category exists."));
+                .orElseThrow(() -> new PageNotFoundException("No such category", ExceptionMessages.NO_CATEGORY));
         req.setAttribute("category", category);
 
         return Paths.ADD_PRODUCT_JSP;

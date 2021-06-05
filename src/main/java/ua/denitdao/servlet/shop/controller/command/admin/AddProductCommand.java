@@ -10,10 +10,11 @@ import ua.denitdao.servlet.shop.model.entity.Product;
 import ua.denitdao.servlet.shop.model.exception.ValidationException;
 import ua.denitdao.servlet.shop.model.service.ProductService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
+import ua.denitdao.servlet.shop.util.ExceptionMessages;
 import ua.denitdao.servlet.shop.util.Paths;
 import ua.denitdao.servlet.shop.util.Validator;
 
-import java.util.*;
+import java.util.Map;
 
 public class AddProductCommand implements Command {
 
@@ -35,7 +36,7 @@ public class AddProductCommand implements Command {
                 .forEach(Validator::validateProduct);
 
         if (!productService.create(categoryId, localizedProduct))
-            throw new ValidationException("Failed to create product");
+            throw new ValidationException("Failed to create product", ExceptionMessages.FAIL_CREATE_PRODUCT);
 
         return "redirect:" + Paths.VIEW_CATEGORY + "?id=" + categoryId;
     }

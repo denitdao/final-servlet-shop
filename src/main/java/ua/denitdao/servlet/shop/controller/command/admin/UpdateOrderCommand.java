@@ -8,6 +8,7 @@ import ua.denitdao.servlet.shop.controller.command.Command;
 import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.OrderService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
+import ua.denitdao.servlet.shop.util.ExceptionMessages;
 
 public class UpdateOrderCommand implements Command {
 
@@ -25,7 +26,7 @@ public class UpdateOrderCommand implements Command {
         String status = req.getParameter("status"); // todo rewrite to use enum
 
         if (!orderService.updateOrder(id, status))
-            throw new ActionFailedException("Order update failed");
+            throw new ActionFailedException("Order update failed", ExceptionMessages.FAIL_UPDATE_PRODUCT);
 
         return "redirect:" + req.getHeader("referer");
     }

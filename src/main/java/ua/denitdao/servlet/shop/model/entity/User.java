@@ -1,5 +1,7 @@
 package ua.denitdao.servlet.shop.model.entity;
 
+import ua.denitdao.servlet.shop.model.entity.enums.Roles;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,7 +14,7 @@ public class User implements Serializable {
     private String secondName;
     private String login;
     private String password;
-    private String role;
+    private Roles role;
     private boolean blocked;
     private Cart cart;
     private List<Order> orders;
@@ -51,7 +53,7 @@ public class User implements Serializable {
             return this;
         }
 
-        public UserBuilder role(String role) {
+        public UserBuilder role(Roles role) {
             entity.setRole(role);
             return this;
         }
@@ -130,11 +132,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getRole() {
+    public Roles getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Roles role) {
         this.role = role;
     }
 

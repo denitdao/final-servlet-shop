@@ -23,13 +23,13 @@
                     <fmt:message key="login_jsp.label.login"/>
                 </label>
                 <input type="text" id="login" name="login" value="${sessionScope.prev_params.get('login')}"
-                       class="form-control">
+                       class="form-control" minlength="3">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">
                     <fmt:message key="login_jsp.label.password"/>
                 </label>
-                <input type="password" id="password" name="password" class="form-control">
+                <input type="password" id="password" name="password" class="form-control" minlength="3">
             </div>
             <div class="mb-3">
                 <input type="submit" class="btn btn-primary"
@@ -40,12 +40,9 @@
             </a>
         </form>
     </div>
-    <c:if test="${not empty sessionScope.errorMessage}">
-        <pre class="h5 mb-5">${sessionScope.errorMessage}</pre>
-    </c:if>
+    <%@ include file="/WEB-INF/parts/error_message.jspf" %>
 </main>
 
-<c:remove var="errorMessage" scope="session"/>
 <c:remove var="prev_params" scope="session"/>
 </body>
 </html>

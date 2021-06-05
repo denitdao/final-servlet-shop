@@ -32,16 +32,16 @@ public class LoginCommand implements Command {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         User user = userService.getUserByLogin(login)
-                .orElseThrow(() -> new ValidationException("Such user doesn't exist"));
+                .orElseThrow(() -> new ValidationException("User doesn't exist", ExceptionMessages.WRONG_LOGIN));
 
         if (!PasswordManager.verifyPassword(password, user.getPassword()))
-            throw new ValidationException("Wrong password");
+            throw new ValidationException("Wrong password", ExceptionMessages.WRONG_PASSWORD);
 
         if (user.isBlocked())
-            throw new ValidationException("You were blocked by admin");
+            throw new ValidationException("Blocked by admin", ExceptionMessages.USER_BLOCKED);
 
         if (ContextUtil.findUserInContext(req, user.getId()))
-            throw new ValidationException("You are already logged in");
+            throw new ValidationException("Already logged in", ExceptionMessages.USER_LOGGED);
 
         user.setPassword(null);
         ContextUtil.addUserToContext(req, user.getId());

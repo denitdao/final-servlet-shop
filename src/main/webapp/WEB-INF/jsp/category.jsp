@@ -49,7 +49,7 @@
         <form class="col-auto col-lg-3" method="get" action="<%= Paths.VIEW_CATEGORY %>">
             <div class="card mb-2">
                 <div class="card-header">
-                    Ordering direction
+                    <fmt:message key="category_jsp.form.ordering_direction"/>
                 </div>
                 <ul class="list-group list-group-flush">
                     <c:forEach var="orderValue" items="${requestScope.sortingOrderValues}">
@@ -58,7 +58,7 @@
                             <input class="form-check-input" type="radio" name="sorting_order" value="${value}"
                                    id="order_${value}" ${requestScope.sortingOrder eq orderValue ? 'checked' : ''}>
                             <label class="form-check-label" for="order_${value}">
-                                    ${value}
+                                <fmt:message key="sorting_order.${value}"/>
                             </label>
                         </li>
                     </c:forEach>
@@ -66,7 +66,7 @@
             </div>
             <div class="card mb-2">
                 <div class="card-header">
-                    Order by
+                    <fmt:message key="category_jsp.form.order_by"/>
                 </div>
                 <ul class="list-group list-group-flush">
                     <c:forEach var="paramValue" items="${requestScope.sortingParamValues}">
@@ -75,7 +75,7 @@
                             <input class="form-check-input" type="radio" name="sorting_param" value="${value}"
                                    id="param_${value}" ${requestScope.sortingParam eq paramValue ? 'checked' : ''}>
                             <label class="form-check-label" for="param_${value}">
-                                    ${value}
+                                    <fmt:message key="sorting_param.${value}"/>
                             </label>
                         </li>
                     </c:forEach>
@@ -83,15 +83,15 @@
             </div>
             <div class="card mb-2">
                 <div class="card-header">
-                    Price Range
+                    <fmt:message key="category_jsp.form.price_range"/>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="form-group input-group-sm">
-                            <label for="price_min">from</label>
+                            <label for="price_min"><fmt:message key="category_jsp.form.min_price"/>:</label>
                             <input type="number" min="0" max="10000" required name="price_min" id="price_min"
                                    class="form-control" value="${requestScope.priceMin}">
-                            <label for="price_max">to</label>
+                            <label for="price_max"><fmt:message key="category_jsp.form.max_price"/>:</label>
                             <input type="number" min="1" max="10000" required name="price_max" id="price_max"
                                    class="form-control" value="${requestScope.priceMax}">
                         </div>
@@ -99,7 +99,7 @@
                 </ul>
             </div>
             <div class="card mb-2">
-                <input type="submit" class="btn btn-outline-secondary" value='Apply'>
+                <input type="submit" class="btn btn-outline-secondary" value='<fmt:message key="category_jsp.form.apply"/>'>
             </div>
             <input type="number" value="${requestScope.category.id}" name="id" aria-label="id" hidden>
             <input type="number" value="${requestScope.currentPage}" name="page" aria-label="page" hidden>
@@ -137,7 +137,7 @@
                     </div>
                 </c:forEach>
                 <c:if test="${empty requestScope.category.products.content}">
-                    <p>No items found</p>
+                    <p><fmt:message key="category_jsp.message.no_found"/></p>
                 </c:if>
             </div>
         </div>

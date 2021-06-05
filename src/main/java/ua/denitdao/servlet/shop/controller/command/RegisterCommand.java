@@ -35,7 +35,7 @@ public class RegisterCommand implements Command {
         HttpSession session = req.getSession();
         user.setPassword(PasswordManager.hashPassword(user.getPassword()));
         if (!userService.createUser(user))
-            throw new ValidationException("Such user already exists");
+            throw new ValidationException("User already exists", ExceptionMessages.USER_EXISTS);
 
         user.setPassword(null);
         ContextUtil.addUserToContext(req, user.getId());

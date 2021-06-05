@@ -10,6 +10,8 @@ import ua.denitdao.servlet.shop.model.entity.User;
 import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.CartService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
+import ua.denitdao.servlet.shop.util.ExceptionMessages;
+import ua.denitdao.servlet.shop.util.Validator;
 
 public class AddToCartCommand implements Command {
 
@@ -23,9 +25,9 @@ public class AddToCartCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
+        Validator.validateNonEmptyRequest(req);
         long productId = Long.parseLong(req.getParameter("product_id"));
         int amount = Integer.parseInt(req.getParameter("amount"));
-        // todo: validate amount
         HttpSession session = req.getSession();
 
         Cart cart = (Cart) session.getAttribute("cart");
@@ -34,7 +36,7 @@ public class AddToCartCommand implements Command {
         User user = (User) session.getAttribute("user");
         if (user != null) {
             if (!cartService.syncCart(user.getId(), cart))
-                throw new ActionFailedException("Failed to add to cart");
+                throw new ActionFailedException("Failed to add to cart", ExceptionMessages.FAIL_ADD_TO_CART);
             session.setAttribute("cart", cart);
         }
         return "redirect:" + req.getHeader("referer");

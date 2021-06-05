@@ -10,6 +10,7 @@ import ua.denitdao.servlet.shop.model.entity.Product;
 import ua.denitdao.servlet.shop.model.exception.ValidationException;
 import ua.denitdao.servlet.shop.model.service.ProductService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
+import ua.denitdao.servlet.shop.util.ExceptionMessages;
 import ua.denitdao.servlet.shop.util.Paths;
 import ua.denitdao.servlet.shop.util.Validator;
 
@@ -32,10 +33,12 @@ public class UpdateProductCommand implements Command {
 
         Map<String, Product> localizedProduct = RequestMapper.buildLocalizedProduct(req);
         localizedProduct.values()
-                .forEach(Validator::validateProduct);
-
+                .forEach(p -> {
+                    p.setId(id);
+                    Validator.validateProduct(p);
+                });
         if (!productService.update(localizedProduct))
-            throw new ValidationException("Failed to edit product");
+            throw new ValidationException("Failed to edit product", ExceptionMessages.FAIL_UPDATE_PRODUCT);
 
         return "redirect:" + Paths.VIEW_PRODUCT + "?id=" + id;
     }

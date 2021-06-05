@@ -6,8 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
 import ua.denitdao.servlet.shop.model.entity.Order;
-import ua.denitdao.servlet.shop.model.entity.enums.Roles;
 import ua.denitdao.servlet.shop.model.entity.User;
+import ua.denitdao.servlet.shop.model.entity.enums.Roles;
 import ua.denitdao.servlet.shop.model.service.OrderService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.util.Paths;
@@ -29,7 +29,7 @@ public class ViewAllOrdersCommand implements Command {
         List<Order> orders;
         User user = (User) req.getSession().getAttribute("user");
 
-        if (Roles.ADMIN.toString().equals(user.getRole())) { // todo rewrite to use Enums
+        if (Roles.ADMIN.equals(user.getRole())) {
             if (req.getParameter("user_id") != null) {
                 Long id = Long.valueOf(req.getParameter("user_id"));
                 orders = orderService.getAllOfUser(id);

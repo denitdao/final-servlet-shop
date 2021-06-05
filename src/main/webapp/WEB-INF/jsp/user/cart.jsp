@@ -69,11 +69,7 @@
         <p><fmt:message key="cart_jsp.message.empty"/></p>
     </c:if>
 
-    <c:if test="${not empty sessionScope.errorMessage}">
-        <pre class="h5 mt-3 mb-5">${sessionScope.errorMessage}</pre>
-    </c:if>
+    <%@ include file="/WEB-INF/parts/error_message.jspf" %>
 </main>
-
-<c:remove var="errorMessage" scope="session"/>
 </body>
 </html>

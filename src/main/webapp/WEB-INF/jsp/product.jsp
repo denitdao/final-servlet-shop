@@ -73,12 +73,8 @@
             <input class="btn btn-primary" type="submit" value='<fmt:message key="product_jsp.form.button"/>'>
         </div>
 
-        <c:if test="${not empty sessionScope.errorMessage}">
-            <pre class="h5 mt-3 mb-5">${sessionScope.errorMessage}</pre>
-        </c:if>
+        <%@ include file="/WEB-INF/parts/error_message.jspf" %>
     </form>
 </main>
-
-<c:remove var="errorMessage" scope="session"/>
 </body>
 </html>

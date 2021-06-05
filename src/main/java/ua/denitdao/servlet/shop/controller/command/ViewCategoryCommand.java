@@ -10,6 +10,7 @@ import ua.denitdao.servlet.shop.model.exception.PageNotFoundException;
 import ua.denitdao.servlet.shop.model.service.CategoryService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
 import ua.denitdao.servlet.shop.model.util.Pageable;
+import ua.denitdao.servlet.shop.util.ExceptionMessages;
 import ua.denitdao.servlet.shop.util.Paths;
 
 import java.math.BigDecimal;
@@ -48,7 +49,7 @@ public class ViewCategoryCommand implements Command {
         // todo pack sorting parameters into the object
         req.setAttribute("category",
                 categoryService.getCategoryWithProducts(id, locale, pageable, sortingOrder, sortingParam, priceMin, priceMax)
-                        .orElseThrow(() -> new PageNotFoundException("No such category exists.")));
+                        .orElseThrow(() -> new PageNotFoundException("No such category", ExceptionMessages.NO_CATEGORY)));
 
         req.setAttribute("currentPage", pageable.getCurrentPage());
         req.setAttribute("sortingOrder", sortingOrder);

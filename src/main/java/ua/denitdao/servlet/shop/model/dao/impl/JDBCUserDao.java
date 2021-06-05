@@ -32,7 +32,7 @@ public class JDBCUserDao implements UserDao {
             pst.setString(2, user.getSecondName());
             pst.setString(3, user.getLogin());
             pst.setString(4, user.getPassword());
-            pst.setString(5, user.getRole());
+            pst.setString(5, user.getRole().toString());
             pst.setTimestamp(6, Timestamp.valueOf(user.getCreatedAt()));
             pst.setTimestamp(7, Timestamp.valueOf(user.getUpdatedAt()));
 
@@ -154,7 +154,7 @@ public class JDBCUserDao implements UserDao {
             pst.setString(2, user.getSecondName());
             pst.setString(3, user.getLogin());
             pst.setString(4, user.getPassword());
-            pst.setString(5, user.getRole());
+            pst.setString(5, user.getRole().toString());
             pst.setTimestamp(6, Timestamp.valueOf(user.getUpdatedAt()));
             pst.setLong(7, user.getId());
 

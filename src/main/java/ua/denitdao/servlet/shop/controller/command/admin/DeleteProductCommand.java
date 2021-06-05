@@ -8,6 +8,7 @@ import ua.denitdao.servlet.shop.controller.command.Command;
 import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.ProductService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
+import ua.denitdao.servlet.shop.util.ExceptionMessages;
 import ua.denitdao.servlet.shop.util.Paths;
 
 public class DeleteProductCommand implements Command {
@@ -26,7 +27,7 @@ public class DeleteProductCommand implements Command {
         long categoryId = Long.parseLong(req.getParameter("category_id"));
 
         if (!productService.delete(productId))
-            throw new ActionFailedException("Could not delete product");
+            throw new ActionFailedException("Could not delete product", ExceptionMessages.FAIL_DELETE_PRODUCT);
 
         return "redirect:" + Paths.VIEW_CATEGORY + "?id=" + categoryId;
     }

@@ -10,6 +10,7 @@ import ua.denitdao.servlet.shop.model.entity.enums.Status;
 import ua.denitdao.servlet.shop.model.exception.PageNotFoundException;
 import ua.denitdao.servlet.shop.model.service.OrderService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
+import ua.denitdao.servlet.shop.util.ExceptionMessages;
 import ua.denitdao.servlet.shop.util.Paths;
 
 import java.util.Locale;
@@ -30,7 +31,7 @@ public class ViewOrderCommand implements Command {
 
         Locale locale = (Locale) req.getSession().getAttribute("locale");
         Order order = orderService.getOrder(id, locale.toString())
-                .orElseThrow(() -> new PageNotFoundException("No such order exists."));
+                .orElseThrow(() -> new PageNotFoundException("No such order", ExceptionMessages.NO_ORDER));
 
         req.setAttribute("order", order);
         Status[] statuses = { Status.REGISTERED, Status.DELIVERED, Status.CANCELLED };
