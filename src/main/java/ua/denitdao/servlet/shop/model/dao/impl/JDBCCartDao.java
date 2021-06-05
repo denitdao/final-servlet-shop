@@ -8,7 +8,10 @@ import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.OrderProduct;
 import ua.denitdao.servlet.shop.model.entity.enums.Status;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 public class JDBCCartDao implements CartDao {

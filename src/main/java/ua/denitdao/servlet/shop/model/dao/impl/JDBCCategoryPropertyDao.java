@@ -4,9 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.dao.CategoryPropertyDao;
 import ua.denitdao.servlet.shop.model.dao.mapper.CategoryPropertyMapper;
-import ua.denitdao.servlet.shop.model.dao.mapper.ProductMapper;
 import ua.denitdao.servlet.shop.model.entity.CategoryProperty;
-import ua.denitdao.servlet.shop.model.entity.Product;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

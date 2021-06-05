@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import ua.denitdao.servlet.shop.model.entity.CategoryProperty;
 import ua.denitdao.servlet.shop.model.entity.Product;
 import ua.denitdao.servlet.shop.model.entity.User;
-import ua.denitdao.servlet.shop.util.PasswordManager;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

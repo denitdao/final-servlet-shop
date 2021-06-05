@@ -3,7 +3,10 @@ package ua.denitdao.servlet.shop.controller.command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.admin.*;
-import ua.denitdao.servlet.shop.controller.command.user.*;
+import ua.denitdao.servlet.shop.controller.command.user.AddOrderCommand;
+import ua.denitdao.servlet.shop.controller.command.user.LogoutCommand;
+import ua.denitdao.servlet.shop.controller.command.user.ViewAllOrdersCommand;
+import ua.denitdao.servlet.shop.controller.command.user.ViewCartCommand;
 import ua.denitdao.servlet.shop.util.Commands;
 
 import java.util.HashMap;

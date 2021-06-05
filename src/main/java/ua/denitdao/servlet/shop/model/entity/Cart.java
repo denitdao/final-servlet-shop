@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class Cart implements Serializable {
 
+    private static final long serialVersionUID = 237367461283653534L;
     private Map<Long, Integer> products; // productId - amount
 
     public Cart() {

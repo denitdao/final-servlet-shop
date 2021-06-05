@@ -21,7 +21,7 @@ public class LocaleFilter implements Filter {
     private static String defaultLocale;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         supportedLocales.addAll(asList(filterConfig.getInitParameter("supported-locales").split(" ")));
         defaultLocale = filterConfig.getInitParameter("default");
         logger.trace("Supported locales: {} \nDefault locale: {}", supportedLocales, defaultLocale);
