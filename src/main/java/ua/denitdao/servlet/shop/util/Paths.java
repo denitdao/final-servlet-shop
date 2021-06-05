@@ -45,6 +45,8 @@ public final class Paths {
     public static final String UPDATE_PRODUCT_JSP = "/WEB-INF/jsp/admin/update_product.jsp";
     public static final String ERROR_JSP = "/WEB-INF/jsp/error.jsp";
 
+    public static final String IMAGES = "/resources/images";
+
     private Paths() {
     }
 }

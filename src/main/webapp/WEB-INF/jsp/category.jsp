@@ -112,8 +112,8 @@
                     </c:url>
                     <div class="mb-4">
                         <div class="card shadow-sm">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Solid_gray.png"
-                                 class="card-img-top"
+                            <img src="<%= Paths.IMAGES %>/${not empty item.imageUrl ? item.imageUrl : 'default.jpg'}"
+                                 class="card-img-top img-fluid"
                                  alt="image of the product">
                             <div class="card-body p-2">
                                 <h5 class="card-title h5 pb-2">${item.title}</h5>

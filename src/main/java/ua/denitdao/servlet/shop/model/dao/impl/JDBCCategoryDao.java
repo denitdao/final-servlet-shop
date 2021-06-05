@@ -81,7 +81,7 @@ public class JDBCCategoryDao implements CategoryDao {
             pst.setString(1, locale.toString());
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                categories.add(CategoryMapper.getInstance().extractFromResultSet(rs)); // todo: optimize
+                categories.add(CategoryMapper.getInstance().extractFromResultSet(rs));
             }
         } catch (SQLException e) {
             logger.warn("Failed to get all categories -- {}", e.getMessage());

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.controller.command.Command;
+import ua.denitdao.servlet.shop.model.entity.enums.Status;
 import ua.denitdao.servlet.shop.model.exception.ActionFailedException;
 import ua.denitdao.servlet.shop.model.service.OrderService;
 import ua.denitdao.servlet.shop.model.service.ServiceFactory;
@@ -23,7 +24,7 @@ public class UpdateOrderCommand implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         Long id = Long.valueOf(req.getParameter("id"));
-        String status = req.getParameter("status"); // todo rewrite to use enum
+        Status status = Status.valueOf(req.getParameter("status"));
 
         if (!orderService.updateOrder(id, status))
             throw new ActionFailedException("Order update failed", ExceptionMessages.FAIL_UPDATE_PRODUCT);

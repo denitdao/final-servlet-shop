@@ -36,7 +36,7 @@ public class JDBCOrderDao implements OrderDao {
                 "where user_id = ? and status = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setString(1, order.getStatus());
+            pst.setString(1, order.getStatus().toString());
             pst.setTimestamp(2, Timestamp.valueOf(order.getCreatedAt()));
             pst.setTimestamp(3, Timestamp.valueOf(order.getUpdatedAt()));
             pst.setLong(4, userId);
@@ -146,7 +146,7 @@ public class JDBCOrderDao implements OrderDao {
                 " where id=?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setString(1, order.getStatus());
+            pst.setString(1, order.getStatus().toString());
             pst.setTimestamp(2, Timestamp.valueOf(order.getUpdatedAt()));
             pst.setLong(3, order.getId());
 

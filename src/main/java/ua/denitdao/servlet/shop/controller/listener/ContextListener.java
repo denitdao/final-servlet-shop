@@ -5,6 +5,7 @@ import jakarta.servlet.ServletContextListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.util.ContextUtil;
+import ua.denitdao.servlet.shop.util.Paths;
 
 public class ContextListener implements ServletContextListener {
 
@@ -13,6 +14,7 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         logger.debug("context initialization");
+        logger.debug("current image files location: {}", sce.getServletContext().getRealPath(Paths.IMAGES));
         ContextUtil.createActiveUserStorage(sce);
     }
 

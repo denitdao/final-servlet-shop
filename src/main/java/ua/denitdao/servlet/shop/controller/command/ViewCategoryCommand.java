@@ -21,6 +21,8 @@ public class ViewCategoryCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(ViewCategoryCommand.class);
     private final CategoryService categoryService;
+    private final int PAGE_SIZE = 3;
+
 
     public ViewCategoryCommand() {
         final ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -29,9 +31,6 @@ public class ViewCategoryCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws PageNotFoundException {
-        int pageSize = 2;
-
-        // todo: move this logic into mapper
         Long id = Long.valueOf(req.getParameter("id"));
         SortingOrder sortingOrder = SortingOrder.valueOf(Optional.ofNullable(req.getParameter("sorting_order"))
                 .orElse(SortingOrder.ASC.toString()));
@@ -44,9 +43,8 @@ public class ViewCategoryCommand implements Command {
         int currentPage = Integer.parseInt(Optional.ofNullable(req.getParameter("page"))
                 .orElse("1"));
 
-        Pageable pageable = new Pageable((currentPage <= 0) ? 1 : currentPage, pageSize);
+        Pageable pageable = new Pageable((currentPage <= 0) ? 1 : currentPage, PAGE_SIZE);
         Locale locale = (Locale) req.getSession().getAttribute("locale");
-        // todo pack sorting parameters into the object
         req.setAttribute("category",
                 categoryService.getCategoryWithProducts(id, locale, pageable, sortingOrder, sortingParam, priceMin, priceMax)
                         .orElseThrow(() -> new PageNotFoundException("No such category", ExceptionMessages.NO_CATEGORY)));

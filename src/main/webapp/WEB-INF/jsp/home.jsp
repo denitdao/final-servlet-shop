@@ -19,12 +19,12 @@
     <div class="col mx-5 mt-4 mb-5">
         <h3 class="h3"><fmt:message key="home_jsp.h3"/></h3>
     </div>
-    <div class="row m-md-2">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 m-md-2">
         <c:forEach var="category" items="${requestScope.categories}">
             <c:url value="<%= Paths.VIEW_CATEGORY %>" var="catUrl">
                 <c:param name="id" value="${category.id}"/>
             </c:url>
-            <div class="col-4 mb-4">
+            <div class="col mb-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="h5 card-title">${category.title}</h5>

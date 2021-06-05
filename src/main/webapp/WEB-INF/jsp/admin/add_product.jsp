@@ -18,7 +18,7 @@
 <main class="container">
     <h3 class="h3 m-5"><fmt:message key="add_product_jsp.h3"/> '${requestScope.category.title}'</h3>
     <div class="form-product">
-        <form action="<%= Paths.POST_ADD_PRODUCT %>" method="post">
+        <form action="<%= Paths.POST_ADD_PRODUCT %>" method="post" enctype = "multipart/form-data">
             <div class="form-text mt-4 mb-2 text-center"><fmt:message key="add_product_jsp.label.general"/></div>
             <div class="input-group mb-3">
                 <span class="input-group-text">Назва товару</span>
@@ -66,6 +66,10 @@
             </c:forEach>
             <hr>
             <div class="form-text mt-4 mb-2 text-center"><fmt:message key="add_product_jsp.label.common"/></div>
+            <div class="input-group mb-3">
+                <span class="input-group-text"><fmt:message key="product.param.image"/></span>
+                <input type="file" name="image" class="form-control text-secondary" accept="image/png, image/jpeg">
+            </div>
             <div class="input-group mb-3">
                 <span class="input-group-text"><fmt:message key="product.param.weight"/></span>
                 <input type="number" name="weight" value="${sessionScope.prev_params.get('weight')}" class="form-control"

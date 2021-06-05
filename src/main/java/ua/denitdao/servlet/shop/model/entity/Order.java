@@ -1,5 +1,7 @@
 package ua.denitdao.servlet.shop.model.entity;
 
+import ua.denitdao.servlet.shop.model.entity.enums.Status;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,7 +13,7 @@ public class Order implements Serializable {
 
     private static final long serialVersionUID = 23958361312483534L;
     private Long id;
-    private String status;
+    private Status status;
     private List<OrderProduct> products;
     private LocalDateTime updatedAt;
     private LocalDateTime createdAt;
@@ -26,7 +28,7 @@ public class Order implements Serializable {
             return this;
         }
 
-        public OrderBuilder status(String status) {
+        public OrderBuilder status(Status status) {
             entity.setStatus(status);
             return this;
         }
@@ -61,11 +63,11 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

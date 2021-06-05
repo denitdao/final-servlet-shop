@@ -28,6 +28,7 @@ public class ProductMapper implements EntityMapper<Product> {
                 .color(rs.getString("color"))
                 .price(rs.getBigDecimal("price"))
                 .weight(rs.getDouble("weight"))
+                .imageUrl(rs.getString("image_url"))
                 .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
                 .updatedAt(rs.getTimestamp("updated_at").toLocalDateTime())
                 .build();

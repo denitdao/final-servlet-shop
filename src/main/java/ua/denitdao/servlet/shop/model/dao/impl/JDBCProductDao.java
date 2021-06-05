@@ -36,15 +36,16 @@ public class JDBCProductDao implements ProductDao {
     @Override
     public boolean create(Long categoryId, Product product) {
         final String query = "insert into " +
-                "products (category_id, price, weight, created_at, updated_at) " +
-                "values (?, ?, ?, ?, ?)";
+                "products (category_id, price, weight, image_url, created_at, updated_at) " +
+                "values (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             pst.setLong(1, categoryId);
             pst.setBigDecimal(2, product.getPrice());
             pst.setDouble(3, product.getWeight());
-            pst.setTimestamp(4, Timestamp.valueOf(product.getCreatedAt()));
-            pst.setTimestamp(5, Timestamp.valueOf(product.getUpdatedAt()));
+            pst.setString(4, product.getImageUrl());
+            pst.setTimestamp(5, Timestamp.valueOf(product.getCreatedAt()));
+            pst.setTimestamp(6, Timestamp.valueOf(product.getUpdatedAt()));
 
             if (pst.executeUpdate() == 0)
                 return false;
@@ -185,14 +186,15 @@ public class JDBCProductDao implements ProductDao {
     @Override
     public boolean update(Product product) {
         final String query = "update products\n" +
-                "set price=?, weight=?, updated_at=?\n" +
+                "set price=?, weight=?, updated_at=?, image_url=?\n" +
                 " where id=?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setBigDecimal(1, product.getPrice());
             pst.setDouble(2, product.getWeight());
             pst.setTimestamp(3, Timestamp.valueOf(product.getUpdatedAt()));
-            pst.setLong(4, product.getId());
+            pst.setString(4, product.getImageUrl());
+            pst.setLong(5, product.getId());
 
             return pst.executeUpdate() != 0;
         } catch (SQLException e) {

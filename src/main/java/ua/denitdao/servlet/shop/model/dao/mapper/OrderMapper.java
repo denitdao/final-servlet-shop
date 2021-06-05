@@ -1,6 +1,7 @@
 package ua.denitdao.servlet.shop.model.dao.mapper;
 
 import ua.denitdao.servlet.shop.model.entity.Order;
+import ua.denitdao.servlet.shop.model.entity.enums.Status;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +23,7 @@ public class OrderMapper implements EntityMapper<Order> {
     public Order extractFromResultSet(ResultSet rs) throws SQLException {
         return Order.builder()
                 .id(rs.getLong("id"))
-                .status(rs.getString("status"))
+                .status(Status.valueOf(rs.getString("status")))
                 .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
                 .updatedAt(rs.getTimestamp("updated_at").toLocalDateTime())
                 .build();

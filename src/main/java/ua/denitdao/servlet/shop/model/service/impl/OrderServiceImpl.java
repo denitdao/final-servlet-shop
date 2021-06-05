@@ -24,7 +24,7 @@ public class OrderServiceImpl implements OrderService {
     public boolean makeOrder(Long userId, Cart sessionCart) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             Order order = Order.builder()
-                    .status(Status.REGISTERED.toString())
+                    .status(Status.REGISTERED)
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now()).build();
             if (!orderDao.create(userId, order))
@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean updateOrder(Long orderId, String status) {
+    public boolean updateOrder(Long orderId, Status status) {
         try (OrderDao dao = daoFactory.createOrderDao()) {
             Order order = Order.builder().id(orderId)
                     .status(status)

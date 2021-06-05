@@ -21,7 +21,6 @@ public final class PropertiesReader {
             return prop;
         } catch (Exception e) {
             logger.fatal("Failed to load {}", fileName, e);
-            // todo: add cannot read config file exception
             throw new RuntimeException("Failed to load database configuration file: " + fileName);
         }
     }
