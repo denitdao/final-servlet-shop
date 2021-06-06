@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="resources"/>
@@ -36,16 +37,16 @@
             </c:url>
             <tr>
                 <th scope="row"><a href="${prodUrl}">${item.product.title}</a></th>
-                <td>$ ${item.product.price}</td>
+                <td><my:currencyConverter value='${item.product.price}'/></td>
                 <td>${item.amount}</td>
-                <td>$ ${item.amount * item.product.price}</td>
+                <td><my:currencyConverter value='${item.amount * item.product.price}'/></td>
                 <c:set var="totalPrice" value="${totalPrice + item.amount * item.product.price}" scope="page"/>
             </tr>
         </c:forEach>
 
         <tr>
             <th scope="row" colspan="3"><fmt:message key="order_jsp.table.total_all"/></th>
-            <td>$ ${totalPrice}</td>
+            <td><my:currencyConverter value='${totalPrice}'/></td>
         </tr>
         </tbody>
     </table>

@@ -1,6 +1,7 @@
 <%@ page import="ua.denitdao.servlet.shop.util.Paths" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>
@@ -51,19 +52,59 @@
         </c:if>
     </div>
 
-    <p>${requestScope.product.description}</p>
-    <p>${requestScope.product.color}</p>
-    <p>${requestScope.product.weight}</p>
-    <p>${requestScope.product.price}</p>
-    <c:forEach var="property" items="${requestScope.product.properties}">
-        <p>${property.key.title} - ${property.value}</p>
-    </c:forEach>
+    <div class="row">
+        <div class="col-5">
+            <img src="<%=Paths.IMAGES%>/${not empty requestScope.product.imageUrl ? requestScope.product.imageUrl : 'default.jpg'}"
+                 class="rounded" alt="product image">
+            <p class="m-3">${requestScope.product.description}</p>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col">
+                    <fmt:message key="product.param.color"/>:
+                </div>
+                <div class="col">
+                    ${requestScope.product.color}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <fmt:message key="product.param.weight"/>:
+                </div>
+                <div class="col">
+                    ${requestScope.product.weight}
+                </div>
+            </div>
+            <hr>
+            <c:forEach var="property" items="${requestScope.product.properties}">
+                <div class="row">
+                    <div class="col">
+                            ${property.key.title}:
+                    </div>
+                    <div class="col">
+                            ${property.value}
+                    </div>
+                </div>
+                <hr>
+            </c:forEach>
+            <div class="row">
+                <div class="col">
+                    <fmt:message key="product.param.price"/>:
+                </div>
+                <div class="col">
+                    <my:currencyConverter value='${requestScope.product.price}'/>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <form action="<%= Paths.POST_ADD_TO_CART %>" method="post" class="row">
         <div class="mb-3 col-2">
             <div class="input-group">
-                <span class="input-group-text">Amount</span>
-                <input type="number" min="0" name="amount" value="${sessionScope.cart.products.get(requestScope.product.id)}"
+                <span class="input-group-text"><fmt:message key="product_jsp.form.amount"/></span>
+                <input type="number" min="0" name="amount"
+                       value="${sessionScope.cart.products.get(requestScope.product.id)}"
                        class="form-control" placeholder="0" maxlength="3" aria-label="amount">
             </div>
         </div>

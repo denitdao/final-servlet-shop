@@ -6,8 +6,6 @@ import ua.denitdao.servlet.shop.model.dao.ProductDao;
 import ua.denitdao.servlet.shop.model.dao.mapper.ProductMapper;
 import ua.denitdao.servlet.shop.model.entity.Category;
 import ua.denitdao.servlet.shop.model.entity.Product;
-import ua.denitdao.servlet.shop.model.entity.enums.SortingOrder;
-import ua.denitdao.servlet.shop.model.entity.enums.SortingParam;
 import ua.denitdao.servlet.shop.model.util.Page;
 import ua.denitdao.servlet.shop.model.util.Pageable;
 
@@ -146,8 +144,7 @@ public class JDBCProductDao implements ProductDao {
     }
 
     @Override
-    public Page<Product> findAllWithCategoryId(Long categoryId, String locale, Pageable pageable,
-                                               SortingOrder sortingOrder, SortingParam sortingParam, BigDecimal priceMin, BigDecimal priceMax) {
+    public Page<Product> findAllWithCategoryId(Long categoryId, String locale, Pageable pageable) {
         List<Product> products = new ArrayList<>();
 
         final String query = "select products.*, pi.*\n" +
@@ -156,10 +153,11 @@ public class JDBCProductDao implements ProductDao {
                 "where category_id = ?" +
                 "  and locale = ? and deleted = 0 " +
                 "  and price between ? and ? " +
-                "  order by " + sortingParam.getValue() + " " + sortingOrder.getValue() +
+                "  order by " + pageable.getSort().getSortingParam().getValue() +
+                " " + pageable.getSort().getSortingOrder().getValue() +
                 " limit ?,?";
 
-        int totalProducts = countWithCategoryId(categoryId, priceMin, priceMax);
+        int totalProducts = countWithCategoryId(categoryId, pageable.getSort().getPriceMin(), pageable.getSort().getPriceMax());
         int totalPages = (int) Math.ceil((double) totalProducts / pageable.getPageSize());
         if (pageable.getCurrentPage() > totalPages && totalPages != 0)
             pageable.setCurrentPage(totalPages);
@@ -167,8 +165,8 @@ public class JDBCProductDao implements ProductDao {
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, categoryId);
             pst.setString(2, locale);
-            pst.setBigDecimal(3, priceMin);
-            pst.setBigDecimal(4, priceMax);
+            pst.setBigDecimal(3, pageable.getSort().getPriceMin());
+            pst.setBigDecimal(4, pageable.getSort().getPriceMax());
             pst.setInt(5, (pageable.getCurrentPage() - 1) * pageable.getPageSize());
             pst.setInt(6, pageable.getCurrentPage() * pageable.getPageSize());
             ResultSet rs = pst.executeQuery();

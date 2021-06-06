@@ -89,10 +89,10 @@
                     <li class="list-group-item">
                         <div class="form-group input-group-sm">
                             <label for="price_min"><fmt:message key="category_jsp.form.min_price"/>:</label>
-                            <input type="number" min="0" max="10000" required name="price_min" id="price_min"
+                            <input type="number" min="0" max="${requestScope.priceLimit}" required name="price_min" id="price_min"
                                    class="form-control" value="${requestScope.priceMin}">
                             <label for="price_max"><fmt:message key="category_jsp.form.max_price"/>:</label>
-                            <input type="number" min="1" max="10000" required name="price_max" id="price_max"
+                            <input type="number" min="1" max="${requestScope.priceLimit}" required name="price_max" id="price_max"
                                    class="form-control" value="${requestScope.priceMax}">
                         </div>
                     </li>
@@ -131,7 +131,7 @@
                                         <fmt:message key="category_jsp.item.button"/>
                                     </a>
                                 </div>
-                                <p class="fw-bold mx-auto">$ ${item.price}</p>
+                                <p class="fw-bold mx-auto"><my:currencyConverter value='${item.price}'/></p>
                             </div>
                         </div>
                     </div>
