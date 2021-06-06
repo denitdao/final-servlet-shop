@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.dao.CategoryDao;
 import ua.denitdao.servlet.shop.model.dao.mapper.CategoryMapper;
 import ua.denitdao.servlet.shop.model.entity.Category;
+import ua.denitdao.servlet.shop.model.util.SQLQueries;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,19 +35,11 @@ public class JDBCCategoryDao implements CategoryDao {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * Get category with basic information
-     */
     @Override
     public Optional<Category> findById(Long id, Locale locale) {
         Category category = null;
 
-        final String query = "select id, title, description, created_at, updated_at\n" +
-                "from categories\n" +
-                "         left join category_info ci on categories.id = ci.category_id\n" +
-                "where id = ? and ci.locale = ?";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.CATEGORY_FIND_ID)) {
             pst.setLong(1, id);
             pst.setString(2, locale.toString());
             ResultSet rs = pst.executeQuery();
@@ -65,19 +58,11 @@ public class JDBCCategoryDao implements CategoryDao {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * Get all categories with their basic information
-     */
     @Override
     public List<Category> findAll(Locale locale) {
         List<Category> categories = new ArrayList<>();
 
-        final String query = "select id, title, description, created_at, updated_at\n" +
-                "from categories\n" +
-                "         left join category_info ci on categories.id = ci.category_id\n" +
-                "where ci.locale = ?";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) { // open and close statement
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.CATEGORY_FIND_ALL)) { // open and close statement
             pst.setString(1, locale.toString());
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {

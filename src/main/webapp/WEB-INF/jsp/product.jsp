@@ -55,7 +55,7 @@
     <div class="row">
         <div class="col-5">
             <img src="<%=Paths.IMAGES%>/${not empty requestScope.product.imageUrl ? requestScope.product.imageUrl : 'default.jpg'}"
-                 class="rounded" alt="product image">
+                 class="rounded" style="max-width: 400px;" alt="product image">
             <p class="m-3">${requestScope.product.description}</p>
         </div>
         <div class="col-6">

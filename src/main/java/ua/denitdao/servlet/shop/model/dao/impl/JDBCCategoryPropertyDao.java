@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.model.dao.CategoryPropertyDao;
 import ua.denitdao.servlet.shop.model.dao.mapper.CategoryPropertyMapper;
 import ua.denitdao.servlet.shop.model.entity.CategoryProperty;
+import ua.denitdao.servlet.shop.model.util.SQLQueries;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,10 +26,7 @@ public class JDBCCategoryPropertyDao implements CategoryPropertyDao {
     public List<CategoryProperty> findAllWithCategoryId(Long categoryId) {
         List<CategoryProperty> categoryProperties = new ArrayList<>();
 
-        final String query = "select *\n" +
-                "from category_properties\n" +
-                "where category_id = ? order by locale";
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.CATEGORY_PROPERTIES_FIND_CATEGORY_ID)) {
             pst.setLong(1, categoryId);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -47,13 +45,7 @@ public class JDBCCategoryPropertyDao implements CategoryPropertyDao {
     public Map<CategoryProperty, String> findAllWithProductId(Long productId, String locale) {
         Map<CategoryProperty, String> properties = new LinkedHashMap<>();
 
-        final String query = "select cp.id, title, value, data_type\n" +
-                "from category_properties cp\n" +
-                "         left join product_properties pp on cp.id = pp.category_properties_id\n" +
-                "where product_id = ?\n" +
-                "  and locale = ? order by locale";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.PRODUCT_PROPERTIES_FIND_PRODUCT_ID)) {
             pst.setLong(1, productId);
             pst.setString(2, locale);
             ResultSet rs = pst.executeQuery();
@@ -75,7 +67,7 @@ public class JDBCCategoryPropertyDao implements CategoryPropertyDao {
 
     @Override
     public Optional<CategoryProperty> findById(Long id) {
-        return Optional.empty();
+        throw new UnsupportedOperationException();
     }
 
     @Override

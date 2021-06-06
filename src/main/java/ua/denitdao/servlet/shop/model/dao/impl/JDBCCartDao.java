@@ -7,6 +7,7 @@ import ua.denitdao.servlet.shop.model.dao.mapper.ProductMapper;
 import ua.denitdao.servlet.shop.model.entity.Cart;
 import ua.denitdao.servlet.shop.model.entity.OrderProduct;
 import ua.denitdao.servlet.shop.model.entity.enums.Status;
+import ua.denitdao.servlet.shop.model.util.SQLQueries;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,11 +33,8 @@ public class JDBCCartDao implements CartDao {
     @Override
     public boolean addToCart(Long userId, Long productId, Integer amount) {
         this.createIfNotExists(userId);
-        final String query = "insert into order_product (order_id, product_id, amount) " +
-                "values ((select o.id from orders o where o.user_id = ? and o.status = ?), ?, ?) " +
-                "on duplicate key update amount=?";
 
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.ORDER_PRODUCT_INSERT)) {
             pst.setLong(1, userId);
             pst.setString(2, CART_STATUS);
             pst.setLong(3, productId);
@@ -53,9 +51,7 @@ public class JDBCCartDao implements CartDao {
     @Override
     public Optional<Cart> findById(Long userId) {
         Cart cart;
-        final String query = "select product_id, amount from order_product " +
-                "where order_id=(select o.id from orders o where o.user_id = ? and o.status = ?) ";
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.ORDER_PRODUCT_FIND_CART)) {
             pst.setLong(1, userId);
             pst.setString(2, CART_STATUS);
             ResultSet rs = pst.executeQuery();
@@ -78,13 +74,7 @@ public class JDBCCartDao implements CartDao {
 
     @Override
     public List<OrderProduct> findProductsInCart(Long userId, String locale) {
-        final String query = "select products.*, pi.title, pi.description, pi.color, amount\n" +
-                "from products\n" +
-                "         left join product_info pi on products.id = pi.product_id\n" +
-                "         inner join order_product op on products.id = op.product_id\n" +
-                "where order_id=(select o.id from orders o where o.user_id = ? and o.status = ?)\n" +
-                "  and locale = ?";
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.ORDER_PRODUCT_FIND_CART_PRODUCT)) {
             pst.setLong(1, userId);
             pst.setString(2, CART_STATUS);
             pst.setString(3, locale);
@@ -115,11 +105,7 @@ public class JDBCCartDao implements CartDao {
 
     @Override
     public boolean delete(Long userId, Long productId) {
-        final String query = "delete from order_product " +
-                "where order_id=(select o.id from orders o where o.user_id = ? and o.status = ?) " +
-                "and product_id=?";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.ORDER_PRODUCT_DELETE_CART)) {
             pst.setLong(1, userId);
             pst.setString(2, CART_STATUS);
             pst.setLong(3, productId);
@@ -134,15 +120,7 @@ public class JDBCCartDao implements CartDao {
      * Create order for the user that will act as a cart if it doesn't exist
      */
     private boolean createIfNotExists(Long userId) {
-        final String query = "insert into orders (user_id, status)\n" +
-                "select *\n" +
-                "from (select ? as user_id, ? as status) as tmp\n" +
-                "where not exists(\n" +
-                "        select user_id, status from orders where user_id = tmp.user_id and status = tmp.status\n" +
-                "    )\n" +
-                "limit 1";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.ORDER_PRODUCT_INSERT_CART)) {
             pst.setLong(1, userId);
             pst.setString(2, CART_STATUS);
 

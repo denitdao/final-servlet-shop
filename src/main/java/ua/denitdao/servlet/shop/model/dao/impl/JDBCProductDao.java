@@ -8,6 +8,7 @@ import ua.denitdao.servlet.shop.model.entity.Category;
 import ua.denitdao.servlet.shop.model.entity.Product;
 import ua.denitdao.servlet.shop.model.util.Page;
 import ua.denitdao.servlet.shop.model.util.Pageable;
+import ua.denitdao.servlet.shop.model.util.SQLQueries;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -33,11 +34,7 @@ public class JDBCProductDao implements ProductDao {
 
     @Override
     public boolean create(Long categoryId, Product product) {
-        final String query = "insert into " +
-                "products (category_id, price, weight, image_url, created_at, updated_at) " +
-                "values (?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.PRODUCT_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             pst.setLong(1, categoryId);
             pst.setBigDecimal(2, product.getPrice());
             pst.setDouble(3, product.getWeight());
@@ -62,11 +59,7 @@ public class JDBCProductDao implements ProductDao {
 
     @Override
     public boolean addLocalizedProperties(Product product, String locale) {
-        final String query = "insert into " +
-                "product_info (product_id, locale, title, description, color) " +
-                "values (?, ?, ?, ?, ?)";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.PRODUCT_INFO_INSERT)) {
             pst.setLong(1, product.getId());
             pst.setString(2, locale);
             pst.setString(3, product.getTitle());
@@ -81,10 +74,7 @@ public class JDBCProductDao implements ProductDao {
 
         AtomicBoolean innerQuerySuccess = new AtomicBoolean(true);
         product.getProperties().forEach((property, value) -> {
-            final String inner = "insert into " +
-                    "product_properties (product_id, category_properties_id, value) " +
-                    "values (?, ?, ?)";
-            try (PreparedStatement pst = connection.prepareStatement(inner)) {
+            try (PreparedStatement pst = connection.prepareStatement(SQLQueries.PRODUCT_PROPERTIES_INSERT)) {
                 pst.setLong(1, product.getId());
                 pst.setLong(2, property.getId());
                 pst.setString(3, value);
@@ -108,19 +98,7 @@ public class JDBCProductDao implements ProductDao {
     @Override
     public Optional<Product> findById(Long id, String locale) {
         Product product = null;
-
-        final String query = "select products.*, pi.*, c.id c_id, c.title c_title\n" +
-                "from products\n" +
-                "         left join product_info pi on products.id = pi.product_id\n" +
-                "         left join (select id, title\n" +
-                "                    from categories\n" +
-                "                             left join category_info ci on categories.id = ci.category_id\n" +
-                "                    where locale = ?) c\n" +
-                "                   on products.category_id = c.id\n" +
-                "where product_id = ?\n" +
-                "  and locale = ?";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.PRODUCT_FIND_ID)) {
             pst.setString(1, locale);
             pst.setLong(2, id);
             pst.setString(3, locale);
@@ -147,21 +125,15 @@ public class JDBCProductDao implements ProductDao {
     public Page<Product> findAllWithCategoryId(Long categoryId, String locale, Pageable pageable) {
         List<Product> products = new ArrayList<>();
 
-        final String query = "select products.*, pi.*\n" +
-                "from products\n" +
-                "         left join product_info pi on products.id = pi.product_id\n" +
-                "where category_id = ?" +
-                "  and locale = ? and deleted = 0 " +
-                "  and price between ? and ? " +
-                "  order by " + pageable.getSort().getSortingParam().getValue() +
-                " " + pageable.getSort().getSortingOrder().getValue() +
-                " limit ?,?";
-
         int totalProducts = countWithCategoryId(categoryId, pageable.getSort().getPriceMin(), pageable.getSort().getPriceMax());
         int totalPages = (int) Math.ceil((double) totalProducts / pageable.getPageSize());
         if (pageable.getCurrentPage() > totalPages && totalPages != 0)
             pageable.setCurrentPage(totalPages);
 
+        String query = SQLQueries.PRODUCT_FIND_ALL_CATEGORY +
+                " order by " + pageable.getSort().getSortingParam().getValue() +
+                " " + pageable.getSort().getSortingOrder().getValue() +
+                SQLQueries.PRODUCT_FIND_ALL_CATEGORY_LIMIT;
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, categoryId);
             pst.setString(2, locale);
@@ -183,11 +155,7 @@ public class JDBCProductDao implements ProductDao {
 
     @Override
     public boolean update(Product product) {
-        final String query = "update products\n" +
-                "set price=?, weight=?, updated_at=?, image_url=?\n" +
-                " where id=?";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.PRODUCT_UPDATE)) {
             pst.setBigDecimal(1, product.getPrice());
             pst.setDouble(2, product.getWeight());
             pst.setTimestamp(3, Timestamp.valueOf(product.getUpdatedAt()));
@@ -203,11 +171,7 @@ public class JDBCProductDao implements ProductDao {
 
     @Override
     public boolean updateLocalizedProperties(Product product, String locale) {
-        final String query = "update product_info " +
-                "set title=?, description=?, color=? " +
-                "where product_id=? and locale=?";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.PRODUCT_INFO_UPDATE)) {
             pst.setString(1, product.getTitle());
             pst.setString(2, product.getDescription());
             pst.setString(3, product.getColor());
@@ -222,10 +186,7 @@ public class JDBCProductDao implements ProductDao {
 
         AtomicBoolean innerQuerySuccess = new AtomicBoolean(true);
         product.getProperties().forEach((property, value) -> {
-            final String inner = "update product_properties " +
-                    "set value=? " +
-                    "where product_id=? and category_properties_id=?";
-            try (PreparedStatement pst = connection.prepareStatement(inner)) {
+            try (PreparedStatement pst = connection.prepareStatement(SQLQueries.PRODUCT_PROPERTIES_UPDATE)) {
                 pst.setString(1, value);
                 pst.setLong(2, product.getId());
                 pst.setLong(3, property.getId());
@@ -243,11 +204,7 @@ public class JDBCProductDao implements ProductDao {
 
     @Override
     public boolean delete(Long id) {
-        final String query = "update products\n" +
-                "set deleted=?, updated_at=?\n" +
-                " where id=?";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.PRODUCT_DELETE)) {
             pst.setBoolean(1, true);
             pst.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
             pst.setLong(3, id);
@@ -260,13 +217,7 @@ public class JDBCProductDao implements ProductDao {
     }
 
     private int countWithCategoryId(Long categoryId, BigDecimal priceMin, BigDecimal priceMax) {
-        final String query = "select count(*) as total " +
-                "from products p\n" +
-                "         left join categories c on p.category_id = c.id\n" +
-                "where category_id = ? and p.deleted=0 " +
-                "  and price between ? and ? ";
-
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+        try (PreparedStatement pst = connection.prepareStatement(SQLQueries.PRODUCT_COUNT_CATEGORY)) {
             pst.setLong(1, categoryId);
             pst.setBigDecimal(2, priceMin);
             pst.setBigDecimal(3, priceMax);
