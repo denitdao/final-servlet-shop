@@ -9,6 +9,8 @@ import ua.denitdao.servlet.shop.model.entity.Order;
 import ua.denitdao.servlet.shop.model.entity.enums.Status;
 import ua.denitdao.servlet.shop.model.service.OrderService;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -53,12 +55,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Optional<Order> getOrder(Long orderId, String locale) {
-        Optional<Order> orderOpt;
-        try (OrderDao dao = daoFactory.createOrderDao()) {
+        Optional<Order> orderOpt = Optional.empty();
+        Connection connection = daoFactory.getConnection();
+        try (OrderDao dao = daoFactory.createOrderDao(connection)) {
+            connection.setAutoCommit(false);
             orderOpt = dao.findById(orderId);
             orderOpt.ifPresent(o ->
                     o.setProducts(dao.findProductsInOrder(orderId, locale))
             );
+        } catch (SQLException e) {
+            logger.warn("transaction get order failed -- {}", e.getMessage());
         }
         return orderOpt;
     }

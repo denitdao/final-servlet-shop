@@ -126,8 +126,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean delete(Long id) {
-        Connection connection = daoFactory.getConnection();
-        try (ProductDao dao = daoFactory.createProductDao(connection)) {
+        try (ProductDao dao = daoFactory.createProductDao()) {
             return dao.delete(id);
         } catch (RuntimeException e) {
             return false;

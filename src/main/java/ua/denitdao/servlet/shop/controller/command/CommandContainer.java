@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * This is a storage for all of the defined commands.
  */
-public class CommandContainer {
+public final class CommandContainer {
 
     private static final Logger logger = LogManager.getLogger(CommandContainer.class);
     private static final Map<String, Command> commands;

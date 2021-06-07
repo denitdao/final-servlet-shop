@@ -34,11 +34,6 @@ class ProductServiceImplTest {
     @InjectMocks
     ProductServiceImpl productService;
 
-    @BeforeEach
-    void setUp() {
-        when(daoFactory.getConnection()).thenReturn(connection);
-    }
-
     @Test
     void When_create_Expect_True() throws SQLException {
         Long categoryId = 1L;
@@ -48,6 +43,7 @@ class ProductServiceImplTest {
         testLocalProducts.put("one", pr1);
         testLocalProducts.put("two", pr2);
 
+        when(daoFactory.getConnection()).thenReturn(connection);
         when(daoFactory.createProductDao(connection)).thenReturn(productDao);
         when(productDao.create(categoryId, pr1)).thenReturn(true);
         when(productDao.addLocalizedProperties(pr1, "one")).thenReturn(true);
@@ -72,6 +68,7 @@ class ProductServiceImplTest {
         testLocalProducts.put("one", pr1);
         testLocalProducts.put("two", pr2);
 
+        when(daoFactory.getConnection()).thenReturn(connection);
         when(daoFactory.createProductDao(connection)).thenReturn(productDao);
         when(productDao.create(categoryId, pr1)).thenReturn(false);
 
@@ -92,6 +89,7 @@ class ProductServiceImplTest {
         testLocalProducts.put("one", pr1);
         testLocalProducts.put("two", pr2);
 
+        when(daoFactory.getConnection()).thenReturn(connection);
         when(daoFactory.createProductDao(connection)).thenReturn(productDao);
         when(productDao.create(categoryId, pr1)).thenReturn(true);
         when(productDao.addLocalizedProperties(pr1, "one")).thenReturn(false);
@@ -112,6 +110,7 @@ class ProductServiceImplTest {
         Map<CategoryProperty, String> cp = new HashMap<>();
         cp.put(new CategoryProperty(1L), "value");
 
+        when(daoFactory.getConnection()).thenReturn(connection);
         when(daoFactory.createProductDao(connection)).thenReturn(productDao);
         when(daoFactory.createCategoryPropertyDao(connection)).thenReturn(categoryPropertyDao);
         when(productDao.findById(id, testLocale)).thenReturn(pr1);
@@ -132,6 +131,7 @@ class ProductServiceImplTest {
         Long id = 1L;
         String testLocale = "en";
 
+        when(daoFactory.getConnection()).thenReturn(connection);
         when(daoFactory.createProductDao(connection)).thenReturn(productDao);
         when(daoFactory.createCategoryPropertyDao(connection)).thenReturn(categoryPropertyDao);
         when(productDao.findById(id, testLocale)).thenReturn(Optional.empty());
@@ -158,6 +158,7 @@ class ProductServiceImplTest {
         testLocalizedProduct.put("en", pr1.get());
         testLocalizedProduct.put("uk", pr2.get());
 
+        when(daoFactory.getConnection()).thenReturn(connection);
         when(daoFactory.createProductDao(connection)).thenReturn(productDao);
         when(daoFactory.createCategoryPropertyDao(connection)).thenReturn(categoryPropertyDao);
         when(productDao.findById(id, testLocales[0])).thenReturn(pr1);
@@ -181,6 +182,7 @@ class ProductServiceImplTest {
         Long id = 1L;
         String[] testLocales =  {"en", "uk"};
 
+        when(daoFactory.getConnection()).thenReturn(connection);
         when(daoFactory.createProductDao(connection)).thenReturn(productDao);
         when(daoFactory.createCategoryPropertyDao(connection)).thenReturn(categoryPropertyDao);
         when(productDao.findById(id, testLocales[0])).thenReturn(Optional.empty());
@@ -198,6 +200,7 @@ class ProductServiceImplTest {
         testLocalProducts.put("one", pr1);
         testLocalProducts.put("two", pr2);
 
+        when(daoFactory.getConnection()).thenReturn(connection);
         when(daoFactory.createProductDao(connection)).thenReturn(productDao);
         when(productDao.update(pr1)).thenReturn(true);
         when(productDao.updateLocalizedProperties(pr1, "one")).thenReturn(true);
@@ -220,6 +223,7 @@ class ProductServiceImplTest {
         testLocalProducts.put("one", pr1);
         testLocalProducts.put("two", pr2);
 
+        when(daoFactory.getConnection()).thenReturn(connection);
         when(daoFactory.createProductDao(connection)).thenReturn(productDao);
         when(productDao.update(pr1)).thenReturn(false);
 
@@ -235,7 +239,7 @@ class ProductServiceImplTest {
     void When_delete_Expect_True() {
         Long id = 1L;
 
-        when(daoFactory.createProductDao(connection)).thenReturn(productDao);
+        when(daoFactory.createProductDao()).thenReturn(productDao);
         when(productDao.delete(id)).thenReturn(true);
 
         boolean result = productService.delete(id);
@@ -246,24 +250,10 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void When_deleteFail_Expect_False() {
-        Long id = 1L;
-
-        when(daoFactory.createProductDao(connection)).thenReturn(productDao);
-        when(productDao.delete(id)).thenReturn(false);
-
-        boolean result = productService.delete(id);
-
-        assertFalse(result);
-        verify(productDao).delete(id);
-        verify(productDao).close();
-    }
-
-    @Test
     void When_deleteThrows_Expect_False() {
         Long id = 1L;
 
-        when(daoFactory.createProductDao(connection)).thenReturn(productDao);
+        when(daoFactory.createProductDao()).thenReturn(productDao);
         when(productDao.delete(id)).thenThrow(new RuntimeException());
 
         boolean result = productService.delete(id);
