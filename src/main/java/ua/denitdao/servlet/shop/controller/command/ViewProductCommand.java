@@ -22,6 +22,10 @@ public class ViewProductCommand implements Command {
         productService = serviceFactory.getProductService();
     }
 
+    public ViewProductCommand(ServiceFactory serviceFactory) {
+        productService = serviceFactory.getProductService();
+    }
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws PageNotFoundException {
         Long id = Long.valueOf(req.getParameter("id"));

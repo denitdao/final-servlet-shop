@@ -25,6 +25,11 @@ public class LoginCommand implements Command {
         cartService = serviceFactory.getCartService();
     }
 
+    public LoginCommand(ServiceFactory serviceFactory) {
+        userService = serviceFactory.getUserService();
+        cartService = serviceFactory.getCartService();
+    }
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ValidationException {
         Validator.validateNonEmptyRequest(req);

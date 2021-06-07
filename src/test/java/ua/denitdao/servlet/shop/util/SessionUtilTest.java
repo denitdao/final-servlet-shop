@@ -17,7 +17,6 @@ class SessionUtilTest {
 
     @Mock
     private HttpServletRequest req;
-
     @Mock
     private HttpSession sess;
 

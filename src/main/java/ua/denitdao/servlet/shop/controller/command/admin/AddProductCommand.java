@@ -29,6 +29,10 @@ public class AddProductCommand implements Command {
         productService = serviceFactory.getProductService();
     }
 
+    public AddProductCommand(ServiceFactory serviceFactory) {
+        productService = serviceFactory.getProductService();
+    }
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ValidationException {
         Validator.validateNonEmptyRequest(req);

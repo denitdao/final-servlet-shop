@@ -23,6 +23,10 @@ public class AddToCartCommand implements Command {
         cartService = serviceFactory.getCartService();
     }
 
+    public AddToCartCommand(ServiceFactory serviceFactory) {
+        cartService = serviceFactory.getCartService();
+    }
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionFailedException {
         Validator.validateNonEmptyRequest(req);

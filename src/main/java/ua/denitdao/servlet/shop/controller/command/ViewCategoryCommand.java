@@ -28,6 +28,10 @@ public class ViewCategoryCommand implements Command {
         categoryService = serviceFactory.getCategoryService();
     }
 
+    public ViewCategoryCommand(ServiceFactory serviceFactory) {
+        categoryService = serviceFactory.getCategoryService();
+    }
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws PageNotFoundException {
         Long id = Long.valueOf(req.getParameter("id"));
