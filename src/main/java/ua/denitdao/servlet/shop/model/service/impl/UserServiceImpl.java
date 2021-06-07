@@ -15,7 +15,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
-    private final DaoFactory daoFactory = DaoFactory.getInstance();
+    private final DaoFactory daoFactory;
+
+    public UserServiceImpl(DaoFactory daoFactory) {
+        this.daoFactory = daoFactory;
+    }
 
     @Override
     public boolean createUser(User user) {

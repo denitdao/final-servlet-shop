@@ -18,7 +18,11 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
 
     private static final Logger logger = LogManager.getLogger(OrderServiceImpl.class);
-    private final DaoFactory daoFactory = DaoFactory.getInstance();
+    private final DaoFactory daoFactory;
+
+    public OrderServiceImpl(DaoFactory daoFactory) {
+        this.daoFactory = daoFactory;
+    }
 
     @Override
     public boolean makeOrder(Long userId, Cart sessionCart) {

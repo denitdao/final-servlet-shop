@@ -21,14 +21,17 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ProductServiceImpl implements ProductService {
 
     private static final Logger logger = LogManager.getLogger(ProductServiceImpl.class);
-    private final DaoFactory daoFactory = DaoFactory.getInstance();
+    private final DaoFactory daoFactory;
+
+    public ProductServiceImpl(DaoFactory daoFactory) {
+        this.daoFactory = daoFactory;
+    }
 
     @Override
     public boolean create(Long categoryId, Map<String, Product> localizedProducts) {
         Connection connection = daoFactory.getConnection();
         try (ProductDao dao = daoFactory.createProductDao(connection)) {
             connection.setAutoCommit(false);
-
             AtomicBoolean inserted = new AtomicBoolean(false);
             AtomicLong insertedProductId = new AtomicLong(-1L);
             localizedProducts.forEach((locale, product) -> {
@@ -39,17 +42,12 @@ public class ProductServiceImpl implements ProductService {
                     insertedProductId.set(product.getId());
                 }
                 product.setId(insertedProductId.get());
-                if (!dao.addLocalizedProperties(product, locale))
-                    throw new RuntimeException("Failed to add localized properties");
+                if (!inserted.get() || !dao.addLocalizedProperties(product, locale))
+                    throw new RuntimeException("Failed to add product");
             });
 
-            if (inserted.get()) {
-                connection.commit();
-                return true;
-            } else {
-                connection.rollback();
-                return false;
-            }
+            connection.commit();
+            return true;
         } catch (RuntimeException | SQLException e) {
             logger.warn("product create transaction failed -- {}", e.getMessage());
             return false;
@@ -114,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
                     product.setUpdatedAt(LocalDateTime.now());
                     updated.set(dao.update(product));
                 }
-                if (!dao.updateLocalizedProperties(product, locale) || !updated.get())
+                if (!updated.get() || !dao.updateLocalizedProperties(product, locale))
                     throw new RuntimeException("Failed to update localized properties");
             });
 

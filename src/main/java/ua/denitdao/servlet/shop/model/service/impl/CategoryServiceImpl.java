@@ -19,7 +19,11 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     private static final Logger logger = LogManager.getLogger(CategoryServiceImpl.class);
-    private final DaoFactory daoFactory = DaoFactory.getInstance();
+    private final DaoFactory daoFactory;
+
+    public CategoryServiceImpl(DaoFactory daoFactory) {
+        this.daoFactory = daoFactory;
+    }
 
     @Override
     public Optional<Category> getCategoryWithProperties(Long id, Locale locale) {

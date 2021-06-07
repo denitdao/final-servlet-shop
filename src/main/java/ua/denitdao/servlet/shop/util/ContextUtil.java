@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 public final class ContextUtil {
 
-    private static final String ACTIVE_USERS = "activeUsers";
+    public static final String ACTIVE_USERS = "activeUsers";
 
     private ContextUtil() {
     }

@@ -17,7 +17,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class CartServiceImpl implements CartService {
 
     private static final Logger logger = LogManager.getLogger(CartServiceImpl.class);
-    private final DaoFactory daoFactory = DaoFactory.getInstance();
+    private final DaoFactory daoFactory;
+
+    public CartServiceImpl(DaoFactory daoFactory) {
+        this.daoFactory = daoFactory;
+    }
 
     @Override
     public boolean syncCart(Long userId, Cart cart) {
