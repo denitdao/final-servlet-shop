@@ -1,5 +1,8 @@
 package ua.denitdao.servlet.shop.util;
 
+/**
+ * Storage for the names of the localized exception messages
+ */
 public final class ExceptionMessages {
 
     public static final String INVAL_FIRSTNAME = "messages.invalid.first_name";

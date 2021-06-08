@@ -1,5 +1,8 @@
 package ua.denitdao.servlet.shop.util;
 
+/**
+ * Storage with the names of the available url, file or directory paths
+ */
 public final class Paths {
 
     private static final String BASE = "/shop/";

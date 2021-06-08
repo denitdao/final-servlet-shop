@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Util class for validation of the request parameters or entity fields
+ */
 public final class Validator {
 
     private Validator() {

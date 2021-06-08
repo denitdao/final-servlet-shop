@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Logger;
 import ua.denitdao.servlet.shop.util.ContextUtil;
 import ua.denitdao.servlet.shop.util.Paths;
 
+/**
+ * Executes during the context creation or destruction. Creates storage for active users.
+ */
 public class ContextListener implements ServletContextListener {
 
     private static final Logger logger = LogManager.getLogger(ContextListener.class);

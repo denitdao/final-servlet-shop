@@ -12,6 +12,9 @@ import java.util.Locale;
 
 import static java.util.Arrays.asList;
 
+/**
+ * Initializes and switches localization for the user
+ */
 public class LocaleFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger(LocaleFilter.class);

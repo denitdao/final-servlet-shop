@@ -1,5 +1,8 @@
 package ua.denitdao.servlet.shop.model.util;
 
+/**
+ * Bean with the parameters for the requested page
+ */
 public class Pageable {
     public static final int PAGE_SIZE = 3;
 

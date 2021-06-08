@@ -19,6 +19,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Utility class for mapping request parameters to objects
+ */
 public final class RequestMapper {
 
     private static final Logger logger = LogManager.getLogger(RequestMapper.class);

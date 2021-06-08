@@ -8,6 +8,9 @@ import ua.denitdao.servlet.shop.util.PropertiesReader;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * Datasource initializer from the properties defined in dbconnect.properties
+ */
 public class DBCPDataSource {
 
     private static final Logger logger = LogManager.getLogger(DBCPDataSource.class);

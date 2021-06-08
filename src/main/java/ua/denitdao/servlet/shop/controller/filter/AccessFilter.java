@@ -15,6 +15,9 @@ import java.util.*;
 
 import static java.util.Arrays.asList;
 
+/**
+ * Determines the accessible routes for the client.
+ */
 public class AccessFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger(AccessFilter.class);

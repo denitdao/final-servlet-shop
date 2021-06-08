@@ -5,6 +5,9 @@ import ua.denitdao.servlet.shop.model.entity.enums.SortingParam;
 
 import java.math.BigDecimal;
 
+/**
+ * Bean with configuration parameters for the products requests
+ */
 public class Sort {
 
     private SortingOrder sortingOrder;

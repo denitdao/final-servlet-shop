@@ -8,6 +8,10 @@ import ua.denitdao.servlet.shop.util.ContextUtil;
 
 import java.util.LinkedHashMap;
 
+/**
+ * Executes during each session creation or destruction. Creates cart for the user.
+ * Removes user from the context after session invalidation
+ */
 public class SessionListener implements HttpSessionListener {
 
     @Override

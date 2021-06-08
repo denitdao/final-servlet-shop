@@ -6,6 +6,9 @@ import jakarta.servlet.http.HttpSessionEvent;
 
 import java.util.HashSet;
 
+/**
+ * Util class for the operations with objects stored in the application context
+ */
 public final class ContextUtil {
 
     public static final String ACTIVE_USERS = "activeUsers";
@@ -13,6 +16,9 @@ public final class ContextUtil {
     private ContextUtil() {
     }
 
+    /**
+     * Initialize storage for active users
+     */
     public static void createActiveUserStorage(ServletContextEvent sce) {
         HashSet<Long> activeUsers = new HashSet<>();
         sce.getServletContext()
@@ -55,6 +61,9 @@ public final class ContextUtil {
                 .setAttribute(ACTIVE_USERS, activeUsers);
     }
 
+    /**
+     * Check if user is already logged in the context
+     */
     public static boolean findUserInContext(HttpServletRequest req, Long userId) {
         @SuppressWarnings("unchecked")
         HashSet<Long> activeUsers = (HashSet<Long>) req

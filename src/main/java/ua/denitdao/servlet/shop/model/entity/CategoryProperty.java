@@ -3,6 +3,9 @@ package ua.denitdao.servlet.shop.model.entity;
 import java.io.Serializable;
 import java.util.Locale;
 
+/**
+ * Storage for the special properties of the category
+ */
 public class CategoryProperty implements Serializable {
 
     private static final long serialVersionUID = 2561095618934598524L;

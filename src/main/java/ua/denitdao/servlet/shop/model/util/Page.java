@@ -2,6 +2,9 @@ package ua.denitdao.servlet.shop.model.util;
 
 import java.util.List;
 
+/**
+ * Storage for the selected from db objects with additional properties
+ */
 public class Page<T> {
     private int totalPages;
     List<T> content;

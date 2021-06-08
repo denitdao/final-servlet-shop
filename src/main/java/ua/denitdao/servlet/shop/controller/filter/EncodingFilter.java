@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * Appends requests and responses with the correct encoding
+ */
 public class EncodingFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger(EncodingFilter.class);

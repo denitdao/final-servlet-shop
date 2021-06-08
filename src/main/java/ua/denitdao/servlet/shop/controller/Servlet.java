@@ -18,6 +18,9 @@ import ua.denitdao.servlet.shop.util.SessionUtil;
 
 import java.io.IOException;
 
+/**
+ * Entry point for all the requests to controller
+ */
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
         maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 5 * 5)
@@ -37,6 +40,9 @@ public class Servlet extends HttpServlet {
         processRequest(req, resp);
     }
 
+    /**
+     * Determines which command should handle the request for the given route
+     */
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         logger.debug("~~~ in controller with path: '{}'", req.getRequestURI());
 

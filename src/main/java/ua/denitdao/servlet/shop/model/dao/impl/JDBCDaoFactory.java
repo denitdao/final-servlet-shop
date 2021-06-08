@@ -9,7 +9,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Factory used to create Dao instances. Opens connections for them.
+ * Factory used to create JDBC Dao instances or get connection from the pool.
+ * Can automatically open the connection for the dao.
  */
 public class JDBCDaoFactory extends DaoFactory {
 

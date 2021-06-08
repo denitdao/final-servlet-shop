@@ -1,5 +1,8 @@
 package ua.denitdao.servlet.shop.util;
 
+/**
+ * Storage with the names of the commands
+ */
 public final class Commands {
     // guest
     public static final String POST_LOGIN = "postLogin";
@@ -27,7 +30,6 @@ public final class Commands {
     public static final String VIEW_ALL_USERS = "allUsers";
     // other
     public static final String DEFAULT = "default";
-    public static final String SOME = "some"; // stub
 
     private Commands() {
     }
