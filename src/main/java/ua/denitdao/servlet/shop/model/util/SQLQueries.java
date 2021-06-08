@@ -7,15 +7,15 @@ public final class SQLQueries {
     public static final String USER_INSERT = "insert into\n" +
             "users (first_name, second_name, login, password, role, created_at, updated_at)\n" +
             "values (?, ?, ?, ?, ?, ?, ?)";
-    public static final String USER_FIND_ID = "select u.*, if(bu.user_id is not null, true, false) blocked\n" +
+    public static final String USER_FIND_ID = "select u.*, (case when (bu.user_id is not null) then true else false end) blocked\n" +
             "from users u\n" +
             "left join blocked_users bu on u.id = bu.user_id\n" +
             "where id=?";
-    public static final String USER_FIND_LOGIN = "select u.*, if(bu.user_id is not null, true, false) blocked\n" +
+    public static final String USER_FIND_LOGIN = "select u.*, (case when (bu.user_id is not null) then true else false end) blocked\n" +
             "from users u\n" +
             "left join blocked_users bu on u.id = bu.user_id\n" +
             "where login=?";
-    public static final String USER_FIND_ALL = "select u.*, if(bu.user_id is not null, true, false) blocked\n" +
+    public static final String USER_FIND_ALL = "select u.*, (case when (bu.user_id is not null) then true else false end) blocked\n" +
             "from users u\n" +
             "left join blocked_users bu on u.id = bu.user_id";
     public static final String USER_BLOCK = "insert into blocked_users (user_id, created_at)\n" +

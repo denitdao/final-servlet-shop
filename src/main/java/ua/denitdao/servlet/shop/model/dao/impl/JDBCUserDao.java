@@ -100,7 +100,7 @@ public class JDBCUserDao implements UserDao {
         try (PreparedStatement pst = connection.prepareStatement(SQLQueries.USER_BLOCK)) {
             pst.setLong(1, userId);
             pst.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            return pst.execute();
+            return pst.executeUpdate() != 0;
         } catch (SQLException e) {
             logger.warn("Failed to block user -- {}", e.getMessage());
             throw new RuntimeException(e);
@@ -111,7 +111,7 @@ public class JDBCUserDao implements UserDao {
     public boolean unblock(Long userId) {
         try (PreparedStatement pst = connection.prepareStatement(SQLQueries.USER_UNBLOCK)) {
             pst.setLong(1, userId);
-            return pst.execute();
+            return pst.executeUpdate() != 0;
         } catch (SQLException e) {
             logger.warn("Failed to unblock user -- {}", e.getMessage());
             throw new RuntimeException(e);
@@ -129,7 +129,7 @@ public class JDBCUserDao implements UserDao {
             pst.setTimestamp(6, Timestamp.valueOf(user.getUpdatedAt()));
             pst.setLong(7, user.getId());
 
-            return pst.execute();
+            return pst.executeUpdate() != 0;
         } catch (SQLException e) {
             logger.warn("Failed to update user -- {}", e.getMessage());
             throw new RuntimeException(e);

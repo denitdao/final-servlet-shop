@@ -5,6 +5,7 @@ import ua.denitdao.servlet.shop.model.entity.enums.Roles;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class User implements Serializable {
 
@@ -178,6 +179,38 @@ public class User implements Serializable {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (blocked != user.blocked) return false;
+        if (!Objects.equals(id, user.id)) return false;
+        if (!Objects.equals(firstName, user.firstName)) return false;
+        if (!Objects.equals(secondName, user.secondName)) return false;
+        if (!Objects.equals(login, user.login)) return false;
+        if (!Objects.equals(password, user.password)) return false;
+        if (role != user.role) return false;
+        if (!Objects.equals(createdAt, user.createdAt)) return false;
+        return Objects.equals(updatedAt, user.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (blocked ? 1 : 0);
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+        result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
+        return result;
     }
 
     @Override
