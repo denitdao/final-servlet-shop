@@ -15,3 +15,24 @@
 - додавання/видалення товарів, зміни інформації про товар;
 - блокування/розблокування користувача;
 - переведення замовлення зі статусу 'зареєстрований' до 'доставлений' або 'скасований'.
+
+# Database structure
+
+![Structure diagram of the database](/shop_db.png)
+
+# Technology stack
+- Gradle as a build tool
+- Java 8
+- Tomcat 10 server
+- Jakarta EE
+- Servlets, JSP, JSTL, (.jspf, .tag)
+- Log4j2
+- MySQL - Apache Commons DBCP 2.8
+- H2, Mockito for the tests
+- Bootstrap
+
+# Installation instructions
+
+- configure database connection for the main app in the [dbconnect.properties](/src/main/resources/dbconnect.properties)
+- create and populate database from the dump file [shop_db.sql](/src/main/resources/shop_db.sql)
+- database records contain links to the images from the [folder](/src/main/webapp/resources/images)
